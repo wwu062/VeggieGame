@@ -1,10 +1,20 @@
 package com.veggie.screen;
 
-public class BattleMode {
+import com.veggie.model.Entity;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+import processing.core.PApplet;
 
+public class BattleMode extends PApplet{
+
+	private Entity player, enemy;
+	
+	public BattleMode(Entity player, Entity enemy) {
+		this.player = player;
+		this.enemy = enemy;
 	}
 
+	//executes 
+	public void draw() {
+		
+	}
 }

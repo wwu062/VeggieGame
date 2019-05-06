@@ -1,5 +1,5 @@
 package com.veggie.screen;
 
-public class GameState {
-
+public class PlatformMode {
+	
 }
