@@ -1,0 +1,6 @@
+Splash,2
+LettuceBomb,5
+CactusRanch,7
+FruitLoop,1
+Bulldoze,4
+Flop,3
