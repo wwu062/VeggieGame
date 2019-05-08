@@ -1,109 +1,116 @@
 package veggie.screen;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import processing.core.PApplet;
-import veggie.model.Entity;
-import veggie.model.Moves;
-import veggie.model.Stats;
-import veggie.textReader.FileIO;
-import veggie.textReader.ReadFile;
+import processing.core.PImage;
 
 public class DrawingSurface extends PApplet {
 
-	/**
-	 * if gamestate = 0, is main menu if gamestate = 1, is instruction page if
-	 * gamestate = 2, is platform mode if gamestate = 3, is battle mode
-	 */
-	private int gamestate;
-	/**
-	 * player character
-	 */
-	private Entity player; // remember to instantiate!!!
+	public static final int DRAWING_WIDTH = 800;
+	public static final int DRAWING_HEIGHT = 600;
 
-	private Entity[] enemy;
-	private Map<Integer, Moves> moves;
+	private Rectangle screenRect;
+
+	private Player player;
+	private ArrayList<Shape> obstacles;
+
+	private ArrayList<Integer> keys;
+	
+	private ArrayList<PImage> assets;
 
 	public DrawingSurface() {
-		gamestate = 0;
-		moves = new HashMap<Integer, Moves>();
-		enemy = new Entity[2];
+		super();
+		assets = new ArrayList<PImage>();
+		keys = new ArrayList<Integer>();
+		screenRect = new Rectangle(0,0,DRAWING_WIDTH,DRAWING_HEIGHT);
+		obstacles = new ArrayList<Shape>();
+		obstacles.add(new Rectangle(200,400,400,50));
+		obstacles.add(new Rectangle(0,250,100,50));
+		obstacles.add(new Rectangle(700,250,100,50));
+		obstacles.add(new Rectangle(375,300,50,100));
+		obstacles.add(new Rectangle(300,250,200,50));
 	}
 
+
+	public void spawnNewPlayer() {
+		player = new Player(loadImage("images//player.gif"), DRAWING_WIDTH/2-Player.WIDTH/2,50);
+	}
+	
+	public void runMe() {
+		runSketch();
+	}
+
+	// The statements in the setup() function 
+	// execute once when the program begins
 	public void setup() {
-				
-		ReadFile translator = new ReadFile();
-
-		try {
-			ArrayList<String> temp_moves = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
-
-			System.out.println("test here");
-			for (String s : temp_moves) {
-				Moves m = translator.translateMoveList(s);
-				if (m == null) throw new AssertionError("movie is null while s=" +s);
-				moves.put(m.getAttackval(), m);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//player creation
-		Stats istats = new Stats(100, 0.1);
-		
-		Moves[] iplayerMovelist = new Moves[4];
-		
-		int i = 0;
-		int k = 1;
-		while(iplayerMovelist[3] == null) {
-			if(moves.containsKey(k)) {
-				iplayerMovelist[i] = moves.get(k);
-			}
-			else {
-				i--;
-			}
-			i++;
-			k++;
-		}
-		
-		player = new Entity(istats, 0, 0, iplayerMovelist);
-		
-		
-
-		for(int a = 0; a < 2; a++) {
-			Moves[] enemyMovelist = new Moves[4];
-			int i = 0;
-			int k = 1;
-			while(enemyMovelist[3] == null) {
-				if(moves.containsKey(k)) {
-					enemyMovelist[i] = moves.get(k);
-				}
-				else {
-					i--;
-				}
-				i++;
-				k++;
-			}
-		}
+		//size(0,0,PApplet.P3D);
+		assets.add(loadImage("images//player.gif"));
+		spawnNewPlayer();
 	}
 
+	// The statements in draw() are executed until the 
+	// program is stopped. Each statement is executed in 
+	// sequence and after the last line is read, the first 
+	// line is executed again.
 	public void draw() {
 
-		if (0 == gamestate) {
+		// drawing stuff
 
-		}
-		if (1 == gamestate) {
+		background(0,255,255);   
 
-		}
-		if (2 == gamestate) {
+		pushMatrix();
 
-		}
-		if (3 == gamestate) {
+		float ratioX = (float)width/DRAWING_WIDTH;
+		float ratioY = (float)height/DRAWING_HEIGHT;
 
-			BattleMode battle = new BattleMode(player, enemy);
+		scale(ratioX, ratioY);
+
+		fill(100);
+		for (Shape s : obstacles) {
+			if (s instanceof Rectangle) {
+				Rectangle r = (Rectangle)s;
+				rect(r.x,r.y,r.width,r.height);
+			}
 		}
+
+		player.draw(this);
+
+		popMatrix();
+
+
+		// modifying stuff
+
+		if (isPressed(KeyEvent.VK_LEFT))
+			player.walk(-1);
+		if (isPressed(KeyEvent.VK_RIGHT))
+			player.walk(1);
+		if (isPressed(KeyEvent.VK_UP))
+			player.jump();
+
+		player.act(obstacles);
+
+		if (!screenRect.intersects(player.getBounds()))
+			spawnNewPlayer();
 	}
+
+
+	public void keyPressed() {
+		keys.add(keyCode);
+	}
+
+	public void keyReleased() {
+		while(keys.contains(keyCode))
+			keys.remove(new Integer(keyCode));
+	}
+
+	public boolean isPressed(Integer code) {
+		return keys.contains(code);
+	}
+
+
 }
+
