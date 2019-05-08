@@ -1,4 +1,4 @@
-package com.veggie.screen;
+package veggie.screen;
 
 public class PlatformMode {
 	

@@ -1,10 +1,8 @@
-package com.veggie;
+package veggie.screen;
 
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-
-import com.veggie.screen.DrawingSurface;
 
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;

@@ -1,13 +1,13 @@
-package com.veggie.model;
+package veggie.model;
 
 public class Stats {
 
 	private int health;
-	private int critrate;
+	private double critrate;
 
-	public Stats(int ihealth, int icritrate, int iattack1, int iattack2) {
+	public Stats(int ihealth, double critrate) {
 		this.health = ihealth;
-		this.critrate = icritrate;
+		this.critrate = critrate;
 	}
 
 	/**
@@ -27,14 +27,14 @@ public class Stats {
 	/**
 	 * @return the critrate
 	 */
-	public int getCritrate() {
+	public double getCritrate() {
 		return critrate;
 	}
 
 	/**
 	 * @param critrate the critrate to set
 	 */
-	public void setCritrate(int critrate) {
+	public void setCritrate(double critrate) {
 		this.critrate = critrate;
 	}
 	

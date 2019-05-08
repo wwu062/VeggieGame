@@ -1,8 +1,7 @@
-package com.veggie.screen;
-
-import com.veggie.model.Entity;
+package veggie.screen;
 
 import processing.core.PApplet;
+import veggie.model.Entity;
 
 public class BattleMode extends PApplet{
 
