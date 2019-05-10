@@ -45,14 +45,24 @@ public class PlayerController extends MovingImage {
 		jump = false;
 	}
 	
+	/** Increases horizontal velocity of object
+	 * 
+	 * @param dir 1 is right, -1 is left
+	 */
 	public void walk(int dir) {
 		dx += dir*0.5;
 	}
 	
+	/** Changes vertical velocity of object
+	 * 
+	 */
 	private void fall() {
 		dy += 0.1;
 	}
 	
+	/** Changes vertical velocity of object
+	 * 
+	 */
 	public void jump() {
 		if(!jump) {
 			dy--;
@@ -60,6 +70,10 @@ public class PlayerController extends MovingImage {
 		}
 	}
 	
+	/** Determines what velocity is changed its movement due to it
+	 * 
+	 * @param platform Shape objects the PlayerController interacts with.
+	 */
 	public void act(ArrayList<Shape> platform) {
 		fall();
 		moveBy(dx, dy);
