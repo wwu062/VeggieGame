@@ -3,11 +3,16 @@ package veggie.screen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import processing.core.PImage;
+import veggie.textReader.FileIO;
+
 public class Menu extends Screen {
 
 	private DrawingSurface surface;
 
 	private Rectangle playbutton, instructbutton;
+
+	private PImage backimg;
 
 	public Menu(DrawingSurface surface) {
 		super(800, 600);
@@ -16,6 +21,10 @@ public class Menu extends Screen {
 		playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 100, 200, 150);
 
 		instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 + 100, 200, 150);
+	}
+
+	public void setup() {
+		backimg = surface.loadImage("images" + FileIO.fileSep + "clouds.png");
 	}
 
 	public void draw() {
@@ -43,7 +52,7 @@ public class Menu extends Screen {
 	}
 
 	public void mousePressed() {
-		Point p = surface.actualCoordinatesToAssumed(new Point(surface.mouseX, surface.mouseY));
+		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if (playbutton.contains(p))
 			surface.switchScreen(ScreenSwitcher.PLATFORM);
 		if (instructbutton.contains(p))

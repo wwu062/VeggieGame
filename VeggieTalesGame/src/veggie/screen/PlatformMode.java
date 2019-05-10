@@ -29,6 +29,8 @@ public class PlatformMode extends Screen {
 	private ArrayList<Integer> keys;
 
 	private ArrayList<PImage> assets;
+	
+	private PImage playerimg;
 
 	private Map<Integer, Moves> moves;
 
@@ -90,7 +92,7 @@ public class PlatformMode extends Screen {
 					k++;
 				}
 
-		PlayerController playerC = new PlayerController(surface.playerimg, 800 / 2 - 100, 600/2 - 100);
+		PlayerController playerC = new PlayerController(playerimg, 800 / 2 - 100, 600/2 - 100);
 		player = new Entity(istats, iplayerMovelist, playerC);
 	}
 
@@ -102,6 +104,9 @@ public class PlatformMode extends Screen {
 	 * The statements in the setup() functions execute once when the program begins
 	 */
 	public void setup() {
+		
+		playerimg = surface.loadImage("images" + FileIO.fileSep + "lettuce-sprite.gif");
+		
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 	}
