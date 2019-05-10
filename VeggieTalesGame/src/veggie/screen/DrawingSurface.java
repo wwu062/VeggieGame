@@ -32,6 +32,9 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 
 		Instructions screen2 = new Instructions(this);
 		screens.add(screen2);
+		
+		PlatformMode screen3 = new PlatformMode(this);
+		screens.add(screen3);
 
 		// add screens 3 and 4 when figure out how to add pictures in different screens
 

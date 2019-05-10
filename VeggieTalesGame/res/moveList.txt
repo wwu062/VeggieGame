@@ -9,5 +9,5 @@ KungFu,8
 ToiletBed,9
 Boo,10
 Sleep,11
-Cash, 12
+Cash,12
 Money,13
