@@ -3,17 +3,17 @@ package veggie.screen;
 import processing.core.PApplet;
 import veggie.model.Entity;
 
-public class BattleMode extends PApplet{
+public class BattleMode extends PApplet {
 
 	private Entity player, enemy;
-	
-	public BattleMode(Entity player, Entity enemy) {
+
+	public BattleMode(DrawingSurface surface, Entity player, Entity enemy) {
 		this.player = player;
 		this.enemy = enemy;
 	}
 
-	//executes 
+	// executes
 	public void draw() {
-		
+		background(255, 255, 255);
 	}
 }

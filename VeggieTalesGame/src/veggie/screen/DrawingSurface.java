@@ -1,109 +1,97 @@
 package veggie.screen;
 
-import java.io.IOException;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import processing.core.PApplet;
-import veggie.model.Entity;
-import veggie.model.Moves;
-import veggie.model.Stats;
+import processing.core.PImage;
 import veggie.textReader.FileIO;
-import veggie.textReader.ReadFile;
 
-public class DrawingSurface extends PApplet {
+public class DrawingSurface extends PApplet implements ScreenSwitcher {
 
-	/**
-	 * if gamestate = 0, is main menu if gamestate = 1, is instruction page if
-	 * gamestate = 2, is platform mode if gamestate = 3, is battle mode
-	 */
-	private int gamestate;
-	/**
-	 * player character
-	 */
-	private Entity player; // remember to instantiate!!!
+	public float ratioX, ratioY;
 
-	private Entity[] enemy;
-	private Map<Integer, Moves> moves;
+	private ArrayList<Integer> keys;
+
+	private Screen activeScreen;
+	private ArrayList<Screen> screens;
+
+	protected PImage backimg;
+
+	protected PImage playerimg;
 
 	public DrawingSurface() {
-		gamestate = 0;
-		moves = new HashMap<Integer, Moves>();
-		enemy = new Entity[2];
+
+		screens = new ArrayList<Screen>();
+
+		keys = new ArrayList<Integer>();
+
+		Menu screen1 = new Menu(this);
+		screens.add(screen1);
+
+		Instructions screen2 = new Instructions(this);
+		screens.add(screen2);
+
+		PlatformMode screen3 = new PlatformMode(this);
+		screens.add(screen3);
+
+		activeScreen = screens.get(0);
 	}
 
 	public void setup() {
-				
-		ReadFile translator = new ReadFile();
 
-		try {
-			ArrayList<String> temp_moves = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
+		surface.setResizable(true);
+		for (Screen s : screens)
+			s.setup();
 
-			System.out.println("test here");
-			for (String s : temp_moves) {
-				Moves m = translator.translateMoveList(s);
-				if (m == null) throw new AssertionError("movie is null while s=" +s);
-				moves.put(m.getAttackval(), m);
-			}
+		backimg = loadImage("images" + FileIO.fileSep + "clouds.png");
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//player creation
-		Stats istats = new Stats(100, 0.1);
-		
-		Moves[] iplayerMovelist = new Moves[4];
-		
-		int i = 0;
-		int k = 1;
-		while(iplayerMovelist[3] == null) {
-			if(moves.containsKey(k)) {
-				iplayerMovelist[i] = moves.get(k);
-			}
-			else {
-				i--;
-			}
-			i++;
-			k++;
-		}
-		
-		player = new Entity(istats, 0, 0, iplayerMovelist);
-		
-		
+		playerimg = loadImage("images" + FileIO.fileSep + "lettuce-sprite.gif");
+	}
 
-		for(int a = 0; a < 2; a++) {
-			Moves[] enemyMovelist = new Moves[4];
-			int i = 0;
-			int k = 1;
-			while(enemyMovelist[3] == null) {
-				if(moves.containsKey(k)) {
-					enemyMovelist[i] = moves.get(k);
-				}
-				else {
-					i--;
-				}
-				i++;
-				k++;
-			}
-		}
+	public void settings() {
+		// size(DRAWING_WIDTH, DRAWING_HEIGHT, P2D);
+		size(activeScreen.DRAWING_WIDTH, activeScreen.DRAWING_HEIGHT);
 	}
 
 	public void draw() {
 
-		if (0 == gamestate) {
+		ratioX = (float) width / activeScreen.DRAWING_WIDTH;
+		ratioY = (float) height / activeScreen.DRAWING_HEIGHT;
 
-		}
-		if (1 == gamestate) {
+		pushMatrix();
 
-		}
-		if (2 == gamestate) {
+		scale(ratioX, ratioY);
 
-		}
-		if (3 == gamestate) {
+		activeScreen.draw();
 
-			BattleMode battle = new BattleMode(player, enemy);
-		}
+		popMatrix();
+
 	}
+
+	public Point assumedCoordinatesToActual(Point assumed) {
+		return new Point((int) (assumed.getX() * ratioX), (int) (assumed.getY() * ratioY));
+	}
+
+	public Point actualCoordinatesToAssumed(Point actual) {
+		return new Point((int) (actual.getX() / ratioX), (int) (actual.getY() / ratioY));
+	}
+
+	@Override
+	public void switchScreen(int i) {
+		activeScreen = screens.get(i);
+	}
+
+	public void keyPressed() {
+		keys.add(keyCode);
+	}
+
+	public void keyReleased() {
+		while (keys.contains(keyCode))
+			keys.remove(new Integer(keyCode));
+	}
+
+	public boolean isPressed(Integer code) {
+		return keys.contains(code);
+	}
+
 }
