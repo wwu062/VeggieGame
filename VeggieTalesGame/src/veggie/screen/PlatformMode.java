@@ -31,11 +31,13 @@ public class PlatformMode extends Screen {
 	private ArrayList<PImage> assets;
 
 	private Map<Integer, Moves> moves;
-
-	private Entity[] enemy = new Entity[2];
 	
 	private DrawingSurface surface;
 
+	/**
+	 * Initializes fields
+	 * @param surface the Drawingsurface
+	 */
 	public PlatformMode(DrawingSurface surface) {
 		super(800, 600);
 		this.surface = surface;
