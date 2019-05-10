@@ -87,8 +87,8 @@ public class PlatformMode extends Screen {
 					k++;
 				}
 
-//		PlayerController playerC = new PlayerController(surface.playerimg, 40 / 2 - 60 / 2, 50);
-//		player = new Entity(istats, iplayerMovelist, playerC);
+		PlayerController playerC = new PlayerController(surface.playerimg, 800 / 2 - 100, 600/2 - 100);
+		player = new Entity(istats, iplayerMovelist, playerC);
 	}
 
 //	public void runMe() {

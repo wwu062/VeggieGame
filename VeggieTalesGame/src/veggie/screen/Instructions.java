@@ -10,7 +10,11 @@ public class Instructions extends Screen{
 	}
 	
 	public void draw() {
+		surface.pushStyle();
+		surface.background(255);
+		surface.fill(0);
 		surface.text("These are the instructions", 400, 300);
+		surface.popStyle();
 	}
 	
 }

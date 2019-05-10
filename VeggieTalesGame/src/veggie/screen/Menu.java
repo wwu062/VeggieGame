@@ -16,9 +16,9 @@ public class Menu extends Screen {
 		super(800, 600);
 		this.surface = surface;
 
-		playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 50, 200, 200);
+		playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 100, 200, 150);
 
-		instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 50, 200, 200);
+		instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 + 100, 200, 150);
 	}
 
 	public void draw() {
