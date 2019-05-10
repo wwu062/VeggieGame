@@ -8,12 +8,25 @@ import veggie.textReader.FileIO;
 
 public class Menu extends Screen {
 
+	/**
+	 * the DrawingSurface being used to draw
+	 */
 	private DrawingSurface surface;
 
+	/**
+	 * buttons used to click on and switch screens
+	 */
 	private Rectangle playbutton, instructbutton;
 
+	/**
+	 * background image
+	 */
 	private PImage backimg;
 
+	/**
+	 * initializes fields
+	 * @param surface initial DrawingSurface object
+	 */
 	public Menu(DrawingSurface surface) {
 		super(800, 600);
 		this.surface = surface;
@@ -23,10 +36,16 @@ public class Menu extends Screen {
 		instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 + 100, 200, 150);
 	}
 
+	/**
+	 * sets up the backimg
+	 */
 	public void setup() {
 		backimg = surface.loadImage("images" + FileIO.fileSep + "clouds.png");
 	}
 
+	/**
+	 * draws to the screen
+	 */
 	public void draw() {
 
 		surface.pushStyle();
@@ -51,6 +70,9 @@ public class Menu extends Screen {
 		surface.popStyle();
 	}
 
+	/**
+	 * checks if mouse is being pressed and switches screens if it is on a button
+	 */
 	public void mousePressed() {
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if (playbutton.contains(p))
