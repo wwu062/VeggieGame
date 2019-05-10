@@ -16,7 +16,7 @@ public class Menu extends Screen {
 		super(800, 600);
 		this.surface = surface;
 
-		playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 50, 200, 100);
+		playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 50, 200, 200);
 
 		instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 50, 200, 200);
 	}
@@ -33,13 +33,15 @@ public class Menu extends Screen {
 		float w = surface.textWidth(a);
 		surface.text(a, playbutton.x + playbutton.width / 2 - w / 2, playbutton.y + playbutton.height / 2);
 
+		surface.popStyle();
+
+		surface.pushStyle();
 		surface.rect(instructbutton.x, instructbutton.y, instructbutton.width, instructbutton.height);
 		surface.fill(0);
 		String b = "Instructions";
 		float y = surface.textWidth(b);
 		surface.text(b, instructbutton.x + instructbutton.width / 2 - y / 2,
 				instructbutton.y + instructbutton.height / 2);
-
 		surface.popStyle();
 	}
 
