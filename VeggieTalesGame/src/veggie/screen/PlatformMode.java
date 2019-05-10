@@ -68,6 +68,9 @@ public class PlatformMode extends Screen {
 
 	}
 
+	/**
+	 * creates a new controllable Entity object
+	 */
 	public void spawnNewPlayer() {
 		
 		// player creation
@@ -95,17 +98,17 @@ public class PlatformMode extends Screen {
 //		runSketch();
 //	}
 
-	// The statements in the setup() function
-	// execute once when the program begins
+	/**
+	 * The statements in the setup() functions execute once when the program begins
+	 */
 	public void setup() {
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 	}
 
-	// The statements in draw() are executed until the
-	// program is stopped. Each statement is executed in
-	// sequence and after the last line is read, the first
-	// line is executed again.
+	/**
+	 * Executes 60 times a second continuously until stopped
+	 */
 	public void draw() {
 		PlayerController mainplayer = player.getControls();
 

@@ -2,9 +2,21 @@ package veggie.model;
 
 public class Stats {
 
+	/**
+	 * the health statistic
+	 */
 	private int health;
+	
+	/**
+	 * the critical rate statistic
+	 */
 	private double critrate;
 
+	/**
+	 * Initializes fields
+	 * @param ihealth initial health statistic
+	 * @param critrate initial critical rate statistic
+	 */
 	public Stats(int ihealth, double critrate) {
 		this.health = ihealth;
 		this.critrate = critrate;
@@ -25,14 +37,14 @@ public class Stats {
 	}
 
 	/**
-	 * @return the critrate
+	 * @return the critical rate
 	 */
 	public double getCritrate() {
 		return critrate;
 	}
 
 	/**
-	 * @param critrate the critrate to set
+	 * @param critrate the critical rate to set
 	 */
 	public void setCritrate(double critrate) {
 		this.critrate = critrate;

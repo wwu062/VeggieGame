@@ -2,14 +2,20 @@ package veggie.model;
 
 public class Entity {
 
+	/**
+	 * the Stats of the Entity object
+	 */
 	private Stats statistics;
 
+	/**
+	 * the movelist that the Entity object has
+	 */
 	private Moves[] moveList;
 
+	/**
+	 * The controls that move the Entity object around
+	 */
 	private PlayerController controls;
-
-	public static final int WIDTH = 40;
-	public static final int HEIGHT = 60;
 
 	public Entity(Stats statistics, Moves[] moveList, PlayerController player) {
 		this.statistics = statistics;
@@ -52,7 +58,7 @@ public class Entity {
 	}
 
 	/**
-	 * @return the player
+	 * @return the controls
 	 */
 	public PlayerController getControls() {
 		return controls;
