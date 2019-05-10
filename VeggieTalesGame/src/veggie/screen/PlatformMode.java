@@ -16,9 +16,23 @@ import veggie.model.PlayerController;
 import veggie.model.Stats;
 import veggie.textReader.FileIO;
 
+/**
+ * 
+ * @author awang104
+ *
+ *
+ * Platform models the platform used in the platformer section of the game.
+ */
 public class PlatformMode extends Screen {
 
+	/**
+	 * Screen drawing width
+	 */
 	public static final int DRAWING_WIDTH = 800;
+	
+	/**
+	 * Screen drawing height
+	 */
 	public static final int DRAWING_HEIGHT = 600;
 
 	private Rectangle screenRect;
@@ -38,6 +52,10 @@ public class PlatformMode extends Screen {
 	
 	private DrawingSurface surface;
 
+	/** Creates a new platform for the game
+	 * 
+	 * @param surface the DrawingSurface sued to draw the platform
+	 */
 	public PlatformMode(DrawingSurface surface) {
 		super(800, 600);
 		this.surface = surface;
