@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import processing.core.PImage;
 
 public class PlayerController extends MovingImage {
-	private int dx;
-	private int dy;
+	private double dx;
+	private double dy;
 
 	public PlayerController(int x, int y, int width, int height, PImage image) {
 		super(x, y, width, height, image);
@@ -32,7 +32,7 @@ public class PlayerController extends MovingImage {
 				dy = 0;
 				break;
 			} else {
-				dy++;
+				dy += 0.1;
 			}
 		}
 	}

@@ -16,11 +16,12 @@ public class MovingImage {
 		this.image = image;
 	}
 	
-	public void moveTo(int x, int y) {
-		hitbox.setLocation(x, y);
+	public void moveTo(double x, double y) {
+		hitbox.x += x;
+		hitbox.y += y;
 	}
 	
-	public void moveBy(int x, int y) {
+	public void moveBy(double x, double y) {
 		hitbox.x += x;
 		hitbox.y += y;
 	}
