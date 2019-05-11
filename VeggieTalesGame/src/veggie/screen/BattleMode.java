@@ -1,22 +1,31 @@
 package veggie.screen;
 
-import processing.core.PApplet;
 import veggie.model.Entity;
 
-public class BattleMode extends PApplet {
-
+public class BattleMode extends Screen {
+	
 	private Entity player, enemy;
 
-	
+	private DrawingSurface surface;
+
+	/**
+	 * initializes the fields
+	 * @param surface DrawingSurface object
+	 * @param player the Player Entity object
+	 * @param enemy the Enemy Entity object
+	 */
 	public BattleMode(DrawingSurface surface, Entity player, Entity enemy) {
+		super(800, 600);
 		this.player = player;
 		this.enemy = enemy;
+		this.surface = surface;
 	}
 
 	/**
 	 * Draws the battle 
+	 * @post changes background color
 	 */
 	public void draw() {
-		background(255, 255, 255);
+		surface.background(255, 255, 255);
 	}
 }

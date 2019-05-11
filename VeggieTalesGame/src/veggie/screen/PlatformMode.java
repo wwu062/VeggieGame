@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 import veggie.model.Entity;
 import veggie.model.Moves;
@@ -16,33 +15,52 @@ import veggie.model.PlayerController;
 import veggie.model.Stats;
 import veggie.textReader.FileIO;
 
+/**
+ * 
+ * @author awang104
+ *
+ *
+ *         Creates the Platform game mode (think Mario)
+ */
 public class PlatformMode extends Screen {
 
+	/**
+	 * Screen drawing width
+	 */
 	public static final int DRAWING_WIDTH = 800;
+
+	/**
+	 * Screen drawing height
+	 */
 	public static final int DRAWING_HEIGHT = 600;
 
 	private Rectangle screenRect;
 
 	private Entity player;
-	private ArrayList<Shape> obstacles;
 
-	private ArrayList<Integer> keys;
+	private ArrayList<Shape> obstacles;
 
 	private ArrayList<PImage> assets;
 
+	private PImage playerimg;
+
 	private Map<Integer, Moves> moves;
-	
+
 	private DrawingSurface surface;
 
 	/**
 	 * Initializes fields
-	 * @param surface the Drawingsurface
+	 * 
+	 * @param surface the DrawingSurface ======= /** Creates a new platform for the
+	 *                game
+	 * 
+	 * @param surface the DrawingSurface sued to draw the platform >>>>>>> branch
+	 *                'master' of https://github.com/wwu062/VeggieGame.git
 	 */
 	public PlatformMode(DrawingSurface surface) {
 		super(800, 600);
 		this.surface = surface;
 		assets = new ArrayList<PImage>();
-		keys = new ArrayList<Integer>();
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
 		obstacles = new ArrayList<Shape>();
 		obstacles.add(new Rectangle(200, 400, 400, 50));
@@ -74,26 +92,25 @@ public class PlatformMode extends Screen {
 	 * creates a new controllable Entity object
 	 */
 	public void spawnNewPlayer() {
-		
+
 		// player creation
-				Stats istats = new Stats(100, 0.1);
+		Stats istats = new Stats(100, 0.1);
 
-				Moves[] iplayerMovelist = new Moves[4];
+		Moves[] iplayerMovelist = new Moves[4];
 
-				int i = 0;
-				int k = 1;
-				while (iplayerMovelist[3] == null) {
-					if (moves.containsKey(k)) {
-						iplayerMovelist[i] = moves.get(k);
-					} else {
-						i--;
-					}
-					i++;
-					k++;
-				}
+		int i = 0;
+		int k = 1;
+		while (iplayerMovelist[3] == null) {
+			if (moves.containsKey(k)) {
+				iplayerMovelist[i] = moves.get(k);
+			} else {
+				i--;
+			}
+			i++;
+			k++;
+		}
 
-		PlayerController playerC = new PlayerController(surface.playerimg, 800 / 2 - 100, 600/2 - 100);
-		player = new Entity(istats, iplayerMovelist, playerC);
+		player = new Entity(playerimg, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
 
 //	public void runMe() {
@@ -104,6 +121,9 @@ public class PlatformMode extends Screen {
 	 * The statements in the setup() functions execute once when the program begins
 	 */
 	public void setup() {
+
+		playerimg = surface.loadImage("images" + FileIO.fileSep + "lettuce-sprite.gif");
+
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 	}
@@ -120,7 +140,6 @@ public class PlatformMode extends Screen {
 
 		surface.pushMatrix();
 
-		
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
@@ -137,7 +156,6 @@ public class PlatformMode extends Screen {
 
 		// modifying stuff
 
-		
 		if (surface.isPressed(KeyEvent.VK_LEFT))
 			mainplayer.walk(-1);
 		if (surface.isPressed(KeyEvent.VK_RIGHT))
@@ -150,7 +168,5 @@ public class PlatformMode extends Screen {
 		if (!screenRect.intersects(mainplayer.getBounds()))
 			spawnNewPlayer();
 	}
-
-	
 
 }

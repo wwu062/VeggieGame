@@ -1,26 +1,28 @@
 package veggie.model;
 
+import processing.core.PImage;
+
 public class Entity {
 
-	/**
-	 * the Stats of the Entity object
-	 */
+
 	private Stats statistics;
 
-	/**
-	 * the movelist that the Entity object has
-	 */
 	private Moves[] moveList;
 
-	/**
-	 * The controls that move the Entity object around
-	 */
 	private PlayerController controls;
 
-	public Entity(Stats statistics, Moves[] moveList, PlayerController player) {
+	/**
+	 * Initializes the fields
+	 * @param img image of the Entity object
+	 * @param statistics initial statistics of the Entity
+	 * @param moveList the moves that the Entity has
+	 * @param x the initial x-coordinate of the object
+	 * @param y the initial y-coordinate of the object
+	 */
+	public Entity(PImage img, Stats statistics, Moves[] moveList, int x, int y) {
 		this.statistics = statistics;
 		this.moveList = moveList;
-		this.controls = player;
+		this.controls = new PlayerController(img, x, y);
 	}
 
 	/**
