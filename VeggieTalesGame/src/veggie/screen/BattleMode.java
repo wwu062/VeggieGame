@@ -24,16 +24,21 @@ public class BattleMode extends Screen {
 		super(800, 600);
 		this.player = player;
 		this.enemy = enemy;
+		
+		// changes location of the player and enemy for battle arena
+		player.getControls().changeBy(200, 200);
+		enemy.getControls().changeBy(600, 200);
+		
 		this.surface = surface;
 
 		button = new Rectangle[4];
 
-		// column 1 initialization
+		// attacks column 1 initialization
 		for (int i = 0; i < 2; i++) {
 			button[i] = new Rectangle(150, 400 + 125 * i, 225, 75);
 		}
 
-		// column 2 initialization
+		// attacks column 2 initialization
 		for (int i = 0; i < 2; i++) {
 			button[i] = new Rectangle(425, 400 + 125 * i, 225, 75);
 		}
@@ -57,12 +62,14 @@ public class BattleMode extends Screen {
 
 		mainplayer.draw(surface);
 		enemyplayer.draw(surface);
+		
+		// remember to initialize the main player and enemy player at different locations
 
 		// draws buttons
 		surface.pushStyle();
 		surface.rect(button[1].x, button[1].y, button[1].width, button[1].height);
 		surface.fill(0);
-		String a = "Play";
+		String a = player.getMoveList()[1].getName();
 		float w = surface.textWidth(a);
 		surface.text(a, button[1].x + button[1].width / 2 - w / 2, button[1].y + button[1].height / 2);
 		surface.popStyle();
@@ -70,7 +77,7 @@ public class BattleMode extends Screen {
 		surface.pushStyle();
 		surface.rect(button[2].x, button[2].y, button[2].width, button[2].height);
 		surface.fill(0);
-		String b = "Instructions";
+		String b = player.getMoveList()[2].getName();
 		float y = surface.textWidth(b);
 		surface.text(b, button[2].x + button[2].width / 2 - y / 2, button[2].y + button[2].height / 2);
 		surface.popStyle();
@@ -78,7 +85,7 @@ public class BattleMode extends Screen {
 		surface.pushStyle();
 		surface.rect(button[3].x, button[3].y, button[3].width, button[3].height);
 		surface.fill(0);
-		String c = "Play";
+		String c = player.getMoveList()[3].getName();
 		float d = surface.textWidth(c);
 		surface.text(c, button[3].x + button[3].width / 2 - d / 2, button[3].y + button[3].height / 2);
 		surface.popStyle();
@@ -86,7 +93,7 @@ public class BattleMode extends Screen {
 		surface.pushStyle();
 		surface.rect(button[4].x, button[4].y, button[4].width, button[4].height);
 		surface.fill(0);
-		String e = "Instructions";
+		String e = player.getMoveList()[4].getName();
 		float f = surface.textWidth(e);
 		surface.text(b, button[4].x + button[4].width / 2 - f / 2, button[4].y + button[4].height / 2);
 		surface.popStyle();

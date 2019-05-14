@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import gifAnimation.Gif;
 import processing.core.PImage;
 import veggie.model.Entity;
 import veggie.model.Moves;
@@ -20,7 +21,7 @@ import veggie.textReader.FileIO;
  * @author awang104
  *
  *
- *         Creates the Platform game mode (think Mario)
+ * Creates the Platform game mode (think Mario)
  */
 public class PlatformMode extends Screen {
 
@@ -42,7 +43,7 @@ public class PlatformMode extends Screen {
 
 	private ArrayList<PImage> assets;
 
-	private PImage playerimg;
+	private Gif playerimg;
 
 	private Map<Integer, Moves> moves;
 
@@ -122,7 +123,9 @@ public class PlatformMode extends Screen {
 	 */
 	public void setup() {
 
-		playerimg = surface.loadImage("images" + FileIO.fileSep + "lettuce-sprite.gif");
+		playerimg = new Gif(surface ,"images" + FileIO.fileSep + "lettuce-sprite.gif");
+		
+		playerimg.play();
 
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
