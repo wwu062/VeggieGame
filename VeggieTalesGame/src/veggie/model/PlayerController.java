@@ -9,7 +9,7 @@ import processing.core.PImage;
  * 
  * @author awang104
  *
- * PlayerController is the player character for the platforming mode with physics traits.
+ * PlayerController is the player character for the platform mode with physics traits.
  */
 public class PlayerController extends MovingImage {
 	private double dx;
