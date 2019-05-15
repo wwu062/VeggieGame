@@ -74,6 +74,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 		scale(ratioX, ratioY);
 
 		activeScreen.draw();
+		
 
 		popMatrix();
 

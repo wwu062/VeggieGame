@@ -13,9 +13,10 @@ import processing.core.PImage;
  *         physics traits.
  */
 public class PlayerController extends MovingImage {
-	private double dx;
-	private double dy;
-	private boolean jump;
+	private double velX;
+	private double velY;
+	private boolean onSurface;
+	private boolean isWalking;
 
 	/**
 	 * Creates a new PlayerController object
@@ -28,9 +29,10 @@ public class PlayerController extends MovingImage {
 	 */
 	public PlayerController(int x, int y, int width, int height, PImage image) {
 		super(x, y, width, height, image);
-		dx = 0;
-		dy = 0;
-		jump = false;
+		velX = 0;
+		velY = 0;
+		onSurface = false;
+		isWalking = false;
 	}
 
 	/**
@@ -42,10 +44,10 @@ public class PlayerController extends MovingImage {
 	 */
 	public PlayerController(PImage image, int x, int y) {
 		super(x, y, image.width, image.height, image);
-		dx = 0;
-		dy = 0;
-		System.out.println(image.width + ", " + image.height);
-		jump = false;
+		velX = 0;
+		velY = 0;
+		onSurface = false;
+		isWalking = false;
 	}
 
 	/**
@@ -54,15 +56,33 @@ public class PlayerController extends MovingImage {
 	 * @param dir 1 is right, -1 is left
 	 */
 	public void walk(int dir) {
-		dx += dir * 0.5;
+		velX += dir * 0.5;
+		isWalking = true;
 	}
 
 	/**
 	 * Changes vertical velocity of object
 	 * 
 	 */
-	private void fall() {
-		dy += 0.1;
+	public void fall() {
+		
+			velY += 0.7; // Gravity
+			if(!isWalking)
+				velX = 0; // Friction
+			
+			onSurface = false;
+
+			moveBy(velX, velY);
+	}
+	
+	public void checkPlayer(ArrayList<Shape> platform) {
+		for(Shape s : platform) {
+			if(super.intersects(s)) {
+				velY = 0;
+				onSurface = true;
+				break;
+			}
+		}
 	}
 
 	/**
@@ -70,20 +90,14 @@ public class PlayerController extends MovingImage {
 	 * 
 	 */
 	public void jump() {
-		if (!jump) {
-			dy--;
-			jump = true;
+		if (onSurface) {
+			velY = -15;
 		}
 	}
-
-	/**
-	 * Determines what velocity is changed its movement due to it
-	 * 
-	 * @param platform Shape objects the PlayerController interacts with.
-	 */
-	public void act(ArrayList<Shape> platform) {
-		fall();
-		moveBy(dx, dy);
+	
+	public boolean battle(PlayerController bot) {
+		return bot.getBounds().intersects(this.getBounds());
 	}
+
 
 }
