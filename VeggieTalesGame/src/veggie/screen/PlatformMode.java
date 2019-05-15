@@ -192,7 +192,7 @@ public class PlatformMode extends Screen {
 	public void run() {
 		for(Entity b : bot) {
 			if(player.getControls().battle(b.getControls()))
-				surface.switchScreen();
+				surface.switchScreen(ScreenSwitcher.MENU);
 		}
 		
 		if (surface.isPressed(KeyEvent.VK_LEFT))

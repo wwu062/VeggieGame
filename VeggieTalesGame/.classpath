@@ -4,6 +4,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/gifAnimation.jar"/>
-	<classpathentry kind="lib" path="lib/shapes.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
