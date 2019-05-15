@@ -65,7 +65,7 @@ public class PlayerController extends MovingImage {
 	 */
 	public void jump() {
 		if(!jump) {
-			dy--;
+			dy = dy - 2;
 			jump = true;
 		}
 	}
@@ -75,7 +75,16 @@ public class PlayerController extends MovingImage {
 	 * @param platform Shape objects the PlayerController interacts with.
 	 */
 	public void act(ArrayList<Shape> platform) {
-		fall();
+		boolean fall = false;
+		for(Shape s : platform) {
+			if(this.contains(s)) {
+				fall = true;
+			}
+		}
+		
+		if(!fall) {
+			fall();
+		} 
 		moveBy(dx, dy);
 	}
 	
