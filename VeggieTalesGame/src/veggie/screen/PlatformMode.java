@@ -38,6 +38,8 @@ public class PlatformMode extends Screen {
 	private Rectangle screenRect;
 
 	private Entity player;
+	
+	private ArrayList<Entity> bot;
 
 	private ArrayList<Shape> obstacles;
 
@@ -72,12 +74,12 @@ public class PlatformMode extends Screen {
 
 		moves = new HashMap<Integer, Moves>();
 
+		bot = new ArrayList<Entity>();
 		// reading moveList file
 		FileIO translator = new FileIO();
 
 		try {
 			ArrayList<String> temp_moves = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
-			System.out.println("test here");
 			for (String s : temp_moves) {
 				Moves m = translator.translateMoveList(s);
 				moves.put(m.getAttackval(), m);
@@ -113,6 +115,26 @@ public class PlatformMode extends Screen {
 
 		player = new Entity(playerimg, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
+	
+	public void spawnNewBot() {
+		Stats istats = new Stats(100, 0.1);
+
+		Moves[] iplayerMovelist = new Moves[4];
+
+		int i = 0;
+		int k = 1;
+		while (iplayerMovelist[3] == null) {
+			if (moves.containsKey(k)) {
+				iplayerMovelist[i] = moves.get(k);
+			} else {
+				i--;
+			}
+			i++;
+			k++;
+		}
+
+		bot.add(new Entity(playerimg, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+	}
 
 //	public void runMe() {
 //		runSketch();
@@ -129,6 +151,7 @@ public class PlatformMode extends Screen {
 
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
+		spawnNewBot();
 	}
 
 	/**
@@ -154,21 +177,39 @@ public class PlatformMode extends Screen {
 		}
 
 		mainplayer.draw(surface);
+		
+		for(Entity b : bot) {
+			b.getControls().draw(surface);
+		}
 
 		surface.popMatrix();
 
 		// modifying stuff
-
+		run();
+		
+	}
+	
+	public void run() {
+		for(Entity b : bot) {
+			if(player.getControls().battle(b.getControls()))
+				surface.switchScreen();
+		}
+		
 		if (surface.isPressed(KeyEvent.VK_LEFT))
-			mainplayer.walk(-1);
+			player.getControls().walk(-1);
 		if (surface.isPressed(KeyEvent.VK_RIGHT))
-			mainplayer.walk(1);
+			player.getControls().walk(1);
 		if (surface.isPressed(KeyEvent.VK_UP))
-			mainplayer.jump();
+			player.getControls().jump();
+		for(Entity b : bot) {
+			b.getControls().fall();
+			b.getControls().checkPlayer(obstacles);
+		}
+		
+		player.getControls().fall();
+		player.getControls().checkPlayer(obstacles);
 
-		player.getControls().fall(obstacles);
-
-		if (!screenRect.intersects(mainplayer.getBounds()))
+		if (!screenRect.intersects(player.getControls().getBounds()))
 			spawnNewPlayer();
 	}
 

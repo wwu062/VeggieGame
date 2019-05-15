@@ -64,7 +64,7 @@ public class PlayerController extends MovingImage {
 	 * Changes vertical velocity of object
 	 * 
 	 */
-	public void fall(ArrayList<Shape> platform) {
+	public void fall() {
 		
 			velY += 0.7; // Gravity
 			if(!isWalking)
@@ -73,17 +73,16 @@ public class PlayerController extends MovingImage {
 			onSurface = false;
 
 			moveBy(velX, velY);
-			
-			for(Shape s : platform) {
-				if(this.contains(s)) {
-					velY = 0;
-					onSurface = true;
-					break;
-				}
+	}
+	
+	public void checkPlayer(ArrayList<Shape> platform) {
+		for(Shape s : platform) {
+			if(super.intersects(s)) {
+				velY = 0;
+				onSurface = true;
+				break;
 			}
-		
-		
-
+		}
 	}
 
 	/**
@@ -94,6 +93,10 @@ public class PlayerController extends MovingImage {
 		if (onSurface) {
 			velY = -15;
 		}
+	}
+	
+	public boolean battle(PlayerController bot) {
+		return bot.getBounds().intersects(this.getBounds());
 	}
 
 
