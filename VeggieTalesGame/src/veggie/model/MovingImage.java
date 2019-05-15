@@ -3,6 +3,7 @@ package veggie.model;
 import java.awt.Rectangle;
 import java.awt.Shape;
 
+import processing.core.PGraphics;
 import processing.core.PImage;
 import veggie.screen.DrawingSurface;
 
@@ -67,6 +68,14 @@ public class MovingImage {
 	 */
 	public void draw(DrawingSurface marker) {
 		marker.image(image, (float) hitbox.x, (float) hitbox.y);
+	}
+	
+	/**
+	 * Draws the object with PGraphics
+	 * @param graphics where the object is drawn
+	 */
+	public void draw(PGraphics graphics) {
+		graphics.image(image, (float) hitbox.x, (float) hitbox.y);
 	}
 
 	/**

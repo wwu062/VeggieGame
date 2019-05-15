@@ -35,7 +35,7 @@ Must have features:
 * Turn based attack system
 * Players play against a bot
 * Movement system while not in battle
-   * Platformer with physics
+* Platformer with physics
 Want to have features:
 * Item system used for stat boosting
 * Potions, etc.
@@ -87,6 +87,8 @@ Stretch features:
    * PlayerController
    * PlatformMode
    * Main
+   * Stats
+   
   
 * William
    * Entity
@@ -96,7 +98,6 @@ Stretch features:
    * DrawingSurface
    * FileIO
    * BattleMode
-   * Stats
    * Gifs, Images, Textures
 
 

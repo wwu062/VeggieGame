@@ -13,7 +13,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 
 	private Screen activeScreen;
 	
-	private ArrayList<Screen> screens;
+	protected ArrayList<Screen> screens;
 
 	//used to hold key codes from the keyboard
 	private ArrayList<Integer> keys;
