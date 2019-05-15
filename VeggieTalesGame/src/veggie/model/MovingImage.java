@@ -10,28 +10,31 @@ import veggie.screen.DrawingSurface;
  * 
  * @author awang104
  *
- * MovingImage represents any image that moves an interacts with the environment while in platform mode
+ *         MovingImage represents any image that moves an interacts with the
+ *         environment while in platform mode
  *
  */
 public class MovingImage {
-	
+
 	private Rectangle hitbox;
 	private PImage image;
-	
-	/** Creates a new MovingImage object
+
+	/**
+	 * Creates a new MovingImage object
 	 * 
-	 * @param x x coordinate of the MovingImage
-	 * @param y y coordinate of the MovingImage
-	 * @param width width of the MovingImage
+	 * @param x      x coordinate of the MovingImage
+	 * @param y      y coordinate of the MovingImage
+	 * @param width  width of the MovingImage
 	 * @param height height of the MovingImage
-	 * @param image texture used to represent the MovingImage
+	 * @param image  texture used to represent the MovingImage
 	 */
 	public MovingImage(int x, int y, int width, int height, PImage image) {
 		hitbox = new Rectangle(x, y, width, height);
 		this.image = image;
 	}
-	
-	/** Moves the object to the designated location
+
+	/**
+	 * Moves the object to the designated location
 	 * 
 	 * @param x new x-coordinate of MovingImage
 	 * @param y new y-coordinate of MovingImage
@@ -40,8 +43,9 @@ public class MovingImage {
 		hitbox.x += x;
 		hitbox.y += y;
 	}
-	
-	/** Moves the object by that amount
+
+	/**
+	 * Moves the object by that amount
 	 * 
 	 * @param x change in x-coordinate
 	 * @param y change in y-coordinate
@@ -50,15 +54,21 @@ public class MovingImage {
 		hitbox.x += x;
 		hitbox.y += y;
 	}
-	
-	/** Draws the object
+
+	public void changeBy(int x, int y) {
+		hitbox.x = x;
+		hitbox.y = y;
+	}
+
+	/**
+	 * Draws the object
 	 * 
 	 * @param marker Place where object is drawn on.
 	 */
 	public void draw(DrawingSurface marker) {
-		marker.image(image, (float)hitbox.x, (float)hitbox.y);
+		marker.image(image, (float) hitbox.x, (float) hitbox.y);
 	}
-	
+
 	/**
 	 * 
 	 * @param bounds Shape interacting with MovingImage
@@ -67,7 +77,7 @@ public class MovingImage {
 	public boolean contains(Shape bounds) {
 		return hitbox.intersects(bounds.getBounds());
 	}
-	
+
 	/**
 	 * 
 	 * @return Rectangular bounds of the MovingImage

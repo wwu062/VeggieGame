@@ -19,7 +19,6 @@ public class Menu extends Screen {
 	private PImage backimg;
 	private PImage logoimg;
 
-	private PGraphics pgraph;
 
 	/**
 	 * initializes fields
@@ -41,8 +40,6 @@ public class Menu extends Screen {
 	public void setup() {
 		backimg = surface.loadImage("images" + FileIO.fileSep + "clouds.png");
 		logoimg = surface.loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png");
-
-		pgraph = surface.createGraphics(DRAWING_WIDTH, DRAWING_HEIGHT);
 	}
 
 	/**
