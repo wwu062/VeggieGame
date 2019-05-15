@@ -21,7 +21,7 @@ import veggie.textReader.FileIO;
  * @author awang104
  *
  *
- * Creates the Platform game mode (think Mario)
+ *         Creates the Platform game mode (think Mario)
  */
 public class PlatformMode extends Screen {
 
@@ -123,8 +123,8 @@ public class PlatformMode extends Screen {
 	 */
 	public void setup() {
 
-		playerimg = new Gif(surface ,"images" + FileIO.fileSep + "lettuce-sprite.gif");
-		
+		playerimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite.gif");
+
 		playerimg.play();
 
 		// size(0,0,PApplet.P3D);

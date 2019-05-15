@@ -44,7 +44,7 @@ public class PlayerController extends MovingImage {
 		super(x, y, image.width, image.height, image);
 		dx = 0;
 		dy = 0;
-		System.out.println("player controller constructor");
+		System.out.println(image.width + ", " + image.height);
 		jump = false;
 	}
 

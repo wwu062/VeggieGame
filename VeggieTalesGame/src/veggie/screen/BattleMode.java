@@ -3,8 +3,10 @@ package veggie.screen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import gifAnimation.Gif;
 import veggie.model.Entity;
 import veggie.model.PlayerController;
+import veggie.textReader.FileIO;
 
 public class BattleMode extends Screen {
 
@@ -13,6 +15,11 @@ public class BattleMode extends Screen {
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
+
+	private Gif hitimage;
+
+	// sets to 0 before and after each mouseclick
+	private int MouseClick = 0;
 
 	/**
 	 * initializes the fields
@@ -25,11 +32,11 @@ public class BattleMode extends Screen {
 		super(800, 600);
 		this.player = player;
 		this.enemy = enemy;
-		
+
 		// changes location of the player and enemy for battle arena
 		player.getControls().changeBy(200, 200);
 		enemy.getControls().changeBy(600, 200);
-		
+
 		this.surface = surface;
 
 		button = new Rectangle[4];
@@ -47,6 +54,7 @@ public class BattleMode extends Screen {
 	}
 
 	public void setup() {
+		hitimage = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
 
 	}
 
@@ -63,8 +71,9 @@ public class BattleMode extends Screen {
 
 		mainplayer.draw(surface);
 		enemyplayer.draw(surface);
-		
-		// remember to initialize the main player and enemy player at different locations
+
+		// remember to initialize the main player and enemy player at different
+		// locations
 
 		// draws buttons
 		surface.pushStyle();
@@ -98,25 +107,58 @@ public class BattleMode extends Screen {
 		float f = surface.textWidth(move4);
 		surface.text(move4, button[4].x + button[4].width / 2 - f / 2, button[4].y + button[4].height / 2);
 		surface.popStyle();
-		
-		
+
+		if (1 == MouseClick) {
+			hitimage.play();
+			surface.image(hitimage, , b);
+		}
 
 	}
-	
+
 	/**
 	 * checks if mouse is being pressed and switches screens if it is on a button
 	 */
 	public void mousePressed() {
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if (button[1].contains(p))
-			surface.switchScreen(ScreenSwitcher.PLATFORM);
+			MouseClick = 1;
 		if (button[2].contains(p))
-			surface.switchScreen(ScreenSwitcher.INSTRUCTION);
+			MouseClick = 2;
 		if (button[3].contains(p))
-			
+			MouseClick = 3;
 		if (button[4].contains(p))
+			MouseClick = 4;
 
 	}
 
-	
+	/**
+	 * changes the health of the player or the enemy to account for healing or
+	 * damage done
+	 * 
+	 * @param e      the Entity that is being attacked/ healed
+	 * @param damage the damage/healing that is occurring to the Entity object
+	 */
+	public void changeHealth(Entity e, int damage) {
+		int health = e.getStatistics().getHealth();
+
+		e.getStatistics().setHealth(health - damage);
+
+	}
+
+	/**
+	 * returns whether or not there is a successful critical hit on the opponent
+	 * 
+	 * @param critChance the critical hit rate of the attacking entity
+	 * @return true if there was a critical, else false.
+	 */
+	public boolean crit(double critChance) {
+		double crit = Math.random();
+
+		if (crit <= critChance)
+			return true;
+		else
+			return false;
+
+	}
+
 }
