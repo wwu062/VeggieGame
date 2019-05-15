@@ -16,9 +16,9 @@ public class BattleMode extends Screen {
 
 	private Rectangle[] button;
 
-	private Gif hitimage;
+	private Gif hitimg, player_attackimg;
 
-	// sets to 0 before and after each mouseclick
+	// sets to 0 before and after each mouse click
 	private int MouseClick = 0;
 
 	/**
@@ -43,19 +43,19 @@ public class BattleMode extends Screen {
 
 		// attacks column 1 initialization
 		for (int i = 0; i < 2; i++) {
-			button[i] = new Rectangle(150, 400 + 125 * i, 225, 75);
+			button[i] = new Rectangle(150, 375 + 125 * i, 225, 75);
 		}
 
 		// attacks column 2 initialization
 		for (int i = 0; i < 2; i++) {
-			button[i] = new Rectangle(425, 400 + 125 * i, 225, 75);
+			button[i] = new Rectangle(425, 375 + 125 * i, 225, 75);
 		}
 
 	}
 
 	public void setup() {
-		hitimage = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
-
+		hitimg = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
+		player_attackimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif");
 	}
 
 	/**
@@ -109,10 +109,64 @@ public class BattleMode extends Screen {
 		surface.popStyle();
 
 		if (1 == MouseClick) {
-			hitimage.play();
-			surface.image(hitimage, , b);
+			surface.image(player_attackimg, 200, 200);
+			surface.delay(1000);
+			hitimg("player");
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if(crit)
+				changeHealth(enemy, player.getMoveList()[1].getAttackval() + 10);
+			else
+				changeHealth(enemy, player.getMoveList()[1].getAttackval());
+			
 		}
-
+		if (2 == MouseClick) {
+			surface.image(player_attackimg, 200, 200);
+			surface.delay(1000);
+			hitimg("player");
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if(crit)
+				changeHealth(enemy, player.getMoveList()[2].getAttackval() + 10);
+			else
+				changeHealth(enemy, player.getMoveList()[2].getAttackval());
+			
+		}
+		if (3 == MouseClick) {
+			surface.image(player_attackimg, 200, 200);
+			surface.delay(1000);
+			hitimg("player");
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if(crit)
+				changeHealth(enemy, player.getMoveList()[3].getAttackval() + 10);
+			else
+				changeHealth(enemy, player.getMoveList()[3].getAttackval());
+			
+		}
+		if (4 == MouseClick) {
+			surface.image(player_attackimg, 200, 200);
+			surface.delay(1000);
+			hitimg("player");
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if(crit)
+				changeHealth(enemy, player.getMoveList()[4].getAttackval() + 10);
+			else
+				changeHealth(enemy, player.getMoveList()[4].getAttackval());
+			
+		}
+		
+	}
+	
+	/**
+	 * Checks if the hit image should land on the player or enemy then draws the gif
+	 * @pre Argument only takes "player" or "enemy"
+	 * @param Entity the "player" or "enemy" that will be damaged
+	 */
+	public void hitimg(String Entity) {
+		hitimg.play();
+		if(Entity.equalsIgnoreCase("enemy"))
+			surface.image(hitimg, 590, 190, 32, 32);
+		if(Entity.equalsIgnoreCase("player"))
+			surface.image(hitimg, 190, 190, 32, 32);
+		
 	}
 
 	/**
@@ -135,7 +189,7 @@ public class BattleMode extends Screen {
 	 * changes the health of the player or the enemy to account for healing or
 	 * damage done
 	 * 
-	 * @param e      the Entity that is being attacked/ healed
+	 * @param e the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
 	public void changeHealth(Entity e, int damage) {
