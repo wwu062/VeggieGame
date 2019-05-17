@@ -98,6 +98,11 @@ public class PlayerController extends MovingImage {
 	public boolean battle(PlayerController bot) {
 		return bot.getBounds().intersects(this.getBounds());
 	}
+	
+	public void stop() {
+		velX = 0;
+		velY = 0;
+	}
 
 
 }

@@ -181,6 +181,7 @@ public class PlatformMode extends Screen {
 		for(Entity b : bot) {
 			b.getControls().draw(surface);
 		}
+	
 
 		surface.popMatrix();
 
@@ -189,10 +190,21 @@ public class PlatformMode extends Screen {
 		
 	}
 	
-	public void run() {
+	public void pause() {
 		for(Entity b : bot) {
-			if(player.getControls().battle(b.getControls()))
+			b.getControls().stop();
+		}
+		player.getControls().stop();
+	}
+	
+	public void run() {
+		
+		for(int i = 0; i < bot.size(); i++) {
+			if(player.getControls().battle(bot.get(i).getControls())) {
+				bot.remove(i);
+				pause();
 				surface.switchScreen(ScreenSwitcher.MENU);
+			}
 		}
 		
 		if (surface.isPressed(KeyEvent.VK_LEFT))

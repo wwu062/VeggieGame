@@ -88,7 +88,7 @@ public class MovingImage {
 		double y = bounds.getBounds().getY();
 		double width = bounds.getBounds().getWidth();
 		
-		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 5 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
+		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		
 		return intersects;
 	}
