@@ -15,6 +15,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 	
 	protected ArrayList<Screen> screens;
 
+	protected BattleMode battlescreen;
+	
 	//used to hold key codes from the keyboard
 	private ArrayList<Integer> keys;
 	
@@ -36,6 +38,10 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 		
 		PlatformMode screen3 = new PlatformMode(this);
 		screens.add(screen3);
+		
+		BattleMode screen4 = new BattleMode(this);
+		screens.add(screen4);
+		battlescreen = screen4;
 
 		// add screens 3 and 4 when figure out how to add pictures in different screens
 

@@ -96,7 +96,7 @@ Stretch features:
    * Instructions
    * Menu
    * DrawingSurface
-   * FileIO
+   * FileIO, moveList.txt
    * BattleMode
    * Gifs, Images, Textures
 
