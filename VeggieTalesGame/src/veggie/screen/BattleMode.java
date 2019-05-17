@@ -142,8 +142,8 @@ public class BattleMode extends Screen {
 		surface.image(panels, 0, 0);
 
 		istate.beginDraw();
-		mainplayer.draw(istate);
-		enemyplayer.draw(istate);
+		mainplayer.draw(surface);
+		enemyplayer.draw(surface);
 
 		if (0 != MouseClick)
 			//istate.background(255);

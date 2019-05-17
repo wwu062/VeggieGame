@@ -79,7 +79,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 		
 
 		popMatrix();
-
+		System.out.println("redrawn");
 	}
 
 	/**
