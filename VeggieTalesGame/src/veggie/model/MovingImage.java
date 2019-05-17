@@ -41,8 +41,8 @@ public class MovingImage {
 	 * @param y new y-coordinate of MovingImage
 	 */
 	public void moveTo(double x, double y) {
-		hitbox.x += x;
-		hitbox.y += y;
+		hitbox.x = (int)x;
+		hitbox.y = (int)y;
 	}
 
 	/**
@@ -84,12 +84,18 @@ public class MovingImage {
 	 * @return true if MovingImage touches the shape
 	 */
 	public boolean intersects(Shape bounds) {
+		/*
 		double x = bounds.getBounds().getX();
 		double y = bounds.getBounds().getY();
 		double width = bounds.getBounds().getWidth();
 		
 		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		
+		return intersects;
+		*/
+		boolean intersects = false;
+		if(bounds instanceof Rectangle)
+			intersects = hitbox.intersects((Rectangle)bounds);
 		return intersects;
 	}
 

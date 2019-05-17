@@ -72,14 +72,18 @@ public class PlayerController extends MovingImage {
 			
 			onSurface = false;
 
-			moveBy(velX, velY);
+			
 	}
 	
 	public void checkPlayer(ArrayList<Shape> platform) {
+		moveBy(velX, velY);
 		for(Shape s : platform) {
 			if(super.intersects(s)) {
 				velY = 0;
 				onSurface = true;
+				System.out.println(this.getBounds().x);
+				moveTo(this.getBounds().x, s.getBounds().y - this.getBounds().getHeight());
+				System.out.println(this.getBounds().x);
 				break;
 			}
 		}

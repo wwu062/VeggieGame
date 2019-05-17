@@ -79,7 +79,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 		
 
 		popMatrix();
-		System.out.println("redrawn");
+		
 	}
 
 	/**
@@ -129,6 +129,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 	 */
 	public void mousePressed() {
 		activeScreen.mousePressed();
+		System.out.println(mouseX + " " + mouseY);
 	}
 	
 	/**
