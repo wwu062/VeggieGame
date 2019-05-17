@@ -84,7 +84,7 @@ public class MovingImage {
 	 * @return true if MovingImage touches the shape
 	 */
 	public boolean intersects(Shape bounds) {
-		/*
+		
 		double x = bounds.getBounds().getX();
 		double y = bounds.getBounds().getY();
 		double width = bounds.getBounds().getWidth();
@@ -92,11 +92,12 @@ public class MovingImage {
 		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		
 		return intersects;
-		*/
+		/*
 		boolean intersects = false;
 		if(bounds instanceof Rectangle)
 			intersects = hitbox.intersects((Rectangle)bounds);
 		return intersects;
+		*/
 	}
 
 	/**
