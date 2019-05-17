@@ -62,7 +62,7 @@ public class BattleMode extends Screen {
 
 		// attacks column 2 initialization
 		for (int i = 0; i < 2; i++) {
-			button[i] = new Rectangle(425, 375 + 125 * i, 225, 75);
+			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
 		}
 
 	}
@@ -94,26 +94,25 @@ public class BattleMode extends Screen {
 		PlayerController mainplayer = player.getControls();
 		PlayerController enemyplayer = enemy.getControls();
 
-		surface.background(255, 255, 255);
+		surface.background(255, 204, 0);
 
 		// remember to initialize the main player and enemy player at different
 		// locations
 
 		// draws buttons
 		panels.beginDraw();
-
-		panels.pushStyle();
-		//System.out.println(panels == null);
-		panels.rect(button[1].x, button[1].y, button[1].width, button[1].height);
-		panels.fill(0);
-		String move1 = player.getMoveList()[1].getName();
-		float w = panels.textWidth(move1);
-		panels.text(move1, button[1].x + button[1].width / 2 - w / 2, button[1].y + button[1].height / 2);
-		panels.popStyle();
+		for(int i = 0; i < 4; i++) {
+			//panels.pushStyle();
+			panels.fill(255);
+			panels.rect(0, 0, 100, 100);
+			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
+			String move = player.getMoveList()[i].getName();
+			float w = panels.textWidth(move);
+			panels.text(move, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
+			//panels.popStyle();
+		}
 		
-		for(int i = 0; i < button.length; i++)
-			System.out.println(button[i].x + " " + button[i].y + " " + button[i].width + " " + button[i].height);
-		
+		/*
 		panels.pushStyle();
 		panels.rect(button[2].x, button[2].y, button[2].width, button[2].height);
 		panels.fill(0);
@@ -137,7 +136,7 @@ public class BattleMode extends Screen {
 		float f = panels.textWidth(move4);
 		panels.text(move4, button[4].x + button[4].width / 2 - f / 2, button[4].y + button[4].height / 2);
 		panels.popStyle();
-
+*/
 		panels.endDraw();
 
 		surface.image(panels, 0, 0);
@@ -147,7 +146,7 @@ public class BattleMode extends Screen {
 		enemyplayer.draw(istate);
 
 		if (0 != MouseClick)
-			istate.background(255);
+			//istate.background(255);
 
 		istate.endDraw();
 
@@ -155,13 +154,30 @@ public class BattleMode extends Screen {
 
 		if (0 == MouseClick) {
 			istate.beginDraw();
-			istate.background(255);
+			//istate.background(255);
 			istate.endDraw();
 
 			surface.image(istate, 0, 0);
 		}
 
 		if (1 == MouseClick) {
+			fstate.beginDraw();
+
+			fstate.image(player_attackimg, 200, 200);
+			surface.delay(1000);
+			hitimg("player");
+
+			fstate.endDraw();
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if (crit)
+				changeHealth(enemy, player.getMoveList()[0].getAttackval() + 10);
+			else
+				changeHealth(enemy, player.getMoveList()[0].getAttackval());
+
+			MouseClick = 0;
+
+		}
+		if (2 == MouseClick) {
 			fstate.beginDraw();
 
 			fstate.image(player_attackimg, 200, 200);
@@ -178,7 +194,7 @@ public class BattleMode extends Screen {
 			MouseClick = 0;
 
 		}
-		if (2 == MouseClick) {
+		if (3 == MouseClick) {
 			fstate.beginDraw();
 
 			fstate.image(player_attackimg, 200, 200);
@@ -195,7 +211,7 @@ public class BattleMode extends Screen {
 			MouseClick = 0;
 
 		}
-		if (3 == MouseClick) {
+		if (4 == MouseClick) {
 			fstate.beginDraw();
 
 			fstate.image(player_attackimg, 200, 200);
@@ -208,23 +224,6 @@ public class BattleMode extends Screen {
 				changeHealth(enemy, player.getMoveList()[3].getAttackval() + 10);
 			else
 				changeHealth(enemy, player.getMoveList()[3].getAttackval());
-
-			MouseClick = 0;
-
-		}
-		if (4 == MouseClick) {
-			fstate.beginDraw();
-
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[4].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[4].getAttackval());
 
 			MouseClick = 0;
 
@@ -252,13 +251,13 @@ public class BattleMode extends Screen {
 	 */
 	public void mousePressed() {
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
-		if (button[1].contains(p))
+		if (button[0].contains(p))
 			MouseClick = 1;
-		if (button[2].contains(p))
+		if (button[1].contains(p))
 			MouseClick = 2;
-		if (button[3].contains(p))
+		if (button[2].contains(p))
 			MouseClick = 3;
-		if (button[4].contains(p))
+		if (button[3].contains(p))
 			MouseClick = 4;
 
 	}
