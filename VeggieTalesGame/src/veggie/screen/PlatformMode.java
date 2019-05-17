@@ -201,9 +201,9 @@ public class PlatformMode extends Screen {
 		
 		for(int i = 0; i < bot.size(); i++) {
 			if(player.getControls().battle(bot.get(i).getControls())) {
+				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 				bot.remove(i);
-				pause();
-				surface.switchScreen(ScreenSwitcher.MENU);
+				pause(); 
 			}
 		}
 		

@@ -16,30 +16,33 @@ public abstract class Screen {
 		this.DRAWING_HEIGHT = height;
 	}
 	
-	public void setup() {
-		
-	}
+	public abstract void setup();
 	
-	public void draw() {
-		
-	}
+	public abstract void draw();
 	
 	public void mousePressed() {
-		
+		System.out.println("hello");
 	}
 	
+	/**
+	 * records the mouse the mouse being moved
+	 */
 	public void mouseMoved() {
 		
 	}
 	
+	/**
+	 * records the mouse being dragged 
+	 */
 	public void mouseDragged() {
 		
 	}
 	
+	/**
+	 * records the mouse being released
+	 */
 	public void mouseReleased() {
 		
 	}
-	
-	
-	
 }
+	

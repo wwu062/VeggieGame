@@ -78,7 +78,7 @@ public class BattleMode extends Screen {
 	public void setup() {
 		hitimg = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
 		player_attackimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif");
-
+		System.out.println("hello");
 		panels = surface.createGraphics(800, 600);
 		istate = surface.createGraphics(800, 600);
 		fstate = surface.createGraphics(800, 600);
@@ -103,13 +103,17 @@ public class BattleMode extends Screen {
 		panels.beginDraw();
 
 		panels.pushStyle();
+		//System.out.println(panels == null);
 		panels.rect(button[1].x, button[1].y, button[1].width, button[1].height);
 		panels.fill(0);
 		String move1 = player.getMoveList()[1].getName();
 		float w = panels.textWidth(move1);
 		panels.text(move1, button[1].x + button[1].width / 2 - w / 2, button[1].y + button[1].height / 2);
 		panels.popStyle();
-
+		
+		for(int i = 0; i < button.length; i++)
+			System.out.println(button[i].x + " " + button[i].y + " " + button[i].width + " " + button[i].height);
+		
 		panels.pushStyle();
 		panels.rect(button[2].x, button[2].y, button[2].width, button[2].height);
 		panels.fill(0);
@@ -225,7 +229,7 @@ public class BattleMode extends Screen {
 			MouseClick = 0;
 
 		}
-
+		
 	}
 
 	/**

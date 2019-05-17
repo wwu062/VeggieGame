@@ -27,7 +27,6 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 
 		keys = new ArrayList<Integer>();
 		
-
 		Menu screen1 = new Menu(this);
 		screens.add(screen1);
 
@@ -36,10 +35,13 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 		
 		PlatformMode screen3 = new PlatformMode(this);
 		screens.add(screen3);
-
-		// add screens 3 and 4 when figure out how to add pictures in different screens
-
-		activeScreen = screens.get(0);
+		
+		/*
+		BattleMode screen4 = new BattleMode(this);
+		screens.add(screen4);
+		*/
+		
+		switchScreen(ScreenSwitcher.MENU);
 	}
 	
 	/**
@@ -148,6 +150,16 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher {
 	 */
 	public void mouseReleased() {
 		activeScreen.mouseReleased();
+	}
+	
+	public void addScreen(Screen temp) {
+		temp.setup();
+		screens.add(temp);
+		activeScreen = temp;
+	}
+
+	public void removeScreen(int i) {
+		screens.remove(screens.size() - 1);
 	}
 }
 
