@@ -21,7 +21,7 @@ public abstract class Screen {
 	public abstract void draw();
 	
 	public void mousePressed() {
-		System.out.println("hello");
+		
 	}
 	
 	/**

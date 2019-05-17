@@ -98,7 +98,6 @@ public class PlayerController extends MovingImage {
 	 * 
 	 */
 	public void jump() {
-		System.out.println(onSurface);
 		if (onSurface) {
 			velY = -15;
 		}
