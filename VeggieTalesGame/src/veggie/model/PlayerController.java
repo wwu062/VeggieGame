@@ -71,8 +71,6 @@ public class PlayerController extends MovingImage {
 			velX = 0;
 		}
 		
-		System.out.println(velX);
-		
 		velY += 0.7; // Gravity
 		if(isWalking && onSurface)
 			velX += -0.01*velX; // Friction
@@ -89,9 +87,7 @@ public class PlayerController extends MovingImage {
 			if(super.intersects(s)) {
 				velY = 0;
 				onSurface = true;
-				//System.out.println(this.getBounds().x);
-				moveTo(this.getBounds().x, s.getBounds().y - 0.9*this.getBounds().getHeight());
-				//System.out.println(this.getBounds().x);
+				moveTo(this.getBounds().x, s.getBounds().y - 1.001*this.getBounds().getHeight());
 				break;
 			}
 		}
@@ -102,6 +98,7 @@ public class PlayerController extends MovingImage {
 	 * 
 	 */
 	public void jump() {
+		System.out.println(onSurface);
 		if (onSurface) {
 			velY = -15;
 		}

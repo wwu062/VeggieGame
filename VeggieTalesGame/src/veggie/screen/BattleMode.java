@@ -42,6 +42,26 @@ public class BattleMode extends Screen {
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
+	public BattleMode(DrawingSurface surface) {
+		super(800, 600);
+
+		this.surface = surface;
+
+		button = new Rectangle[4];
+
+		// attacks column 1 initialization
+		for (int i = 0; i < 2; i++) {
+			button[i] = new Rectangle(150, 375 + 125 * i, 225, 75);
+		}
+
+		// attacks column 2 initialization
+		for (int i = 0; i < 2; i++) {
+			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
+		}
+
+	}
+	
+
 	public BattleMode(DrawingSurface surface, Entity player, Entity enemy) {
 		super(800, 600);
 		this.player = player;
@@ -67,20 +87,22 @@ public class BattleMode extends Screen {
 
 	}
 
-	/**
-	 * Alternate constructor; leaves everything null
-	 * @param surface the DrawingSurface object
-	 */
-	public BattleMode(DrawingSurface surface) {
-		super(800, 600);
+	public void addBattlePlayers(Entity player, Entity enemy) {
+		this.player = player;
+		this.enemy = enemy;
+
+		// changes location of the player and enemy for battle arena
+		player.getControls().changeBy(200, 200);
+		enemy.getControls().changeBy(600, 200);
+
 	}
 
 	public void setup() {
 		hitimg = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
 		player_attackimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif");
-		System.out.println("hello");
+
 		panels = surface.createGraphics(800, 600);
-		istate = surface.createGraphics(800, 600);
+		istate = surface.createGraphics(800, 300);
 		fstate = surface.createGraphics(800, 600);
 
 	}
@@ -91,70 +113,71 @@ public class BattleMode extends Screen {
 	 * @post changes background color
 	 */
 	public void draw() {
-		PlayerController mainplayer = player.getControls();
-		PlayerController enemyplayer = enemy.getControls();
 
-		surface.background(255, 204, 0);
+		surface.background(255, 255, 255);
 
 		// remember to initialize the main player and enemy player at different
 		// locations
 
 		// draws buttons
 		panels.beginDraw();
-		for(int i = 0; i < 4; i++) {
-			//panels.pushStyle();
-			panels.fill(255);
-			panels.rect(0, 0, 100, 100);
-			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
-			String move = player.getMoveList()[i].getName();
-			float w = panels.textWidth(move);
-			panels.text(move, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
-			//panels.popStyle();
-		}
-		
-		/*
+
+		panels.pushStyle();
+		panels.rect(button[0].x, button[0].y, button[0].width, button[0].height);
+		panels.fill(0);
+		String move1 = player.getMoveList()[0].getName();
+		float w = panels.textWidth(move1);
+		panels.text(move1, button[0].x + button[0].width / 2 - w / 2, button[0].y + button[0].height / 2);
+		panels.popStyle();
+
+		panels.pushStyle();
+		panels.rect(button[1].x, button[1].y, button[1].width, button[1].height);
+		panels.fill(0);
+		String move2 = player.getMoveList()[1].getName();
+		float y = panels.textWidth(move2);
+		panels.text(move2, button[1].x + button[1].width / 2 - y / 2, button[1].y + button[1].height / 2);
+		panels.popStyle();
+
+//		System.out.println("x=" + button[0].x +",y=" + button[0].y + ",w=" + button[0].width + ",h=" + button[0].height);
+//		System.out.println("x=" + button[2].x +",y=" + button[2].y + ",w=" + button[2].width + ",h=" + button[2].height);
 		panels.pushStyle();
 		panels.rect(button[2].x, button[2].y, button[2].width, button[2].height);
 		panels.fill(0);
-		String move2 = player.getMoveList()[2].getName();
-		float y = panels.textWidth(move2);
-		panels.text(move2, button[2].x + button[2].width / 2 - y / 2, button[2].y + button[2].height / 2);
+		String move3 = player.getMoveList()[2].getName();
+		float d = panels.textWidth(move3);
+		panels.text(move3, button[2].x + button[2].width / 2 - d / 2, button[2].y + button[2].height / 2);
 		panels.popStyle();
 
 		panels.pushStyle();
 		panels.rect(button[3].x, button[3].y, button[3].width, button[3].height);
 		panels.fill(0);
-		String move3 = player.getMoveList()[3].getName();
-		float d = panels.textWidth(move3);
-		panels.text(move3, button[3].x + button[3].width / 2 - d / 2, button[3].y + button[3].height / 2);
+		String move4 = player.getMoveList()[3].getName();
+		float f = panels.textWidth(move4);
+		panels.text(move4, button[3].x + button[3].width / 2 - f / 2, button[3].y + button[3].height / 2);
 		panels.popStyle();
 
-		panels.pushStyle();
-		panels.rect(button[4].x, button[4].y, button[4].width, button[4].height);
-		panels.fill(0);
-		String move4 = player.getMoveList()[4].getName();
-		float f = panels.textWidth(move4);
-		panels.text(move4, button[4].x + button[4].width / 2 - f / 2, button[4].y + button[4].height / 2);
-		panels.popStyle();
-*/
 		panels.endDraw();
 
 		surface.image(panels, 0, 0);
 
 		istate.beginDraw();
-		mainplayer.draw(surface);
-		enemyplayer.draw(surface);
 
-		if (0 != MouseClick)
-			//istate.background(255);
 
+		// if no mouseclicking. background is white. 
+		if (0 == MouseClick)
+			istate.background(255);
+		
+		player.getControls().draw(istate);
+		enemy.getControls().draw(istate);
+		
 		istate.endDraw();
 
 		surface.image(istate, 0, 0);
 
-		if (0 == MouseClick) {
+		// when mouse is clicked, clears with white screen. 
+		if (0 != MouseClick) {
 			istate.beginDraw();
-			//istate.background(255);
+			istate.background(255);
 			istate.endDraw();
 
 			surface.image(istate, 0, 0);
@@ -228,7 +251,7 @@ public class BattleMode extends Screen {
 			MouseClick = 0;
 
 		}
-		
+
 	}
 
 	/**
