@@ -82,7 +82,7 @@ public class PlayerController extends MovingImage {
 				velY = 0;
 				onSurface = true;
 				System.out.println(this.getBounds().x);
-				moveTo(this.getBounds().x, s.getBounds().y - this.getBounds().getHeight());
+				moveTo(this.getBounds().x, s.getBounds().y - 0.9*this.getBounds().getHeight());
 				System.out.println(this.getBounds().x);
 				break;
 			}
