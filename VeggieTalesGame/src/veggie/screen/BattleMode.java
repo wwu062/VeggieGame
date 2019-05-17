@@ -27,7 +27,7 @@ public class BattleMode extends Screen {
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, istate, fstate;
+	private PGraphics panels, istate, fstate, healthpanel;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turncounter = 0;
@@ -60,7 +60,6 @@ public class BattleMode extends Screen {
 		}
 
 	}
-	
 
 	public BattleMode(DrawingSurface surface, Entity player, Entity enemy) {
 		super(800, 600);
@@ -103,7 +102,8 @@ public class BattleMode extends Screen {
 
 		panels = surface.createGraphics(800, 600);
 		istate = surface.createGraphics(800, 300);
-		fstate = surface.createGraphics(800, 600);
+		fstate = surface.createGraphics(800, 300);
+		healthpanel = surface.createGraphics(800, 600);
 
 	}
 
@@ -120,6 +120,9 @@ public class BattleMode extends Screen {
 		// locations
 
 		// draws buttons
+		
+		
+		
 		panels.beginDraw();
 
 		panels.pushStyle();
@@ -162,95 +165,162 @@ public class BattleMode extends Screen {
 
 		istate.beginDraw();
 
-
-		// if no mouseclicking. background is white. 
+		// if no mouseclicking. background is white.
 		if (0 == MouseClick)
 			istate.background(255);
-		
+
 		player.getControls().draw(istate);
 		enemy.getControls().draw(istate);
-		
+
 		istate.endDraw();
 
 		surface.image(istate, 0, 0);
 
-		// when mouse is clicked, clears with white screen. 
-		if (0 != MouseClick) {
+		if (turncounter % 2 == 0) {
+			System.out.println("player");
+			// when mouse is clicked, clears with white screen.
+			if (0 != MouseClick) {
+				istate.beginDraw();
+				istate.background(255);
+				istate.endDraw();
+
+				surface.image(istate, 0, 0);
+				
+				turncounter++;
+			}
+
+			if (1 == MouseClick) {
+				System.out.println("1");
+				fstate.beginDraw();
+
+				fstate.image(player_attackimg, 200, 200);
+				surface.delay(1000);
+				hitimg("player");
+
+				fstate.endDraw();
+
+				surface.image(fstate, 0, 0);
+
+				boolean crit = crit(player.getStatistics().getCritrate());
+				if (crit)
+					changeHealth(enemy, player.getMoveList()[0].getAttackval() + 10);
+				else
+					changeHealth(enemy, player.getMoveList()[0].getAttackval());
+
+				MouseClick = 0;
+
+			}
+			if (2 == MouseClick) {
+				fstate.beginDraw();
+
+				fstate.image(player_attackimg, 200, 200);
+				surface.delay(1000);
+				hitimg("player");
+
+				fstate.endDraw();
+
+				surface.image(fstate, 0, 0);
+
+				boolean crit = crit(player.getStatistics().getCritrate());
+				if (crit)
+					changeHealth(enemy, player.getMoveList()[1].getAttackval() + 10);
+				else
+					changeHealth(enemy, player.getMoveList()[1].getAttackval());
+
+				MouseClick = 0;
+
+			}
+			if (3 == MouseClick) {
+				fstate.beginDraw();
+
+				fstate.image(player_attackimg, 200, 200);
+				hitimg("player");
+
+				fstate.endDraw();
+
+				surface.image(fstate, 0, 0);
+
+				boolean crit = crit(player.getStatistics().getCritrate());
+				if (crit)
+					changeHealth(enemy, player.getMoveList()[2].getAttackval() + 10);
+				else
+					changeHealth(enemy, player.getMoveList()[2].getAttackval());
+
+				MouseClick = 0;
+
+			}
+			if (4 == MouseClick) {
+				fstate.beginDraw();
+
+				
+				fstate.image(player_attackimg, 200, 200);
+				surface.delay(1000);
+				hitimg("player");
+
+				fstate.endDraw();
+
+				surface.image(fstate, 0, 0);
+
+				boolean crit = crit(player.getStatistics().getCritrate());
+				if (crit)
+					changeHealth(enemy, player.getMoveList()[3].getAttackval() + 10);
+				else
+					changeHealth(enemy, player.getMoveList()[3].getAttackval());
+
+				MouseClick = 0;
+				
+			}
+
+		} else {
+			
 			istate.beginDraw();
 			istate.background(255);
 			istate.endDraw();
-
 			surface.image(istate, 0, 0);
-		}
-
-		if (1 == MouseClick) {
+			
 			fstate.beginDraw();
 
-			fstate.image(player_attackimg, 200, 200);
+			fstate.image(player_attackimg, 600, 200);
 			surface.delay(1000);
-			hitimg("player");
+			hitimg("enemy");
 
 			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[0].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[0].getAttackval());
 
-			MouseClick = 0;
-
+			
+			surface.image(fstate, 0, 0);
+			
+			int enemyattack = enemy.getMoveList()[((int)(Math.random()*4))].getAttackval();
+			
+			changeHealth(player, enemyattack);
+			
+			turncounter++; 
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		if (2 == MouseClick) {
-			fstate.beginDraw();
+		
+		healthpanel.beginDraw();
+		//player
+		
+		healthpanel.fill(0);
+		healthpanel.rect(100, 50, 100, 50);
+		healthpanel.fill(255, 0, 0);
+		healthpanel.rect(100, 50, player.getStatistics().getHealth(), 50);
+		//enemy
+		healthpanel.fill(0);
+		healthpanel.rect(600, 50, 100, 50);
+		healthpanel.fill(255, 0, 0);
+		healthpanel.rect(600, 50, enemy.getStatistics().getHealth(), 50);
+	
+		
+		healthpanel.endDraw();
+		
+		surface.image(healthpanel, 0, 0);
 
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[1].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[1].getAttackval());
-
-			MouseClick = 0;
-
-		}
-		if (3 == MouseClick) {
-			fstate.beginDraw();
-
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[2].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[2].getAttackval());
-
-			MouseClick = 0;
-
-		}
-		if (4 == MouseClick) {
-			fstate.beginDraw();
-
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[3].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[3].getAttackval());
-
-			MouseClick = 0;
-
-		}
+		
 
 	}
 

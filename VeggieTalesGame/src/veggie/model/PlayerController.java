@@ -73,7 +73,7 @@ public class PlayerController extends MovingImage {
 		
 		velY += 0.7; // Gravity
 		if(isWalking && onSurface)
-			velX += -0.01*velX; // Friction
+			velX += -0.05*(Math.abs(velX)/velX); // Friction
 			
 			
 			onSurface = false;
