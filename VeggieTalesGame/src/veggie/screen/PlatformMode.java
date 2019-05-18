@@ -45,7 +45,7 @@ public class PlatformMode extends Screen {
 
 	private ArrayList<PImage> assets;
 
-	private Gif playerimg;
+	private Gif playerRun;
 
 	private Map<Integer, Moves> moves;
 
@@ -72,22 +72,8 @@ public class PlatformMode extends Screen {
 		obstacles.add(new Rectangle(375, 300, 50, 100));
 		obstacles.add(new Rectangle(300, 250, 200, 50));
 
-		moves = new HashMap<Integer, Moves>();
 
 		bot = new ArrayList<Entity>();
-		// reading moveList file
-		FileIO translator = new FileIO();
-
-		try {
-			ArrayList<String> temp_moves = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
-			for (String s : temp_moves) {
-				Moves m = translator.translateMoveList(s);
-				moves.put(m.getAttackval(), m);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -104,8 +90,8 @@ public class PlatformMode extends Screen {
 		int i = 0;
 		int k = 1;
 		while (iplayerMovelist[3] == null) {
-			if (moves.containsKey(k)) {
-				iplayerMovelist[i] = moves.get(k);
+			if (surface.moves.containsKey(k)) {
+				iplayerMovelist[i] = surface.moves.get(k);
 			} else {
 				i--;
 			}
@@ -113,7 +99,7 @@ public class PlatformMode extends Screen {
 			k++;
 		}
 
-		player = new Entity(playerimg, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
+		player = new Entity(playerRun, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
 	
 	public void spawnNewBot() {
@@ -124,8 +110,8 @@ public class PlatformMode extends Screen {
 		int i = 0;
 		int k = 1;
 		while (iplayerMovelist[3] == null) {
-			if (moves.containsKey(k)) {
-				iplayerMovelist[i] = moves.get(k);
+			if (surface.moves.containsKey(k)) {
+				iplayerMovelist[i] = surface.moves.get(k);
 			} else {
 				i--;
 			}
@@ -133,7 +119,7 @@ public class PlatformMode extends Screen {
 			k++;
 		}
 
-		bot.add(new Entity(playerimg, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new Entity(playerRun, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
 	}
 
 //	public void runMe() {
@@ -145,9 +131,9 @@ public class PlatformMode extends Screen {
 	 */
 	public void setup() {
 
-		playerimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite.gif");
+		playerRun = surface.lettuceAssets.get("run");
 
-		playerimg.play();
+		playerRun.play();
 
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
@@ -181,6 +167,7 @@ public class PlatformMode extends Screen {
 		for(Entity b : bot) {
 			b.getControls().draw(surface);
 		}
+	
 
 		surface.popMatrix();
 
@@ -189,10 +176,21 @@ public class PlatformMode extends Screen {
 		
 	}
 	
-	public void run() {
+	public void pause() {
 		for(Entity b : bot) {
-			if(player.getControls().battle(b.getControls()))
-				surface.switchScreen(ScreenSwitcher.MENU);
+			b.getControls().stop();
+		}
+		player.getControls().stop();
+	}
+	
+	public void run() {
+		
+		for(int i = 0; i < bot.size(); i++) {
+			if(player.getControls().battle(bot.get(i).getControls())) {
+				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+				bot.remove(i);
+				pause(); 
+			}
 		}
 		
 		if (surface.isPressed(KeyEvent.VK_LEFT))

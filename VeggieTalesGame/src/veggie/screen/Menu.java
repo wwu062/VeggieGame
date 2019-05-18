@@ -10,7 +10,8 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import veggie.textReader.FileIO;
 
-public class Menu extends Screen {
+public class Menu extends Screen
+{
 
 	private DrawingSurface surface;
 
@@ -25,7 +26,8 @@ public class Menu extends Screen {
 	 * 
 	 * @param surface initial DrawingSurface object
 	 */
-	public Menu(DrawingSurface surface) {
+	public Menu(DrawingSurface surface)
+	{
 		super(800, 600);
 		this.surface = surface;
 
@@ -37,28 +39,28 @@ public class Menu extends Screen {
 	/**
 	 * sets up the backimg
 	 */
-	public void setup() {
-		backimg = surface.loadImage("images" + FileIO.fileSep + "clouds.png");
-		logoimg = surface.loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png");
+	public void setup()
+	{
+		backimg = surface.assets.get("background1");
+		logoimg = surface.assets.get("logo");
 	}
 
 	/**
 	 * draws to the screen
 	 */
-	public void draw() {
-
-		
+	public void draw()
+	{
 		backimg.resize(DRAWING_WIDTH, DRAWING_HEIGHT);
-		
-		logoimg.resize(backimg.width/2, backimg.height/7);
+
+		logoimg.resize(backimg.width / 2, backimg.height / 7);
 
 		surface.background(250, 250, 250);
-		
+
 		surface.imageMode(PConstants.CORNER);
 
 		surface.image(backimg, 0, 0);
 		surface.image(logoimg, DRAWING_WIDTH / 2 - 200, DRAWING_HEIGHT / 4 - 75);
-		
+
 		surface.pushStyle();
 		surface.rect(playbutton.x, playbutton.y, playbutton.width, playbutton.height);
 		surface.fill(0);
@@ -80,11 +82,12 @@ public class Menu extends Screen {
 	/**
 	 * checks if mouse is being pressed and switches screens if it is on a button
 	 */
-	public void mousePressed() {
+	public void mousePressed()
+	{
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
-		if (playbutton.contains(p))
+		if(playbutton.contains(p))
 			surface.switchScreen(ScreenSwitcher.PLATFORM);
-		if (instructbutton.contains(p))
+		if(instructbutton.contains(p))
 			surface.switchScreen(ScreenSwitcher.INSTRUCTION);
 
 	}

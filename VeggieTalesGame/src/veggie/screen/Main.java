@@ -11,6 +11,8 @@ public class Main {
 
 	public static void main(String args[]) {
 
+		System.out.println(System.getProperty("user.home"));
+
 		DrawingSurface drawing = new DrawingSurface();
 		PApplet.runSketch(new String[]{""}, drawing);
 		PSurfaceAWT surf = (PSurfaceAWT) drawing.getSurface();

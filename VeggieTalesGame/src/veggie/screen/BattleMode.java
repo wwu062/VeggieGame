@@ -6,34 +6,32 @@ import java.awt.Rectangle;
 import gifAnimation.Gif;
 import processing.core.PGraphics;
 import veggie.model.Entity;
-import veggie.model.PlayerController;
-import veggie.textReader.FileIO;
 
 /**
- * The battle screen for the game (think pokemon battle)
+ * The battle screen for the game (think Pokemon battle)
  * 
  * @author williamwu
- *
  */
-public class BattleMode extends Screen {
-
+public class BattleMode extends Screen
+{
 	private Entity player, enemy;
 
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
 
-	private Gif hitimg, player_attackimg;
+	private Gif hitImage;
+	private Gif lettuceAttack, lettuceBounce;
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, istate, fstate;
+	private PGraphics panels, istate, fstate, healthPanel;
 
 	// keeps check of if it is the players turn or the enemy's
-	private int turncounter = 0;
+	private int turnCounter = 0;
 
 	// sets to 0 before and after each mouse click
-	private int MouseClick = 0;
+	private int panelClick = 0;
 
 	/**
 	 * initializes the fields
@@ -42,26 +40,9 @@ public class BattleMode extends Screen {
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
-	public BattleMode(DrawingSurface surface) {
+	public BattleMode(DrawingSurface surface, Entity player, Entity enemy)
+	{
 		super(800, 600);
-
-		this.surface = surface;
-
-		button = new Rectangle[4];
-
-		// attacks column 1 initialization
-		for (int i = 0; i < 2; i++) {
-			button[i] = new Rectangle(150, 375 + 125 * i, 225, 75);
-		}
-
-		// attacks column 2 initialization
-		for (int i = 0; i < 2; i++) {
-			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
-		}
-
-	}
-
-	public void addBattlePlayers(Entity player, Entity enemy) {
 		this.player = player;
 		this.enemy = enemy;
 
@@ -69,15 +50,37 @@ public class BattleMode extends Screen {
 		player.getControls().changeBy(200, 200);
 		enemy.getControls().changeBy(600, 200);
 
+		this.surface = surface;
+
+		button = new Rectangle[4];
+
+		// attacks column 1 initialization
+		for(int i = 0; i < 2; i++)
+		{
+			button[i] = new Rectangle(150, 375 + 125 * i, 225, 75);
+		}
+
+		// attacks column 2 initialization
+		for(int i = 0; i < 2; i++)
+		{
+			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
+		}
+
 	}
 
-	public void setup() {
-		hitimg = new Gif(surface, "images" + FileIO.fileSep + "hit-effect.gif");
-		player_attackimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif");
+	public void setup()
+	{
+		hitImage = (Gif) surface.assets.get("hit");
+		lettuceAttack = surface.lettuceAssets.get("attack");
+		lettuceBounce = surface.lettuceAssets.get("bounce");
+
+		lettuceAttack.play();
+		lettuceBounce.play();
 
 		panels = surface.createGraphics(800, 600);
 		istate = surface.createGraphics(800, 300);
-		fstate = surface.createGraphics(800, 600);
+		fstate = surface.createGraphics(800, 300);
+		healthPanel = surface.createGraphics(800, 600);
 
 	}
 
@@ -86,7 +89,8 @@ public class BattleMode extends Screen {
 	 * 
 	 * @post changes background color
 	 */
-	public void draw() {
+	public void draw()
+	{
 
 		surface.background(255, 255, 255);
 
@@ -94,138 +98,134 @@ public class BattleMode extends Screen {
 		// locations
 
 		// draws buttons
+
 		panels.beginDraw();
-
-		panels.pushStyle();
-		panels.rect(button[0].x, button[0].y, button[0].width, button[0].height);
-		panels.fill(0);
-		String move1 = player.getMoveList()[0].getName();
-		float w = panels.textWidth(move1);
-		panels.text(move1, button[0].x + button[0].width / 2 - w / 2, button[0].y + button[0].height / 2);
-		panels.popStyle();
-
-		panels.pushStyle();
-		panels.rect(button[1].x, button[1].y, button[1].width, button[1].height);
-		panels.fill(0);
-		String move2 = player.getMoveList()[1].getName();
-		float y = panels.textWidth(move2);
-		panels.text(move2, button[1].x + button[1].width / 2 - y / 2, button[1].y + button[1].height / 2);
-		panels.popStyle();
-
-//		System.out.println("x=" + button[0].x +",y=" + button[0].y + ",w=" + button[0].width + ",h=" + button[0].height);
-//		System.out.println("x=" + button[2].x +",y=" + button[2].y + ",w=" + button[2].width + ",h=" + button[2].height);
-		panels.pushStyle();
-		panels.rect(button[2].x, button[2].y, button[2].width, button[2].height);
-		panels.fill(0);
-		String move3 = player.getMoveList()[2].getName();
-		float d = panels.textWidth(move3);
-		panels.text(move3, button[2].x + button[2].width / 2 - d / 2, button[2].y + button[2].height / 2);
-		panels.popStyle();
-
-		panels.pushStyle();
-		panels.rect(button[3].x, button[3].y, button[3].width, button[3].height);
-		panels.fill(0);
-		String move4 = player.getMoveList()[3].getName();
-		float f = panels.textWidth(move4);
-		panels.text(move4, button[3].x + button[3].width / 2 - f / 2, button[3].y + button[3].height / 2);
-		panels.popStyle();
-
+		drawPanel();
 		panels.endDraw();
-
 		surface.image(panels, 0, 0);
 
+
 		istate.beginDraw();
-
-
-		// if no mouseclicking. background is white. 
-		if (0 == MouseClick)
+		if(0 == panelClick) // if no panelClicking. background is white.
+		{
 			istate.background(255);
-		
-		player.getControls().draw(istate);
-		enemy.getControls().draw(istate);
-		
+		}
+		player.getControls().draw(istate, lettuceBounce);
+		enemy.getControls().draw(istate, lettuceBounce);
 		istate.endDraw();
-
 		surface.image(istate, 0, 0);
 
-		// when mouse is clicked, clears with white screen. 
-		if (0 != MouseClick) {
+
+		if(turnCounter % 2 == 0)
+		{
+			System.out.println("player");
+			checkpanelClick();
+		}
+		// else
+		// {
+		//
+		// istate.beginDraw();
+		// istate.background(255);
+		// istate.endDraw();
+		// surface.image(istate, 0, 0);
+		//
+		// fstate.beginDraw();
+		//
+		// fstate.image(lettuceAttack, 600, 200);
+		// surface.delay(1000);
+		// hitImage("enemy");
+		//
+		// fstate.endDraw();
+		//
+		// surface.image(fstate, 0, 0);
+		//
+		// int enemyattack = enemy.getMoveList()[((int) (Math.random() *
+		// 4))].getAttackval();
+		//
+		// changeHealth(player, enemyattack);
+		//
+		// turnCounter++;
+		// try
+		// {
+		// Thread.sleep(1000);
+		// } catch(InterruptedException e)
+		// {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		drawHealthPanel();
+	}
+
+	public void drawHealthPanel()
+	{
+		healthPanel.beginDraw();
+		// player
+
+		healthPanel.fill(0);
+		healthPanel.rect(100, 50, 100, 25);
+		healthPanel.fill(255, 0, 0);
+		healthPanel.rect(100, 50, player.getStatistics().getHealth(), 25);
+		// enemy
+		healthPanel.fill(0);
+		healthPanel.rect(600, 50, 100, 25);
+		healthPanel.fill(255, 0, 0);
+		healthPanel.rect(600, 50, enemy.getStatistics().getHealth(), 25);
+
+		healthPanel.endDraw();
+
+		surface.image(healthPanel, 0, 0);
+	}
+
+	public void drawPanel()
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			panels.pushStyle();
+			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
+			panels.fill(0);
+			String move1 = player.getMoveList()[i].getName();
+			float w = panels.textWidth(move1);
+			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
+			panels.popStyle();
+		}
+
+	}
+
+	public void checkpanelClick()
+	{
+		if(0 != panelClick) // when mouse is clicked, clears with white screen.
+		{
 			istate.beginDraw();
 			istate.background(255);
 			istate.endDraw();
-
 			surface.image(istate, 0, 0);
+
+			drawPlayerMove(panelClick - 1);
+
+			turnCounter++;
 		}
+	}
 
-		if (1 == MouseClick) {
-			fstate.beginDraw();
+	private void drawPlayerMove(int num)
+	{
+		fstate.beginDraw();
 
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
+		fstate.image(lettuceAttack, 200, 200);
+		surface.delay(1000);
+		hitImage("enemy");
 
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[0].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[0].getAttackval());
+		fstate.endDraw();
 
-			MouseClick = 0;
+		surface.image(fstate, 0, 0);
 
-		}
-		if (2 == MouseClick) {
-			fstate.beginDraw();
+		boolean crit = crit(player.getStatistics().getCritrate());
+		if(crit)
+			changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
+		else
+			changeHealth(enemy, player.getMoveList()[num].getAttackval());
 
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[1].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[1].getAttackval());
-
-			MouseClick = 0;
-
-		}
-		if (3 == MouseClick) {
-			fstate.beginDraw();
-
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[2].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[2].getAttackval());
-
-			MouseClick = 0;
-
-		}
-		if (4 == MouseClick) {
-			fstate.beginDraw();
-
-			fstate.image(player_attackimg, 200, 200);
-			surface.delay(1000);
-			hitimg("player");
-
-			fstate.endDraw();
-			boolean crit = crit(player.getStatistics().getCritrate());
-			if (crit)
-				changeHealth(enemy, player.getMoveList()[3].getAttackval() + 10);
-			else
-				changeHealth(enemy, player.getMoveList()[3].getAttackval());
-
-			MouseClick = 0;
-
-		}
-
+		panelClick = 0;
 	}
 
 	/**
@@ -234,29 +234,29 @@ public class BattleMode extends Screen {
 	 * @pre Argument only takes "player" or "enemy"
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
-	public void hitimg(String Entity) {
-		hitimg.play();
-		if (Entity.equalsIgnoreCase("enemy"))
-			fstate.image(hitimg, 590, 190, 32, 32);
-		if (Entity.equalsIgnoreCase("player"))
-			fstate.image(hitimg, 190, 190, 32, 32);
-
+	public void hitImage(String Entity)
+	{
+		hitImage.play();
+		if(Entity.equalsIgnoreCase("enemy"))
+			fstate.image(hitImage, 590, 190, 32, 32);
+		if(Entity.equalsIgnoreCase("player"))
+			fstate.image(hitImage, 190, 190, 32, 32);
 	}
 
 	/**
 	 * checks if mouse is being pressed and switches screens if it is on a button
 	 */
-	public void mousePressed() {
+	public void mousePressed()
+	{
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
-		if (button[0].contains(p))
-			MouseClick = 1;
-		if (button[1].contains(p))
-			MouseClick = 2;
-		if (button[2].contains(p))
-			MouseClick = 3;
-		if (button[3].contains(p))
-			MouseClick = 4;
-
+		if(button[0].contains(p))
+			panelClick = 1;
+		if(button[1].contains(p))
+			panelClick = 2;
+		if(button[2].contains(p))
+			panelClick = 3;
+		if(button[3].contains(p))
+			panelClick = 4;
 	}
 
 	/**
@@ -266,11 +266,11 @@ public class BattleMode extends Screen {
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(Entity e, int damage) {
+	public void changeHealth(Entity e, int damage)
+	{
 		int health = e.getStatistics().getHealth();
 
 		e.getStatistics().setHealth(health - damage);
-
 	}
 
 	/**
@@ -279,14 +279,13 @@ public class BattleMode extends Screen {
 	 * @param critChance the critical hit rate of the attacking entity
 	 * @return true if there was a critical, else false.
 	 */
-	public boolean crit(double critChance) {
+	public boolean crit(double critChance)
+	{
 		double crit = Math.random();
 
-		if (crit <= critChance)
+		if(crit <= critChance)
 			return true;
 		else
 			return false;
-
 	}
-
 }

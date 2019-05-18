@@ -66,20 +66,28 @@ public class PlayerController extends MovingImage {
 	 */
 	public void fall() {
 		
-			velY += 0.7; // Gravity
-			if(!isWalking)
-				velX = 0; // Friction
+		if(Math.abs(velX) < 0.2) {
+			isWalking = false;
+			velX = 0;
+		}
+		
+		velY += 0.7; // Gravity
+		if(isWalking && onSurface)
+			velX += -0.05*(Math.abs(velX)/velX); // Friction
+			
 			
 			onSurface = false;
 
-			moveBy(velX, velY);
+			
 	}
 	
 	public void checkPlayer(ArrayList<Shape> platform) {
+		moveBy(velX, velY);
 		for(Shape s : platform) {
 			if(super.intersects(s)) {
 				velY = 0;
 				onSurface = true;
+				moveTo(this.getBounds().x, s.getBounds().y - 1.001*this.getBounds().getHeight());
 				break;
 			}
 		}
@@ -97,6 +105,11 @@ public class PlayerController extends MovingImage {
 	
 	public boolean battle(PlayerController bot) {
 		return bot.getBounds().intersects(this.getBounds());
+	}
+	
+	public void stop() {
+		velX = 0;
+		velY = 0;
 	}
 
 
