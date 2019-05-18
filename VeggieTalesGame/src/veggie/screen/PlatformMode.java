@@ -134,7 +134,7 @@ public class PlatformMode extends Screen {
 		playerRun = surface.lettuceAssets.get("run");
 
 		playerRun.play();
-
+		
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 		spawnNewBot();
