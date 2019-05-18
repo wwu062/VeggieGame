@@ -18,7 +18,6 @@ import veggie.textReader.FileIO;
 public class BattleMode extends Screen {
 
 	private Entity player, enemy;
-
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
@@ -35,6 +34,8 @@ public class BattleMode extends Screen {
 	// sets to 0 before and after each mouse click
 	private int MouseClick = 0;
 
+	private int timer;
+	
 	/**
 	 * initializes the fields
 	 * 
@@ -58,6 +59,8 @@ public class BattleMode extends Screen {
 		for (int i = 0; i < 2; i++) {
 			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
 		}
+		
+		timer = 0;
 
 	}
 
@@ -83,6 +86,8 @@ public class BattleMode extends Screen {
 		for (int i = 0; i < 2; i++) {
 			button[i + 2] = new Rectangle(425, 375 + 125 * i, 225, 75);
 		}
+		
+		timer = 0;
 
 	}
 
@@ -113,7 +118,6 @@ public class BattleMode extends Screen {
 	 * @post changes background color
 	 */
 	public void draw() {
-
 		surface.background(255, 255, 255);
 
 		// remember to initialize the main player and enemy player at different
@@ -121,43 +125,17 @@ public class BattleMode extends Screen {
 
 		// draws buttons
 		
-		
-		
 		panels.beginDraw();
 
-		panels.pushStyle();
-		panels.rect(button[0].x, button[0].y, button[0].width, button[0].height);
-		panels.fill(0);
-		String move1 = player.getMoveList()[0].getName();
-		float w = panels.textWidth(move1);
-		panels.text(move1, button[0].x + button[0].width / 2 - w / 2, button[0].y + button[0].height / 2);
-		panels.popStyle();
-
-		panels.pushStyle();
-		panels.rect(button[1].x, button[1].y, button[1].width, button[1].height);
-		panels.fill(0);
-		String move2 = player.getMoveList()[1].getName();
-		float y = panels.textWidth(move2);
-		panels.text(move2, button[1].x + button[1].width / 2 - y / 2, button[1].y + button[1].height / 2);
-		panels.popStyle();
-
-//		System.out.println("x=" + button[0].x +",y=" + button[0].y + ",w=" + button[0].width + ",h=" + button[0].height);
-//		System.out.println("x=" + button[2].x +",y=" + button[2].y + ",w=" + button[2].width + ",h=" + button[2].height);
-		panels.pushStyle();
-		panels.rect(button[2].x, button[2].y, button[2].width, button[2].height);
-		panels.fill(0);
-		String move3 = player.getMoveList()[2].getName();
-		float d = panels.textWidth(move3);
-		panels.text(move3, button[2].x + button[2].width / 2 - d / 2, button[2].y + button[2].height / 2);
-		panels.popStyle();
-
-		panels.pushStyle();
-		panels.rect(button[3].x, button[3].y, button[3].width, button[3].height);
-		panels.fill(0);
-		String move4 = player.getMoveList()[3].getName();
-		float f = panels.textWidth(move4);
-		panels.text(move4, button[3].x + button[3].width / 2 - f / 2, button[3].y + button[3].height / 2);
-		panels.popStyle();
+		for(int i = 0; i < button.length; i++) {
+			panels.pushStyle();
+			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
+			panels.fill(0);
+			String move = player.getMoveList()[i].getName();
+			float w = panels.textWidth(move);
+			panels.text(move, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
+			panels.popStyle();
+		}
 
 		panels.endDraw();
 
@@ -177,7 +155,6 @@ public class BattleMode extends Screen {
 		surface.image(istate, 0, 0);
 
 		if (turncounter % 2 == 0) {
-			System.out.println("player");
 			// when mouse is clicked, clears with white screen.
 			if (0 != MouseClick) {
 				istate.beginDraw();
@@ -321,7 +298,7 @@ public class BattleMode extends Screen {
 		surface.image(healthpanel, 0, 0);
 
 		
-
+		timer++;
 	}
 
 	/**
@@ -330,6 +307,7 @@ public class BattleMode extends Screen {
 	 * @pre Argument only takes "player" or "enemy"
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
+	
 	public void hitimg(String Entity) {
 		hitimg.play();
 		if (Entity.equalsIgnoreCase("enemy"))

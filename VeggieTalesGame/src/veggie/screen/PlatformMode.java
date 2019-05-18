@@ -45,7 +45,7 @@ public class PlatformMode extends Screen {
 
 	private ArrayList<PImage> assets;
 
-	private Gif playerimg;
+	private Gif playerimg, botimg;
 
 	private Map<Integer, Moves> moves;
 
@@ -133,7 +133,7 @@ public class PlatformMode extends Screen {
 			k++;
 		}
 
-		bot.add(new Entity(playerimg, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new Entity(botimg, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
 	}
 
 //	public void runMe() {
@@ -146,9 +146,11 @@ public class PlatformMode extends Screen {
 	public void setup() {
 
 		playerimg = new Gif(surface, "images" + FileIO.fileSep + "lettuce-sprite.gif");
-
 		playerimg.play();
-
+		
+		botimg = new Gif(surface, "images" + FileIO.fileSep + "tomato-sprite.gif");
+		botimg.play();
+		
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 		spawnNewBot();
