@@ -1,5 +1,8 @@
 package veggie.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import processing.core.PImage;
 
 public class Entity {
@@ -13,16 +16,16 @@ public class Entity {
 
 	/**
 	 * Initializes the fields
-	 * @param img image of the Entity object
+	 * @param lettuceAssets image of the Entity object
 	 * @param statistics initial statistics of the Entity
 	 * @param moveList the moves that the Entity has
 	 * @param x the initial x-coordinate of the object
 	 * @param y the initial y-coordinate of the object
 	 */
-	public Entity(PImage img, Stats statistics, Moves[] moveList, int x, int y) {
+	public Entity(Map<String, PImage> lettuceAssets, Stats statistics, Moves[] moveList, int x, int y) {
 		this.statistics = statistics;
 		this.moveList = moveList;
-		this.controls = new PlayerController(img, x, y);
+		this.controls = new PlayerController(lettuceAssets, x, y);
 	}
 
 	/**

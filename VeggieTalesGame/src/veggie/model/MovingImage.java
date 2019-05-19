@@ -2,36 +2,37 @@ package veggie.model;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.util.HashMap;
+import java.util.Map;
 
+import gifAnimation.Gif;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import veggie.screen.DrawingSurface;
 
 /**
- * 
- * @author awang104
- *
- *         MovingImage represents any image that moves an interacts with the
- *         environment while in platform mode
- *
+ * @author awang104 MovingImage represents any image that moves an interacts
+ *         with the environment while in platform mode
  */
-public class MovingImage {
+public class MovingImage
+{
 
 	private Rectangle hitbox;
-	private PImage image;
+	private Map<String, PImage> image;
 
 	/**
 	 * Creates a new MovingImage object
 	 * 
-	 * @param x      x coordinate of the MovingImage
-	 * @param y      y coordinate of the MovingImage
-	 * @param width  width of the MovingImage
-	 * @param height height of the MovingImage
-	 * @param image  texture used to represent the MovingImage
+	 * @param x             x coordinate of the MovingImage
+	 * @param y             y coordinate of the MovingImage
+	 * @param width         width of the MovingImage
+	 * @param height        height of the MovingImage
+	 * @param lettuceAssets texture used to represent the MovingImage
 	 */
-	public MovingImage(int x, int y, int width, int height, PImage image) {
+	public MovingImage(int x, int y, int width, int height, Map<String, PImage> lettuceAssets)
+	{
 		hitbox = new Rectangle(x, y, width, height);
-		this.image = image;
+		this.image = lettuceAssets;
 	}
 
 	/**
@@ -40,9 +41,10 @@ public class MovingImage {
 	 * @param x new x-coordinate of MovingImage
 	 * @param y new y-coordinate of MovingImage
 	 */
-	public void moveTo(double x, double y) {
-		hitbox.x = (int)x;
-		hitbox.y = (int)y;
+	public void moveTo(double x, double y)
+	{
+		hitbox.x = (int) x;
+		hitbox.y = (int) y;
 	}
 
 	/**
@@ -51,12 +53,14 @@ public class MovingImage {
 	 * @param x change in x-coordinate
 	 * @param y change in y-coordinate
 	 */
-	public void moveBy(double x, double y) {
+	public void moveBy(double x, double y)
+	{
 		hitbox.x += x;
 		hitbox.y += y;
 	}
 
-	public void changeBy(int x, int y) {
+	public void changeBy(int x, int y)
+	{
 		hitbox.x = x;
 		hitbox.y = y;
 	}
@@ -66,45 +70,57 @@ public class MovingImage {
 	 * 
 	 * @param marker Place where object is drawn on.
 	 */
-	public void draw(DrawingSurface marker) {
-		marker.image(image, (float) hitbox.x, (float) hitbox.y);
-	}
-	
-	/**
-	 * Draws the object with PGraphics
-	 * @param graphics where the object is drawn
-	 */
-	public void draw(PGraphics graphics, PImage image) {
-		graphics.image(image, (float) hitbox.x, (float) hitbox.y);
+	public void draw(DrawingSurface marker, String key)
+	{
+		marker.image(image.get(key), (float) hitbox.x, (float) hitbox.y);
+
+		if(image.get(key).getClass() == Gif.class)
+		{
+			((Gif) image.get(key)).play();
+		}
 	}
 
 	/**
+	 * Draws the object with PGraphics
 	 * 
+	 * @param graphics where the object is drawn
+	 */
+	public void draw(PGraphics graphics, String key)
+	{
+		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y);
+
+		if(image.get(key).getClass() == Gif.class)
+		{
+			((Gif) image.get(key)).play();
+		}
+	}
+
+	/**
 	 * @param bounds Shape interacting with MovingImage
 	 * @return true if MovingImage touches the shape
 	 */
-	public boolean intersects(Shape bounds) {
-		
+	public boolean intersects(Shape bounds)
+	{
+
 		double x = bounds.getBounds().getX();
 		double y = bounds.getBounds().getY();
 		double width = bounds.getBounds().getWidth();
-		
-		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
-		
+
+		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width
+				|| hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
+
 		return intersects;
 		/*
-		boolean intersects = false;
-		if(bounds instanceof Rectangle)
-			intersects = hitbox.intersects((Rectangle)bounds);
-		return intersects;
-		*/
+		 * boolean intersects = false; if(bounds instanceof Rectangle) intersects =
+		 * hitbox.intersects((Rectangle)bounds); return intersects;
+		 */
 	}
 
 	/**
-	 * 
 	 * @return Rectangular bounds of the MovingImage
 	 */
-	public Rectangle getBounds() {
+	public Rectangle getBounds()
+	{
 		return hitbox;
 	}
 }

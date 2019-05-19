@@ -40,7 +40,7 @@ public class PlatformMode extends Screen
 
 	private ArrayList<Shape> obstacles;
 
-	private Gif playerRun;
+	private Gif playerRun, tomatoBounce;
 
 	private DrawingSurface surface;
 
@@ -95,7 +95,7 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new Entity(playerRun, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
+		player = new Entity(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
 
 	public void spawnNewBot()
@@ -118,8 +118,9 @@ public class PlatformMode extends Screen
 			i++;
 			k++;
 		}
+		
 
-		bot.add(new Entity(surface.tomatoAssets.get("bounce"), istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new Entity(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
 	}
 
 	// public void runMe() {
@@ -132,10 +133,13 @@ public class PlatformMode extends Screen
 	public void setup()
 	{
 
-		playerRun = surface.lettuceAssets.get("run");
-
+		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
-
+		
+		tomatoBounce = (Gif) surface.tomatoAssets.get("bounce");
+		tomatoBounce.play();
+		
+		
 		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 		spawnNewBot();
@@ -166,11 +170,11 @@ public class PlatformMode extends Screen
 			}
 		}
 
-		mainplayer.draw(surface);
+		mainplayer.draw(surface, "run");
 
 		for(Entity b : bot)
 		{
-			b.getControls().draw(surface);
+			b.getControls().draw(surface, "bounce");
 		}
 
 

@@ -71,11 +71,6 @@ public class BattleMode extends Screen
 	public void setup()
 	{
 		hitImage = (Gif) surface.assets.get("hit");
-		lettuceAttack = surface.lettuceAssets.get("attack");
-		lettuceBounce = surface.lettuceAssets.get("bounce");
-
-		lettuceAttack.play();
-		lettuceBounce.play();
 
 		panels = surface.createGraphics(800, 600);
 		istate = surface.createGraphics(800, 300);
@@ -110,8 +105,8 @@ public class BattleMode extends Screen
 		{
 			istate.background(255);
 		}
-		player.getControls().draw(istate, lettuceBounce);
-		enemy.getControls().draw(istate, lettuceBounce);
+		player.getControls().draw(istate, "bounce");
+		enemy.getControls().draw(istate, "bounce");
 		istate.endDraw();
 		surface.image(istate, 0, 0);
 

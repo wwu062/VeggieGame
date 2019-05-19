@@ -27,10 +27,11 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	// used to hold key codes from the keyboard
 	private ArrayList<Integer> keys;
 
-	protected Map<String, Gif> lettuceAssets;
+	protected Map<String, PImage> lettuceAssets;
+	protected Map<String, PImage> tomatoAssets;
+
 	protected Map<String, PImage> assets;
 	protected Map<Integer, Moves> moves;
-	protected Map<String, Gif> tomatoAssets;
 
 
 	/**
@@ -38,10 +39,10 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 */
 	public DrawingSurface()
 	{
-		lettuceAssets = new HashMap<String, Gif>();
+		lettuceAssets = new HashMap<String, PImage>();
 		assets = new HashMap<String, PImage>();
 		moves = new HashMap<Integer, Moves>();
-		tomatoAssets = new HashMap<String, Gif>();
+		tomatoAssets = new HashMap<String, PImage>();
 
 
 		screens = new ArrayList<Screen>();
@@ -76,14 +77,14 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	public void setup()
 	{
 		lettuceAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif"));
-		lettuceAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite.gif"));
+		lettuceAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-run.gif"));
 		lettuceAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-bounce.gif"));
 
 		assets.put("hit", new Gif(this, "images" + FileIO.fileSep + "hit-effect.gif"));
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 
-		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite.gif"));
+		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 
 
 		// reading moveList file
