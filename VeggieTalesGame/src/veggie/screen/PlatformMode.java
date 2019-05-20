@@ -10,10 +10,10 @@ import java.util.Map;
 
 import gifAnimation.Gif;
 import processing.core.PImage;
-import veggie.model.Entity;
+import veggie.model.PlayerManager;
 import veggie.model.Moves;
-import veggie.model.PlayerController;
-import veggie.model.Stats;
+import veggie.model.PlayerPlatform;
+import veggie.model.PlayerBattle;
 import veggie.textReader.FileIO;
 
 /**
@@ -34,9 +34,9 @@ public class PlatformMode extends Screen
 
 	private Rectangle screenRect;
 
-	private Entity player;
+	private PlayerManager player;
 
-	private ArrayList<Entity> bot;
+	private ArrayList<PlayerManager> bot;
 
 	private ArrayList<Shape> obstacles;
 
@@ -65,7 +65,7 @@ public class PlatformMode extends Screen
 		obstacles.add(new Rectangle(300, 250, 200, 50));
 
 
-		bot = new ArrayList<Entity>();
+		bot = new ArrayList<PlayerManager>();
 
 	}
 
@@ -76,7 +76,7 @@ public class PlatformMode extends Screen
 	{
 
 		// player creation
-		Stats istats = new Stats(100, 0.1);
+		PlayerBattle istats = new PlayerBattle(100, 0.1);
 
 		Moves[] iplayerMovelist = new Moves[4];
 
@@ -95,12 +95,12 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new Entity(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
+		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
 
 	public void spawnNewBot()
 	{
-		Stats istats = new Stats(100, 0.1);
+		PlayerBattle istats = new PlayerBattle(100, 0.1);
 
 		Moves[] iplayerMovelist = new Moves[4];
 
@@ -120,7 +120,7 @@ public class PlatformMode extends Screen
 		}
 		
 
-		bot.add(new Entity(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
 	}
 
 	// public void runMe() {
@@ -150,7 +150,7 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
-		PlayerController mainplayer = player.getController();
+		PlayerPlatform mainplayer = player.getController();
 
 		// drawing stuff
 
@@ -172,7 +172,7 @@ public class PlatformMode extends Screen
 
 		mainplayer.draw(surface, "run");
 
-		for(Entity b : bot)
+		for(PlayerManager b : bot)
 		{
 			b.getController().draw(surface, "bounce");
 		}
@@ -187,7 +187,7 @@ public class PlatformMode extends Screen
 
 	public void pause()
 	{
-		for(Entity b : bot)
+		for(PlayerManager b : bot)
 		{
 			b.getController().stop();
 		}
@@ -213,7 +213,7 @@ public class PlatformMode extends Screen
 			player.getController().walk(1);
 		if(surface.isPressed(KeyEvent.VK_UP))
 			player.getController().jump();
-		for(Entity b : bot)
+		for(PlayerManager b : bot)
 		{
 			b.getController().fall();
 			b.getController().checkPlayer(obstacles);

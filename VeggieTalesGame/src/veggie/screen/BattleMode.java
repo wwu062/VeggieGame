@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
-import veggie.model.Entity;
+import veggie.model.PlayerManager;
 
 /**
  * The battle screen for the game (think Pokemon battle)
@@ -14,7 +14,7 @@ import veggie.model.Entity;
  */
 public class BattleMode extends Screen
 {
-	private Entity player, enemy;
+	private PlayerManager player, enemy;
 
 	private DrawingSurface surface;
 
@@ -45,7 +45,7 @@ public class BattleMode extends Screen
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
-	public BattleMode(DrawingSurface surface, Entity player, Entity enemy)
+	public BattleMode(DrawingSurface surface, PlayerManager player, PlayerManager enemy)
 	{
 		super(800, 600);
 		this.player = player;
@@ -288,7 +288,7 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(Entity e, int damage)
+	public void changeHealth(PlayerManager e, int damage)
 	{
 		int health = e.getStatistics().getHealth();
 

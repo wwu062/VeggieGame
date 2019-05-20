@@ -10,7 +10,7 @@ import processing.core.PImage;
  * @author awang104 PlayerController is the player character for the platform
  *         mode with physics traits.
  */
-public class PlayerController extends MovingImage
+public class PlayerPlatform extends MovingImage
 {
 	private double velX;
 	private double velY;
@@ -24,7 +24,7 @@ public class PlayerController extends MovingImage
 	 * @param y             y coordinate of object
 	 * @param lettuceAssets image texture of object
 	 */
-	public PlayerController(Map<String, PImage> lettuceAssets, int x, int y)
+	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y)
 	{
 		super(x, y, lettuceAssets.get("bounce").width, lettuceAssets.get("bounce").height, lettuceAssets);
 		velX = 0;
@@ -92,7 +92,7 @@ public class PlayerController extends MovingImage
 		}
 	}
 
-	public boolean battle(PlayerController bot)
+	public boolean battle(PlayerPlatform bot)
 	{
 		return bot.getBounds().intersects(this.getBounds());
 	}

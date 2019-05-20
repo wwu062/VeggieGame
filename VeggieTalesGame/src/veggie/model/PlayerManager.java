@@ -4,14 +4,14 @@ import java.util.Map;
 
 import processing.core.PImage;
 
-public class Entity {
+public class PlayerManager {
 
 
-	private Stats statistics;
+	private PlayerBattle statistics;
 
 	private Moves[] moveList;
 
-	private PlayerController controller;
+	private PlayerPlatform controller;
 
 	/**
 	 * Initializes the fields
@@ -21,23 +21,23 @@ public class Entity {
 	 * @param x the initial x-coordinate of the object
 	 * @param y the initial y-coordinate of the object
 	 */
-	public Entity(Map<String, PImage> lettuceAssets, Stats statistics, Moves[] moveList, int x, int y) {
+	public PlayerManager(Map<String, PImage> lettuceAssets, PlayerBattle statistics, Moves[] moveList, int x, int y) {
 		this.statistics = statistics;
 		this.moveList = moveList;
-		this.controller = new PlayerController(lettuceAssets, x, y);
+		this.controller = new PlayerPlatform(lettuceAssets, x, y);
 	}
 
 	/**
 	 * @return the statistics
 	 */
-	public Stats getStatistics() {
+	public PlayerBattle getStatistics() {
 		return statistics;
 	}
 
 	/**
 	 * @param statistics the statistics to set
 	 */
-	public void setStatistics(Stats statistics) {
+	public void setStatistics(PlayerBattle statistics) {
 		this.statistics = statistics;
 	}
 
@@ -64,7 +64,7 @@ public class Entity {
 	/**
 	 * @return the controls
 	 */
-	public PlayerController getController() {
+	public PlayerPlatform getController() {
 		return controller;
 	}
 }
