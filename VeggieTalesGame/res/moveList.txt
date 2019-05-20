@@ -1,7 +1,7 @@
-Splash,1
-LettuceBomb,2
-CactusRanch,3
-FruitLoop,4
+Splash,10
+LettuceBomb,15
+CactusRanch,50
+FruitLoop,20
 Bulldoze,5
 Flop,6
 HungryChicken,7

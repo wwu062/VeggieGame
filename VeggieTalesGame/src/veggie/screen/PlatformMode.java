@@ -3,18 +3,14 @@ package veggie.screen;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import gifAnimation.Gif;
-import processing.core.PImage;
+import processing.core.PShape;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
 import veggie.model.PlayerPlatform;
 import veggie.model.PlayerBattle;
-import veggie.textReader.FileIO;
 
 /**
  * @author awang104 Creates the Platform game mode (think Mario)
@@ -38,7 +34,7 @@ public class PlatformMode extends Screen
 
 	private ArrayList<PlayerManager> bot;
 
-	private ArrayList<Shape> obstacles;
+	private ArrayList<PShape> obstacles;
 
 	private Gif playerRun, tomatoBounce;
 
@@ -57,12 +53,19 @@ public class PlatformMode extends Screen
 		super(800, 600);
 		this.surface = surface;
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
-		obstacles = new ArrayList<Shape>();
-		obstacles.add(new Rectangle(200, 400, 400, 50));
-		obstacles.add(new Rectangle(0, 250, 100, 50));
-		obstacles.add(new Rectangle(700, 250, 100, 50));
-		obstacles.add(new Rectangle(375, 300, 50, 100));
-		obstacles.add(new Rectangle(300, 250, 200, 50));
+		
+		PShape p1 = surface.createShape(PShape.RECT, 200, 400, 400, 50);
+		PShape p2 = surface.createShape(PShape.RECT, 0, 250, 100, 50);
+		PShape p3 = surface.createShape(PShape.RECT, 700, 250, 100, 50);
+		PShape p4 = surface.createShape(PShape.RECT, 375, 300, 50, 100);
+		PShape p5 = surface.createShape(PShape.RECT, 300, 250, 200, 50);
+		
+		obstacles = new ArrayList<PShape>();
+		obstacles.add(p1);
+		obstacles.add(p2);
+		obstacles.add(p3);
+		obstacles.add(p4);
+		obstacles.add(p5);
 
 
 		bot = new ArrayList<PlayerManager>();
@@ -161,13 +164,9 @@ public class PlatformMode extends Screen
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
-		for(Shape s : obstacles)
+		for(PShape s : obstacles)
 		{
-			if(s instanceof Rectangle)
-			{
-				Rectangle r = (Rectangle) s;
-				surface.rect(r.x, r.y, r.width, r.height);
-			}
+			surface.shape(s);
 		}
 
 		mainplayer.draw(surface, "run");

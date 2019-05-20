@@ -1,7 +1,7 @@
 package veggie.model;
 
 public class PlayerBattle {
-
+	
 	/**
 	 * the health statistic
 	 */
@@ -33,7 +33,11 @@ public class PlayerBattle {
 	 * @param health the health to set
 	 */
 	public void setHealth(int health) {
-		this.health = health;
+		if(health < 0) {
+			this.health = 0;
+		} else {
+			this.health = health;
+		}
 	}
 
 	/**
@@ -49,5 +53,6 @@ public class PlayerBattle {
 	public void setCritrate(double critrate) {
 		this.critrate = critrate;
 	}
+	
 	
 }

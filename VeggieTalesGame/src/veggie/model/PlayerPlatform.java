@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import processing.core.PImage;
+import processing.core.PShape;
 
 /**
  * @author awang104 PlayerController is the player character for the platform
@@ -66,11 +67,13 @@ public class PlayerPlatform extends MovingImage
 
 	}
 
-	public void checkPlayer(ArrayList<Shape> platform)
+	public void checkPlayer(ArrayList<PShape> platform)
 	{
 		moveBy(velX, velY);
-		for(Shape s : platform)
+		for(PShape s : platform)
 		{
+			System.out.println(s.getNormalX(1));
+			/*
 			if(super.intersects(s))
 			{
 				velY = 0;
@@ -78,6 +81,7 @@ public class PlayerPlatform extends MovingImage
 				moveTo(this.getBounds().x, s.getBounds().y - 1.001 * this.getBounds().getHeight());
 				break;
 			}
+			*/
 		}
 	}
 

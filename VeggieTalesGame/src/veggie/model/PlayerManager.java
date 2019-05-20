@@ -30,14 +30,14 @@ public class PlayerManager {
 	/**
 	 * @return the statistics
 	 */
-	public PlayerBattle getStatistics() {
+	public PlayerBattle getBattler() {
 		return statistics;
 	}
 
 	/**
 	 * @param statistics the statistics to set
 	 */
-	public void setStatistics(PlayerBattle statistics) {
+	public void setBattler(PlayerBattle statistics) {
 		this.statistics = statistics;
 	}
 
