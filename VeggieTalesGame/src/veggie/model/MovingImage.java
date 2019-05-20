@@ -86,13 +86,15 @@ public class MovingImage
 	 * @param graphics where the object is drawn
 	 */
 	public void draw(PGraphics graphics, String key)
-	{
-		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y);
-
+	{	
 		if(image.get(key).getClass() == Gif.class)
 		{
 			((Gif) image.get(key)).play();
 		}
+		graphics.beginDraw();
+		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y);
+		graphics.endDraw();
+
 	}
 
 	/**

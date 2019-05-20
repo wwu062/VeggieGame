@@ -24,9 +24,7 @@ public class BattleMode extends Screen
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, istate, fstate, healthPanel;
-
-	private PGraphics offline;
+	private PGraphics panels, attackScreen, healthPanel;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turnCounter = 0;
@@ -74,15 +72,14 @@ public class BattleMode extends Screen
 		hitImage = (Gif) surface.assets.get("hit");
 
 		panels = surface.createGraphics(800, 600);
-		istate = surface.createGraphics(800, 300);
-		fstate = surface.createGraphics(800, 300);
+		attackScreen = surface.createGraphics(800, 300);
 		healthPanel = surface.createGraphics(800, 600);
 
 		surface.background(255, 255, 255);
 
 		panels.beginDraw();
 		drawPanel();
-		//drawPanel(); TEXT ONLY CENTERS IF I CALL IT TWICE ?
+		// drawPanel(); TEXT ONLY CENTERS IF I CALL IT TWICE ?
 		panels.endDraw();
 		surface.image(panels, 0, 0);
 	}
@@ -95,19 +92,12 @@ public class BattleMode extends Screen
 	public void draw()
 	{
 
+		attackScreen.beginDraw();
+		attackScreen.clear();
+		attackScreen.background(255);
 
-
-
-		istate.beginDraw();
-		if(0 == panelClick) // if no panelClicking. background is white.
-		{
-			istate.background(255);
-		}
-		player.getControls().draw(istate, "bounce");
-		enemy.getControls().draw(istate, "bounce");
-		istate.endDraw();
-		surface.image(istate, 0, 0);
-
+		player.getControls().draw(attackScreen, "bounce");
+		enemy.getControls().draw(attackScreen, "bounce");
 
 		if(turnCounter % 2 == 0)
 		{
@@ -117,10 +107,10 @@ public class BattleMode extends Screen
 		// else
 		// {
 		//
-		// istate.beginDraw();
-		// istate.background(255);
-		// istate.endDraw();
-		// surface.image(istate, 0, 0);
+		// attackScreen.beginDraw();
+		// attackScreen.background(255);
+		// attackScreen.endDraw();
+		// surface.image(attackScreen, 0, 0);
 		//
 		// fstate.beginDraw();
 		//
@@ -147,7 +137,12 @@ public class BattleMode extends Screen
 		// e.printStackTrace();
 		// }
 		// }
-		drawHealthPanel();
+		// drawHealthPanel();
+
+		attackScreen.endDraw();
+
+		surface.image(attackScreen, 0, 0);
+
 	}
 
 	public void drawHealthPanel()
@@ -170,7 +165,7 @@ public class BattleMode extends Screen
 		surface.image(healthPanel, 0, 0);
 	}
 
-	public void drawPanel()
+	private void drawPanel()
 	{
 		for(int i = 0; i < 4; i++)
 		{
@@ -187,16 +182,10 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public void checkpanelClick()
+	private void checkpanelClick()
 	{
 		if(0 != panelClick) // when mouse is clicked, clears with white screen.
 		{
-			istate.beginDraw();
-			istate.background(255);
-			istate.endDraw();
-
-			surface.image(istate, 0, 0);
-
 			drawPlayerMove(panelClick - 1);
 
 			turnCounter++;
@@ -205,13 +194,9 @@ public class BattleMode extends Screen
 
 	private void drawPlayerMove(int num)
 	{
-		fstate.beginDraw();
-		player.getControls().draw(istate, "attack");
-		surface.delay(1000);
-		hitImage("enemy");
-		fstate.endDraw();
+		player.getControls().draw(attackScreen, "attack");
 
-		surface.image(fstate, 0, 0);
+		hitImage("enemy");
 
 		boolean crit = crit(player.getStatistics().getCritrate());
 		if(crit)
@@ -230,13 +215,19 @@ public class BattleMode extends Screen
 	 * @pre Argument only takes "player" or "enemy"
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
-	public void hitImage(String Entity)
+	private void hitImage(String Entity)
 	{
+		attackScreen.beginDraw();
 		hitImage.play();
 		if(Entity.equalsIgnoreCase("enemy"))
-			fstate.image(hitImage, 590, 190, 32, 32);
+		{
+			attackScreen.image(hitImage, 590, 190, 32, 32);
+		}
 		if(Entity.equalsIgnoreCase("player"))
-			fstate.image(hitImage, 190, 190, 32, 32);
+		{
+			attackScreen.image(hitImage, 190, 190, 32, 32);
+		}
+		attackScreen.endDraw();
 	}
 
 	/**
@@ -275,7 +266,7 @@ public class BattleMode extends Screen
 	 * @param critChance the critical hit rate of the attacking entity
 	 * @return true if there was a critical, else false.
 	 */
-	public boolean crit(double critChance)
+	private boolean crit(double critChance)
 	{
 		double crit = Math.random();
 
