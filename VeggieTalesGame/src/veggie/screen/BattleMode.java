@@ -110,27 +110,39 @@ public class BattleMode extends Screen
 
 		long c = System.currentTimeMillis();
 
-		if(turnCounter % 2 == 0)
+		if(turnCounter % 2 == 0 & timer % 20 == 0)
 		{
 			// System.out.println("player");
 			checkpanelClick();
+			whichPlayer = 0;
+		}
 
+		if(turnCounter % 2 != 0 && timer % 20 == 0)
+		{
+			int move = (int) Math.round(Math.random() * 4);
+
+			drawMove(move, "enemy");
+
+			turnDone = true;
+			timer = 1;
+			whichPlayer = 1;
 		}
 
 		if(turnDone)
 		{
-			if(whichPlayer % 2 == 0)
-			{
-				System.out.println("hit");
-				attackScreen.beginDraw();
-				attackScreen.background(255);
-				attackScreen.endDraw();
+			attackScreen.beginDraw();
+			attackScreen.background(255);
+			attackScreen.endDraw();
 
+			if(whichPlayer == 0)
+			{
+				// System.out.println("hit");
 				enemy.getControls().draw(attackScreen, "bounce");
 				player.getControls().draw(attackScreen, "attack");
 				hitImage("enemy");
 			} else
 			{
+				player.getControls().draw(attackScreen, "bounce");
 				enemy.getControls().draw(attackScreen, "attack");
 				hitImage("player");
 			}
@@ -138,11 +150,10 @@ public class BattleMode extends Screen
 			if(timer % 20 == 0)
 			{
 				turnDone = false;
+				turnCounter++;
 			}
 
 		}
-
-		
 
 		attackScreen.endDraw();
 
@@ -195,26 +206,38 @@ public class BattleMode extends Screen
 			turnDone = true;
 			timer = 1;
 
-			drawPlayerMove(panelClick - 1);
+			drawMove(panelClick - 1, "player");
 
 			turnCounter++;
 		}
 	}
 
-	private void drawPlayerMove(int num)
+	private void drawMove(int num, String entity)
 	{
-		player.getControls().draw(attackScreen, "attack");
-
-		hitImage("enemy");
-
-		boolean crit = crit(player.getStatistics().getCritrate());
-		if(crit)
+		if(entity.equalsIgnoreCase("player"))
 		{
-			changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
-		} else
-		{
-			changeHealth(enemy, player.getMoveList()[num].getAttackval());
+			boolean crit = crit(player.getStatistics().getCritrate());
+			if(crit)
+			{
+				changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
+			} else
+			{
+				changeHealth(enemy, player.getMoveList()[num].getAttackval());
+			}
 		}
+
+		if(entity.equalsIgnoreCase("enemy"))
+		{
+			boolean crit = crit(enemy.getStatistics().getCritrate());
+			if(crit)
+			{
+				changeHealth(player, enemy.getMoveList()[num].getAttackval() + 10);
+			} else
+			{
+				changeHealth(player, enemy.getMoveList()[num].getAttackval());
+			}
+		}
+
 		panelClick = 0;
 	}
 
