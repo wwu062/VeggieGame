@@ -1,7 +1,6 @@
 package veggie.screen;
 
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -139,9 +138,9 @@ public class PlatformMode extends Screen
 		
 		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
 		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
-		PShape p3 = surface.createShape(PShape.RECT, 700, 250, 100, 50);
-		PShape p4 = surface.createShape(PShape.RECT, 375, 300, 50, 100);
-		PShape p5 = surface.createShape(PShape.RECT, 300, 250, 200, 50);
+		PShape p3 = surface.createShape(PConstants.RECT, 700, 250, 100, 50);
+		PShape p4 = surface.createShape(PConstants.RECT, 375, 300, 50, 100);
+		PShape p5 = surface.createShape(PConstants.RECT, 300, 250, 200, 50);
 		
 		surface.popStyle();
 		
@@ -151,10 +150,6 @@ public class PlatformMode extends Screen
 		obstacles.add(p4);
 		obstacles.add(p5);
 		
-		
-		
-		
-		// size(0,0,PApplet.P3D);
 		spawnNewPlayer();
 		spawnNewBot();
 	}

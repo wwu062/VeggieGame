@@ -1,7 +1,4 @@
 package veggie.model;
-
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -76,10 +73,14 @@ public class PlayerPlatform extends MovingImage
 		moveBy(velX, velY);
 		for(PShape rect : platform)
 		{
-			if(rect.contains((float)this.getX(), (float)this.getY())) {
+			/*
+			if() {
+				
 				onSurface = true;
 				velY = 0;
 			}
+			*/
+			System.out.println(rect.getVertexCount());
 		}
 	}
 
