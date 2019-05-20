@@ -92,9 +92,8 @@ public class MovingImage
 			((Gif) image.get(key)).play();
 		}
 		graphics.beginDraw();
-		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y);
+		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y, 100, 100);
 		graphics.endDraw();
-
 	}
 
 	/**

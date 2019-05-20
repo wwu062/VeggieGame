@@ -22,6 +22,12 @@ public class BattleMode extends Screen
 
 	private Gif hitImage;
 
+	private int timer = 1;
+
+	private int whichPlayer = 0;
+
+	private boolean turnDone = false;
+
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
 	private PGraphics panels, attackScreen, healthPanel;
@@ -46,8 +52,8 @@ public class BattleMode extends Screen
 		this.enemy = enemy;
 
 		// changes location of the player and enemy for battle arena
-		player.getControls().changeBy(200, 200);
-		enemy.getControls().changeBy(600, 200);
+		player.getControls().changeBy(150, 200);
+		enemy.getControls().changeBy(550, 200);
 
 		this.surface = surface;
 
@@ -70,10 +76,12 @@ public class BattleMode extends Screen
 	public void setup()
 	{
 		hitImage = (Gif) surface.assets.get("hit");
+		hitImage.play();
 
 		panels = surface.createGraphics(800, 600);
 		attackScreen = surface.createGraphics(800, 300);
 		healthPanel = surface.createGraphics(800, 600);
+		surface.createGraphics(800, 300);
 
 		surface.background(255, 255, 255);
 
@@ -92,57 +100,55 @@ public class BattleMode extends Screen
 	public void draw()
 	{
 
+		timer++;
+		System.out.println(timer);
 		attackScreen.beginDraw();
-		attackScreen.clear();
 		attackScreen.background(255);
 
 		player.getControls().draw(attackScreen, "bounce");
 		enemy.getControls().draw(attackScreen, "bounce");
 
+		long c = System.currentTimeMillis();
+
 		if(turnCounter % 2 == 0)
 		{
 			// System.out.println("player");
 			checkpanelClick();
+
 		}
-		// else
-		// {
-		//
-		// attackScreen.beginDraw();
-		// attackScreen.background(255);
-		// attackScreen.endDraw();
-		// surface.image(attackScreen, 0, 0);
-		//
-		// fstate.beginDraw();
-		//
-		// fstate.image(lettuceAttack, 600, 200);
-		// surface.delay(1000);
-		// hitImage("enemy");
-		//
-		// fstate.endDraw();
-		//
-		// surface.image(fstate, 0, 0);
-		//
-		// int enemyattack = enemy.getMoveList()[((int) (Math.random() *
-		// 4))].getAttackval();
-		//
-		// changeHealth(player, enemyattack);
-		//
-		// turnCounter++;
-		// try
-		// {
-		// Thread.sleep(1000);
-		// } catch(InterruptedException e)
-		// {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// drawHealthPanel();
+
+		if(turnDone)
+		{
+			if(whichPlayer % 2 == 0)
+			{
+				System.out.println("hit");
+				attackScreen.beginDraw();
+				attackScreen.background(255);
+				attackScreen.endDraw();
+
+				enemy.getControls().draw(attackScreen, "bounce");
+				player.getControls().draw(attackScreen, "attack");
+				hitImage("enemy");
+			} else
+			{
+				enemy.getControls().draw(attackScreen, "attack");
+				hitImage("player");
+			}
+
+			if(timer % 20 == 0)
+			{
+				turnDone = false;
+			}
+
+		}
+
+		
 
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
 
+		// System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -186,6 +192,9 @@ public class BattleMode extends Screen
 	{
 		if(0 != panelClick) // when mouse is clicked, clears with white screen.
 		{
+			turnDone = true;
+			timer = 1;
+
 			drawPlayerMove(panelClick - 1);
 
 			turnCounter++;
@@ -218,7 +227,6 @@ public class BattleMode extends Screen
 	private void hitImage(String Entity)
 	{
 		attackScreen.beginDraw();
-		hitImage.play();
 		if(Entity.equalsIgnoreCase("enemy"))
 		{
 			attackScreen.image(hitImage, 590, 190, 32, 32);
@@ -271,8 +279,11 @@ public class BattleMode extends Screen
 		double crit = Math.random();
 
 		if(crit <= critChance)
+		{
 			return true;
-		else
+		} else
+		{
 			return false;
+		}
 	}
 }
