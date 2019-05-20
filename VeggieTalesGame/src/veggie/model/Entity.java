@@ -12,7 +12,7 @@ public class Entity {
 
 	private Moves[] moveList;
 
-	private PlayerController controls;
+	private PlayerController controller;
 
 	/**
 	 * Initializes the fields
@@ -25,7 +25,7 @@ public class Entity {
 	public Entity(Map<String, PImage> lettuceAssets, Stats statistics, Moves[] moveList, int x, int y) {
 		this.statistics = statistics;
 		this.moveList = moveList;
-		this.controls = new PlayerController(lettuceAssets, x, y);
+		this.controller = new PlayerController(lettuceAssets, x, y);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class Entity {
 	/**
 	 * @return the controls
 	 */
-	public PlayerController getControls() {
-		return controls;
+	public PlayerController getController() {
+		return controller;
 	}
 }

@@ -52,8 +52,8 @@ public class BattleMode extends Screen
 		this.enemy = enemy;
 
 		// changes location of the player and enemy for battle arena
-		player.getControls().changeBy(150, 200);
-		enemy.getControls().changeBy(550, 200);
+		player.getController().changeBy(150, 200);
+		enemy.getController().changeBy(550, 200);
 
 		this.surface = surface;
 
@@ -80,7 +80,7 @@ public class BattleMode extends Screen
 
 		panels = surface.createGraphics(800, 600);
 		attackScreen = surface.createGraphics(800, 300);
-		healthPanel = surface.createGraphics(800, 600);
+		healthPanel = surface.createGraphics(800, 300);
 		surface.createGraphics(800, 300);
 
 		surface.background(255, 255, 255);
@@ -99,51 +99,37 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
-
 		timer++;
 		System.out.println(timer);
+
 		attackScreen.beginDraw();
 		attackScreen.background(255);
+		
+		drawHealthPanel();
+		attackScreen.image(healthPanel, 0, 0);
 
-		player.getControls().draw(attackScreen, "bounce");
-		enemy.getControls().draw(attackScreen, "bounce");
+		player.getController().draw(attackScreen, "bounce");
+		enemy.getController().draw(attackScreen, "bounce");
 
 		long c = System.currentTimeMillis();
-
-		if(turnCounter % 2 == 0 & timer % 20 == 0)
-		{
-			// System.out.println("player");
-			checkpanelClick();
-			whichPlayer = 0;
-		}
-
-		if(turnCounter % 2 != 0 && timer % 20 == 0)
-		{
-			int move = (int) Math.round(Math.random() * 4);
-
-			drawMove(move, "enemy");
-
-			turnDone = true;
-			timer = 1;
-			whichPlayer = 1;
-		}
-
+		
 		if(turnDone)
 		{
 			attackScreen.beginDraw();
 			attackScreen.background(255);
+			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
 			if(whichPlayer == 0)
 			{
 				// System.out.println("hit");
-				enemy.getControls().draw(attackScreen, "bounce");
-				player.getControls().draw(attackScreen, "attack");
+				enemy.getController().draw(attackScreen, "bounce");
+				player.getController().draw(attackScreen, "attack");
 				hitImage("enemy");
 			} else
 			{
-				player.getControls().draw(attackScreen, "bounce");
-				enemy.getControls().draw(attackScreen, "attack");
+				player.getController().draw(attackScreen, "bounce");
+				enemy.getController().draw(attackScreen, "bounce");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
 				hitImage("player");
 			}
 
@@ -155,18 +141,40 @@ public class BattleMode extends Screen
 
 		}
 
+		if(turnCounter % 2 == 0 & timer % 20 == 0)
+		{
+			// System.out.println("player");
+			checkpanelClick();
+			whichPlayer = 0;
+		}
+
+		if(turnCounter % 2 != 0 && timer % 20 == 0)
+		{
+			int move = (int) (Math.random() * 4);
+
+			System.out.println("move");
+			drawMove(move, "enemy");
+
+			turnDone = true;
+			timer = 1;
+			whichPlayer = 1;
+		}
+
+		
+
+		
+
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
 
-		// System.out.println(System.currentTimeMillis() - c);
+		//System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
 	{
 		healthPanel.beginDraw();
 		// player
-
 		healthPanel.fill(0);
 		healthPanel.rect(100, 50, 100, 25);
 		healthPanel.fill(255, 0, 0);
@@ -178,8 +186,6 @@ public class BattleMode extends Screen
 		healthPanel.rect(600, 50, enemy.getStatistics().getHealth(), 25);
 
 		healthPanel.endDraw();
-
-		surface.image(healthPanel, 0, 0);
 	}
 
 	private void drawPanel()
@@ -187,12 +193,12 @@ public class BattleMode extends Screen
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
-			System.out.println("button" + i + " " + button[i].x + button[i].y + ", " + button[i].width + ", " + button[i].height);
+			//System.out.println("button" + i + " " + button[i].x + button[i].y + ", " + button[i].width + ", " + button[i].height);
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
 			String move1 = player.getMoveList()[i].getName();
 			float w = panels.textWidth(move1);
-			System.out.println("panel width = " + w);
+			//System.out.println("panel width = " + w);
 
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
@@ -207,8 +213,6 @@ public class BattleMode extends Screen
 			timer = 1;
 
 			drawMove(panelClick - 1, "player");
-
-			turnCounter++;
 		}
 	}
 

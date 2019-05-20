@@ -150,7 +150,7 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
-		PlayerController mainplayer = player.getControls();
+		PlayerController mainplayer = player.getController();
 
 		// drawing stuff
 
@@ -174,7 +174,7 @@ public class PlatformMode extends Screen
 
 		for(Entity b : bot)
 		{
-			b.getControls().draw(surface, "bounce");
+			b.getController().draw(surface, "bounce");
 		}
 
 
@@ -189,9 +189,9 @@ public class PlatformMode extends Screen
 	{
 		for(Entity b : bot)
 		{
-			b.getControls().stop();
+			b.getController().stop();
 		}
-		player.getControls().stop();
+		player.getController().stop();
 	}
 
 	public void run()
@@ -199,7 +199,7 @@ public class PlatformMode extends Screen
 
 		for(int i = 0; i < bot.size(); i++)
 		{
-			if(player.getControls().battle(bot.get(i).getControls()))
+			if(player.getController().battle(bot.get(i).getController()))
 			{
 				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 				bot.remove(i);
@@ -208,21 +208,21 @@ public class PlatformMode extends Screen
 		}
 
 		if(surface.isPressed(KeyEvent.VK_LEFT))
-			player.getControls().walk(-1);
+			player.getController().walk(-1);
 		if(surface.isPressed(KeyEvent.VK_RIGHT))
-			player.getControls().walk(1);
+			player.getController().walk(1);
 		if(surface.isPressed(KeyEvent.VK_UP))
-			player.getControls().jump();
+			player.getController().jump();
 		for(Entity b : bot)
 		{
-			b.getControls().fall();
-			b.getControls().checkPlayer(obstacles);
+			b.getController().fall();
+			b.getController().checkPlayer(obstacles);
 		}
 
-		player.getControls().fall();
-		player.getControls().checkPlayer(obstacles);
+		player.getController().fall();
+		player.getController().checkPlayer(obstacles);
 
-		if(!screenRect.intersects(player.getControls().getBounds()))
+		if(!screenRect.intersects(player.getController().getBounds()))
 			spawnNewPlayer();
 	}
 
