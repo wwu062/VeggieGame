@@ -1,5 +1,6 @@
 package veggie.model;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,6 +43,9 @@ public class PlayerPlatform extends MovingImage
 	public void walk(int dir)
 	{
 		velX += dir * 0.5;
+		if(Math.abs(velX) > 5) {
+			velX = dir*5;
+		}
 		isWalking = true;
 	}
 
@@ -70,18 +74,12 @@ public class PlayerPlatform extends MovingImage
 	public void checkPlayer(ArrayList<PShape> platform)
 	{
 		moveBy(velX, velY);
-		for(PShape s : platform)
+		for(PShape rect : platform)
 		{
-			System.out.println(s.getNormalX(1));
-			/*
-			if(super.intersects(s))
-			{
-				velY = 0;
+			if(rect.contains((float)this.getX(), (float)this.getY())) {
 				onSurface = true;
-				moveTo(this.getBounds().x, s.getBounds().y - 1.001 * this.getBounds().getHeight());
-				break;
+				velY = 0;
 			}
-			*/
 		}
 	}
 

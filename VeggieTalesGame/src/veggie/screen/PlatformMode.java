@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import gifAnimation.Gif;
+import processing.core.PConstants;
 import processing.core.PShape;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
@@ -54,19 +55,11 @@ public class PlatformMode extends Screen
 		this.surface = surface;
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
 		
-		PShape p1 = surface.createShape(PShape.RECT, 200, 400, 400, 50);
-		PShape p2 = surface.createShape(PShape.RECT, 0, 250, 100, 50);
-		PShape p3 = surface.createShape(PShape.RECT, 700, 250, 100, 50);
-		PShape p4 = surface.createShape(PShape.RECT, 375, 300, 50, 100);
-		PShape p5 = surface.createShape(PShape.RECT, 300, 250, 200, 50);
+		
+
 		
 		obstacles = new ArrayList<PShape>();
-		obstacles.add(p1);
-		obstacles.add(p2);
-		obstacles.add(p3);
-		obstacles.add(p4);
-		obstacles.add(p5);
-
+		
 
 		bot = new ArrayList<PlayerManager>();
 
@@ -135,12 +128,30 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
-
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
 		tomatoBounce = (Gif) surface.tomatoAssets.get("bounce");
 		tomatoBounce.play();
+		
+		surface.pushStyle();
+		surface.fill(165, 42, 42);
+		
+		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
+		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
+		PShape p3 = surface.createShape(PShape.RECT, 700, 250, 100, 50);
+		PShape p4 = surface.createShape(PShape.RECT, 375, 300, 50, 100);
+		PShape p5 = surface.createShape(PShape.RECT, 300, 250, 200, 50);
+		
+		surface.popStyle();
+		
+		obstacles.add(p1);
+		obstacles.add(p2);
+		obstacles.add(p3);
+		obstacles.add(p4);
+		obstacles.add(p5);
+		
+		
 		
 		
 		// size(0,0,PApplet.P3D);

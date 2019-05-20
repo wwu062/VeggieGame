@@ -123,4 +123,13 @@ public class MovingImage
 	{
 		return hitbox;
 	}
+	
+	public double getX() {
+		return hitbox.getX();
+	}
+	
+	public double getY() {
+		return hitbox.getY();
+	}
+	
 }
