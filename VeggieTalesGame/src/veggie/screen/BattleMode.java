@@ -21,11 +21,12 @@ public class BattleMode extends Screen
 	private Rectangle[] button;
 
 	private Gif hitImage;
-	private Gif lettuceAttack, lettuceBounce;
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
 	private PGraphics panels, istate, fstate, healthPanel;
+
+	private PGraphics offline;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turnCounter = 0;
@@ -77,6 +78,13 @@ public class BattleMode extends Screen
 		fstate = surface.createGraphics(800, 300);
 		healthPanel = surface.createGraphics(800, 600);
 
+		surface.background(255, 255, 255);
+
+		panels.beginDraw();
+		drawPanel();
+		drawPanel();
+		panels.endDraw();
+		surface.image(panels, 0, 0);
 	}
 
 	/**
@@ -87,17 +95,7 @@ public class BattleMode extends Screen
 	public void draw()
 	{
 
-		surface.background(255, 255, 255);
 
-		// remember to initialize the main player and enemy player at different
-		// locations
-
-		// draws buttons
-
-		panels.beginDraw();
-		drawPanel();
-		panels.endDraw();
-		surface.image(panels, 0, 0);
 
 
 		istate.beginDraw();
@@ -113,7 +111,7 @@ public class BattleMode extends Screen
 
 		if(turnCounter % 2 == 0)
 		{
-			System.out.println("player");
+			// System.out.println("player");
 			checkpanelClick();
 		}
 		// else
@@ -177,14 +175,16 @@ public class BattleMode extends Screen
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
+			System.out.println("button" + i + " " + button[i].x + button[i].y + ", " + button[i].width + ", " + button[i].height);
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
 			String move1 = player.getMoveList()[i].getName();
 			float w = panels.textWidth(move1);
+			System.out.println("panel width = " + w);
+
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
 		}
-
 	}
 
 	public void checkpanelClick()
@@ -194,6 +194,7 @@ public class BattleMode extends Screen
 			istate.beginDraw();
 			istate.background(255);
 			istate.endDraw();
+
 			surface.image(istate, 0, 0);
 
 			drawPlayerMove(panelClick - 1);
@@ -205,21 +206,21 @@ public class BattleMode extends Screen
 	private void drawPlayerMove(int num)
 	{
 		fstate.beginDraw();
-
-		fstate.image(lettuceAttack, 200, 200);
+		player.getControls().draw(istate, "attack");
 		surface.delay(1000);
 		hitImage("enemy");
-
 		fstate.endDraw();
 
 		surface.image(fstate, 0, 0);
 
 		boolean crit = crit(player.getStatistics().getCritrate());
 		if(crit)
+		{
 			changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
-		else
+		} else
+		{
 			changeHealth(enemy, player.getMoveList()[num].getAttackval());
-
+		}
 		panelClick = 0;
 	}
 
