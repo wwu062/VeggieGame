@@ -82,7 +82,7 @@ public class BattleMode extends Screen
 
 		panels.beginDraw();
 		drawPanel();
-		drawPanel();
+		//drawPanel(); TEXT ONLY CENTERS IF I CALL IT TWICE ?
 		panels.endDraw();
 		surface.image(panels, 0, 0);
 	}
