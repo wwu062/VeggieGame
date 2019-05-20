@@ -2,7 +2,6 @@ package veggie.model;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.util.HashMap;
 import java.util.Map;
 
 import gifAnimation.Gif;

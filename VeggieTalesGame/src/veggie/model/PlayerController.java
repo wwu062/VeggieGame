@@ -2,7 +2,6 @@ package veggie.model;
 
 import java.awt.Shape;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import processing.core.PImage;
