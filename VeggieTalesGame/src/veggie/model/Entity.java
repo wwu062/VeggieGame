@@ -1,12 +1,10 @@
 package veggie.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import processing.core.PImage;
 
 public class Entity {
-
 
 	private Stats statistics;
 

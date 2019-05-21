@@ -83,22 +83,24 @@ Stretch features:
 
 
 * Alex
-   * MovingImage
-   * PlayerController
-   * PlatformMode
-   * Main
-   * Stats
+   * The Platforming part of the game
+	   * MovingImage
+	   * PlayerController
+	   * PlatformMode
+	   * Main
+	   * Stats
    
   
 * William
-   * Entity
-   * Moves
-   * Instructions
-   * Menu
-   * DrawingSurface
-   * FileIO, moveList.txt
-   * BattleMode
-   * Gifs, Images, Textures
+   * The Battle part of the game 
+	   * Entity
+	   * Moves
+	   * Instructions
+	   * Menu
+	   * DrawingSurface
+	   * FileIO, moveList.txt
+	   * BattleMode
+	   * Gifs, Images, Textures
 
 
 — Resources — 
