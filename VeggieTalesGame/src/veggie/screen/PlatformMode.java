@@ -114,8 +114,10 @@ public class PlatformMode extends Screen
 			k++;
 		}
 		
+		// made it so that it automatically goes to battlemode for now. 
+		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 
-		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
 	}
 
 	// public void runMe() {

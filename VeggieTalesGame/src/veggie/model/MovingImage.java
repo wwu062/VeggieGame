@@ -1,7 +1,6 @@
 package veggie.model;
 
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.util.Map;
 
 import gifAnimation.Gif;
@@ -92,6 +91,7 @@ public class MovingImage
 			((Gif) image.get(key)).play();
 		}
 		graphics.beginDraw();
+		// I CHANGED THE SIZE OF THE IMAGE FOR BATTLEMODE HERE!!@Q@!@!Q$@#$@#$ 
 		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y, 100, 100);
 		graphics.endDraw();
 	}

@@ -16,6 +16,8 @@ public class BattleMode extends Screen
 {
 	private PlayerManager player, enemy;
 
+	private int iplayerHealth, ienemyHealth;
+
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
@@ -50,6 +52,9 @@ public class BattleMode extends Screen
 		super(800, 600);
 		this.player = player;
 		this.enemy = enemy;
+
+		iplayerHealth = player.getBattler().getHealth();
+		ienemyHealth = enemy.getBattler().getHealth();
 
 		// changes location of the player and enemy for battle arena
 		player.getController().changeBy(150, 200);
@@ -87,7 +92,7 @@ public class BattleMode extends Screen
 
 		panels.beginDraw();
 		drawPanel();
-		// drawPanel(); TEXT ONLY CENTERS IF I CALL IT TWICE ?
+		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
 		panels.endDraw();
 		surface.image(panels, 0, 0);
 	}
@@ -99,6 +104,9 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
+		System.out.println("This is the ienemy: " + ienemyHealth);
+		System.out.println("This is the getStat health" + enemy.getBattler().getHealth());
+
 		timer++;
 
 		attackScreen.beginDraw();
@@ -108,7 +116,7 @@ public class BattleMode extends Screen
 		attackScreen.image(healthPanel, 0, 0);
 
 
-		if(player.getBattler().getHealth() <= player.getBattler().getHealth() / 2)
+		if(player.getBattler().getHealth() <= iplayerHealth / 2)
 		{
 			player.getController().draw(attackScreen, "hurt");
 		} else
@@ -116,7 +124,7 @@ public class BattleMode extends Screen
 			player.getController().draw(attackScreen, "bounce");
 		}
 
-		if(enemy.getBattler().getHealth() <= enemy.getBattler().getHealth() / 2)
+		if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
 		{
 			enemy.getController().draw(attackScreen, "hurt");
 		} else
@@ -124,7 +132,7 @@ public class BattleMode extends Screen
 			enemy.getController().draw(attackScreen, "bounce");
 		}
 
-
+		System.out.println(enemy.getBattler().getHealth());
 		long c = System.currentTimeMillis();
 
 		if(turnDone)
@@ -137,7 +145,7 @@ public class BattleMode extends Screen
 			if(whichPlayer == 0)
 			{
 				// System.out.println("hit");
-				if(enemy.getBattler().getHealth() <= enemy.getBattler().getHealth() / 2)
+				if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
 				{
 					enemy.getController().draw(attackScreen, "hurt");
 				} else
@@ -148,7 +156,7 @@ public class BattleMode extends Screen
 				hitImage("enemy");
 			} else
 			{
-				if(player.getBattler().getHealth() <= player.getBattler().getHealth() / 2)
+				if(player.getBattler().getHealth() <= iplayerHealth / 2)
 				{
 					player.getController().draw(attackScreen, "hurt");
 				} else
@@ -167,15 +175,11 @@ public class BattleMode extends Screen
 
 		}
 
+		
 		if(turnCounter % 2 == 0 & timer % 20 == 0)
 		{
 			checkpanelClick();
 			whichPlayer = 0;
-			if(checkDead() == 1 || checkDead() == -1)
-			{
-				System.out.println("is dead");
-				surface.switchScreen(2);
-			}
 		}
 
 		if(turnCounter % 2 != 0 && timer % 20 == 0)
@@ -188,6 +192,11 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
+		if(checkDead() == 1 || checkDead() == -1)
+		{
+			System.out.println("is dead");
+			surface.switchScreen(2);
+		}
 
 		attackScreen.endDraw();
 

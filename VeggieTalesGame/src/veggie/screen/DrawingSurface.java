@@ -79,6 +79,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		lettuceAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif"));
 		lettuceAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-run.gif"));
 		lettuceAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-bounce.gif"));
+		lettuceAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-hurt.gif"));
 
 		assets.put("hit", new Gif(this, "images" + FileIO.fileSep + "hit-effect.gif"));
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
