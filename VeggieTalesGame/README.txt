@@ -105,7 +105,7 @@ Stretch features:
 
 — Resources — 
 
-
+* block.png = https://lh3.googleusercontent.com/eT33UQU7wHS0fx19MgjXGBOfbRTMLNBAfH5RZhYrd6IcYAU71xbJ0H72LgVsFJ8kH9zVgTlE7UaAcjMQpa_-MBw=s400
+* clouds.png = http://tse3.mm.bing.net/th?id=OIP.4_5G3toRzBjrgizBzuvDfAHaFj
 * Shelby Screen Switching Demo
 * AnimationDemo
-* Used to implement gifs correctly into processing : http://www.science.smith.edu/dftwiki/index.php/Processing_Tutorial_--_Showing_Animated_Gifs

@@ -1,17 +1,15 @@
 package veggie.model;
-
-import java.awt.Shape;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import processing.core.PImage;
+import processing.core.PShape;
 
 /**
  * @author awang104 PlayerController is the player character for the platform
  *         mode with physics traits.
  */
-public class PlayerController extends MovingImage
+public class PlayerPlatform extends MovingImage
 {
 	private double velX;
 	private double velY;
@@ -25,7 +23,7 @@ public class PlayerController extends MovingImage
 	 * @param y             y coordinate of object
 	 * @param lettuceAssets image texture of object
 	 */
-	public PlayerController(Map<String, PImage> lettuceAssets, int x, int y)
+	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y)
 	{
 		super(x, y, lettuceAssets.get("bounce").width, lettuceAssets.get("bounce").height, lettuceAssets);
 		velX = 0;
@@ -42,6 +40,9 @@ public class PlayerController extends MovingImage
 	public void walk(int dir)
 	{
 		velX += dir * 0.5;
+		if(Math.abs(velX) > 5) {
+			velX = dir*5;
+		}
 		isWalking = true;
 	}
 
@@ -67,18 +68,19 @@ public class PlayerController extends MovingImage
 
 	}
 
-	public void checkPlayer(ArrayList<Shape> platform)
+	public void checkPlayer(ArrayList<PShape> platform)
 	{
 		moveBy(velX, velY);
-		for(Shape s : platform)
+		for(PShape rect : platform)
 		{
-			if(super.intersects(s))
-			{
-				velY = 0;
+			/*
+			if() {
+				
 				onSurface = true;
-				moveTo(this.getBounds().x, s.getBounds().y - 1.001 * this.getBounds().getHeight());
-				break;
+				velY = 0;
 			}
+			*/
+			System.out.println(rect.getVertexCount());
 		}
 	}
 
@@ -93,7 +95,7 @@ public class PlayerController extends MovingImage
 		}
 	}
 
-	public boolean battle(PlayerController bot)
+	public boolean battle(PlayerPlatform bot)
 	{
 		return bot.getBounds().intersects(this.getBounds());
 	}

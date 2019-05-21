@@ -85,17 +85,22 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
+		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
+		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
 
 
 		// reading moveList file
 		FileIO translator = new FileIO();
 		try
 		{
-			ArrayList<String> temp_moves = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
-			for(String s : temp_moves)
+			ArrayList<String> temp = FileIO.readFile("res" + FileIO.fileSep + "moveList.txt");
+			int i = 1;
+			for(String s : temp)
 			{
 				Moves m = translator.translateMoveList(s);
-				moves.put(m.getAttackval(), m);
+				System.out.println(m.getName());
+				moves.put(i, m);
+				i++;
 			}
 
 		} catch(IOException e)

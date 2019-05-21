@@ -2,12 +2,12 @@ package veggie.model;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.util.HashMap;
 import java.util.Map;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PShape;
 import veggie.screen.DrawingSurface;
 
 /**
@@ -100,11 +100,12 @@ public class MovingImage
 	 * @param bounds Shape interacting with MovingImage
 	 * @return true if MovingImage touches the shape
 	 */
-	public boolean intersects(Shape bounds)
+	public boolean intersects(PShape bounds)
 	{
 
-		double x = bounds.getBounds().getX();
-		double y = bounds.getBounds().getY();
+		/*
+		double x = bounds.getVertexX();
+		double y = bounds.getVertexY();
 		double width = bounds.getBounds().getWidth();
 
 		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width
@@ -115,6 +116,7 @@ public class MovingImage
 		 * boolean intersects = false; if(bounds instanceof Rectangle) intersects =
 		 * hitbox.intersects((Rectangle)bounds); return intersects;
 		 */
+		return true;
 	}
 
 	/**
@@ -124,4 +126,21 @@ public class MovingImage
 	{
 		return hitbox;
 	}
+	
+	public double getX() {
+		return hitbox.getX();
+	}
+	
+	public double getY() {
+		return hitbox.getY();
+	}
+	
+	public double getHeight() {
+		return hitbox.getHeight();
+	}
+	
+	public double getWidth() {
+		return hitbox.getWidth();
+	}
+	
 }

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
-import veggie.model.Entity;
+import veggie.model.PlayerManager;
 
 /**
  * The battle screen for the game (think Pokemon battle)
@@ -14,7 +14,7 @@ import veggie.model.Entity;
  */
 public class BattleMode extends Screen
 {
-	private Entity player, enemy;
+	private PlayerManager player, enemy;
 
 	private DrawingSurface surface;
 
@@ -45,7 +45,7 @@ public class BattleMode extends Screen
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
-	public BattleMode(DrawingSurface surface, Entity player, Entity enemy)
+	public BattleMode(DrawingSurface surface, PlayerManager player, PlayerManager enemy)
 	{
 		super(800, 600);
 		this.player = player;
@@ -100,7 +100,6 @@ public class BattleMode extends Screen
 	public void draw()
 	{
 		timer++;
-		System.out.println(timer);
 
 		attackScreen.beginDraw();
 		attackScreen.background(255);
@@ -143,16 +142,17 @@ public class BattleMode extends Screen
 
 		if(turnCounter % 2 == 0 & timer % 20 == 0)
 		{
-			// System.out.println("player");
 			checkpanelClick();
 			whichPlayer = 0;
+			if(checkDead() == 1 || checkDead() == -1) {
+				System.out.println("is dead");
+				surface.switchScreen(2);
+			}
 		}
 
 		if(turnCounter % 2 != 0 && timer % 20 == 0)
 		{
 			int move = (int) (Math.random() * 4);
-
-			System.out.println("move");
 			drawMove(move, "enemy");
 
 			turnDone = true;
@@ -178,12 +178,12 @@ public class BattleMode extends Screen
 		healthPanel.fill(0);
 		healthPanel.rect(100, 50, 100, 25);
 		healthPanel.fill(255, 0, 0);
-		healthPanel.rect(100, 50, player.getStatistics().getHealth(), 25);
+		healthPanel.rect(100, 50, player.getBattler().getHealth(), 25);
 		// enemy
 		healthPanel.fill(0);
 		healthPanel.rect(600, 50, 100, 25);
 		healthPanel.fill(255, 0, 0);
-		healthPanel.rect(600, 50, enemy.getStatistics().getHealth(), 25);
+		healthPanel.rect(600, 50, enemy.getBattler().getHealth(), 25);
 
 		healthPanel.endDraw();
 	}
@@ -198,7 +198,6 @@ public class BattleMode extends Screen
 			panels.fill(0);
 			String move1 = player.getMoveList()[i].getName();
 			float w = panels.textWidth(move1);
-			//System.out.println("panel width = " + w);
 
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
@@ -211,7 +210,6 @@ public class BattleMode extends Screen
 		{
 			turnDone = true;
 			timer = 1;
-
 			drawMove(panelClick - 1, "player");
 		}
 	}
@@ -220,7 +218,7 @@ public class BattleMode extends Screen
 	{
 		if(entity.equalsIgnoreCase("player"))
 		{
-			boolean crit = crit(player.getStatistics().getCritrate());
+			boolean crit = crit(player.getBattler().getCritrate());
 			if(crit)
 			{
 				changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
@@ -232,7 +230,7 @@ public class BattleMode extends Screen
 
 		if(entity.equalsIgnoreCase("enemy"))
 		{
-			boolean crit = crit(enemy.getStatistics().getCritrate());
+			boolean crit = crit(enemy.getBattler().getCritrate());
 			if(crit)
 			{
 				changeHealth(player, enemy.getMoveList()[num].getAttackval() + 10);
@@ -288,11 +286,11 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(Entity e, int damage)
+	public void changeHealth(PlayerManager e, int damage)
 	{
-		int health = e.getStatistics().getHealth();
+		int health = e.getBattler().getHealth();
 
-		e.getStatistics().setHealth(health - damage);
+		e.getBattler().setHealth(health - damage);
 	}
 
 	/**
@@ -312,5 +310,14 @@ public class BattleMode extends Screen
 		{
 			return false;
 		}
+	}
+	
+	public int checkDead() {
+		if(enemy.getBattler().getHealth() == 0)
+			return -1; 
+		else if(player.getBattler().getHealth() == 0)
+			return 1;
+		else
+			return 0;
 	}
 }
