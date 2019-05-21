@@ -103,15 +103,30 @@ public class BattleMode extends Screen
 
 		attackScreen.beginDraw();
 		attackScreen.background(255);
-		
+
 		drawHealthPanel();
 		attackScreen.image(healthPanel, 0, 0);
 
-		player.getController().draw(attackScreen, "bounce");
-		enemy.getController().draw(attackScreen, "bounce");
+
+		if(player.getBattler().getHealth() <= player.getBattler().getHealth() / 2)
+		{
+			player.getController().draw(attackScreen, "hurt");
+		} else
+		{
+			player.getController().draw(attackScreen, "bounce");
+		}
+
+		if(enemy.getBattler().getHealth() <= enemy.getBattler().getHealth() / 2)
+		{
+			enemy.getController().draw(attackScreen, "hurt");
+		} else
+		{
+			enemy.getController().draw(attackScreen, "bounce");
+		}
+
 
 		long c = System.currentTimeMillis();
-		
+
 		if(turnDone)
 		{
 			attackScreen.beginDraw();
@@ -122,13 +137,25 @@ public class BattleMode extends Screen
 			if(whichPlayer == 0)
 			{
 				// System.out.println("hit");
-				enemy.getController().draw(attackScreen, "bounce");
+				if(enemy.getBattler().getHealth() <= enemy.getBattler().getHealth() / 2)
+				{
+					enemy.getController().draw(attackScreen, "hurt");
+				} else
+				{
+					enemy.getController().draw(attackScreen, "bounce");
+				}
 				player.getController().draw(attackScreen, "attack");
 				hitImage("enemy");
 			} else
 			{
-				player.getController().draw(attackScreen, "bounce");
-				enemy.getController().draw(attackScreen, "bounce");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
+				if(player.getBattler().getHealth() <= player.getBattler().getHealth() / 2)
+				{
+					player.getController().draw(attackScreen, "hurt");
+				} else
+				{
+					player.getController().draw(attackScreen, "bounce");
+				}
+				enemy.getController().draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
 				hitImage("player");
 			}
 
@@ -144,7 +171,8 @@ public class BattleMode extends Screen
 		{
 			checkpanelClick();
 			whichPlayer = 0;
-			if(checkDead() == 1 || checkDead() == -1) {
+			if(checkDead() == 1 || checkDead() == -1)
+			{
 				System.out.println("is dead");
 				surface.switchScreen(2);
 			}
@@ -160,15 +188,12 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
-		
-
-		
 
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
 
-		//System.out.println(System.currentTimeMillis() - c);
+		// System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -193,7 +218,8 @@ public class BattleMode extends Screen
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
-			//System.out.println("button" + i + " " + button[i].x + button[i].y + ", " + button[i].width + ", " + button[i].height);
+			// System.out.println("button" + i + " " + button[i].x + button[i].y + ", " +
+			// button[i].width + ", " + button[i].height);
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
 			String move1 = player.getMoveList()[i].getName();
@@ -311,10 +337,11 @@ public class BattleMode extends Screen
 			return false;
 		}
 	}
-	
-	public int checkDead() {
+
+	public int checkDead()
+	{
 		if(enemy.getBattler().getHealth() == 0)
-			return -1; 
+			return -1;
 		else if(player.getBattler().getHealth() == 0)
 			return 1;
 		else
