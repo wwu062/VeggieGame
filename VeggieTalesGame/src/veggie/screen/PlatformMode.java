@@ -131,7 +131,7 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
-		obstacles = surface.createShape(surface.GROUP);
+		obstacles = surface.createShape(PConstants.GROUP);
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -164,6 +164,7 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
+		System.out.println(player.getController().getX());
 		PlayerPlatform mainplayer = player.getController();
 
 		// drawing stuff
