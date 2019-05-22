@@ -34,7 +34,7 @@ public class PlatformMode extends Screen
 
 	private ArrayList<PlayerManager> bot;
 
-	private ArrayList<PShape> obstacles;
+	private PShape obstacles;
 
 	private Gif playerRun, tomatoBounce;
 
@@ -57,7 +57,7 @@ public class PlatformMode extends Screen
 		
 
 		
-		obstacles = new ArrayList<PShape>();
+		
 		
 
 		bot = new ArrayList<PlayerManager>();
@@ -137,7 +137,8 @@ public class PlatformMode extends Screen
 		
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
-		
+	
+		obstacles = surface.createShape(PConstants.GROUP);
 		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
 		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
 		PShape p3 = surface.createShape(PConstants.RECT, 700, 250, 100, 50);
@@ -146,11 +147,11 @@ public class PlatformMode extends Screen
 		
 		surface.popStyle();
 		
-		obstacles.add(p1);
-		obstacles.add(p2);
-		obstacles.add(p3);
-		obstacles.add(p4);
-		obstacles.add(p5);
+		obstacles.addChild(p1);
+		obstacles.addChild(p2);
+		obstacles.addChild(p3);
+		obstacles.addChild(p4);
+		obstacles.addChild(p5);
 		
 		spawnNewPlayer();
 		spawnNewBot();
@@ -172,10 +173,8 @@ public class PlatformMode extends Screen
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
-		for(PShape s : obstacles)
-		{
-			surface.shape(s);
-		}
+		
+		surface.shape(obstacles);
 
 		mainplayer.draw(surface, "run");
 
