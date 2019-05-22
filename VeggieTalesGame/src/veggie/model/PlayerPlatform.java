@@ -75,7 +75,6 @@ public class PlayerPlatform extends MovingImage
 			velX = 0;
 			isWalking = false;
 		}
-		System.out.println(velX);
 
 		velY += 0.7;
 		if(velY > TERMINAL_VELOCITY)
