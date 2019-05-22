@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 import gifAnimation.Gif;
 import processing.core.PConstants;
+import processing.core.PImage;
 import processing.core.PShape;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
 import veggie.model.PlayerPlatform;
+import veggie.textReader.FileIO;
 import veggie.model.PlayerBattle;
 
 /**
@@ -39,6 +41,8 @@ public class PlatformMode extends Screen
 	private Gif playerRun, tomatoBounce;
 
 	private DrawingSurface surface;
+	
+	private PImage backimg;
 
 	/**
 	 * Initializes fields
@@ -54,14 +58,7 @@ public class PlatformMode extends Screen
 		this.surface = surface;
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
 		
-		
-
-		
-		
-		
-
 		bot = new ArrayList<PlayerManager>();
-
 	}
 
 	/**
@@ -129,6 +126,8 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+		
+		backimg = surface.assets.get("background2");
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -138,21 +137,44 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 	
+		PImage platform = surface.loadImage("images" + FileIO.fileSep + "rbricks_large_shop_preview.png");
+		
+		
 		obstacles = surface.createShape(PConstants.GROUP);
+		//PShape p1 = surface.loadShape("images" + FileIO.fileSep + "random.svg");
+	
 		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
 		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
 		PShape p3 = surface.createShape(PConstants.RECT, 700, 250, 100, 50);
 		PShape p4 = surface.createShape(PConstants.RECT, 375, 300, 50, 100);
 		PShape p5 = surface.createShape(PConstants.RECT, 300, 250, 200, 50);
 		
-		surface.popStyle();
 		
-		obstacles.addChild(p1);
+		
+		
+		
+		p1.setTexture(platform);
+		p1.beginShape();
+		p1.texture(platform);
+		p1.vertex(0, 0, 0, 0);
+		p1.vertex(300, 0, 470, 0);
+		p1.vertex(0, 300, 470, 403);
+		p1.vertex(300, 300, 0, 403);
+		p1.endShape();
+		
+		p2.setTexture(platform);
+		p3.setTexture(platform);
+		p4.setTexture(platform);
+		p5.setTexture(platform);
+		
+		//obstacles.addChild(p1);
 		obstacles.addChild(p2);
 		obstacles.addChild(p3);
 		obstacles.addChild(p4);
 		obstacles.addChild(p5);
 		
+	
+		surface.popStyle();
 		spawnNewPlayer();
 		spawnNewBot();
 	}
@@ -162,11 +184,19 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
+		
+		surface.background(0, 255, 255);
+		
+		backimg.resize(DRAWING_WIDTH, DRAWING_HEIGHT);
+		surface.image(backimg, 0, 0);
+		
+		
+		
 		PlayerPlatform mainplayer = player.getController();
 
 		// drawing stuff
 
-		surface.background(0, 255, 255);
+		
 
 		surface.pushMatrix();
 

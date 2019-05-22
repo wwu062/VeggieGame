@@ -88,7 +88,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 		assets.put("crit", loadImage("images" + FileIO.fileSep + "crit.png"));
-
+		assets.put("background2", loadImage("images" + FileIO.fileSep + "clouds.png"));
+		
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
@@ -98,6 +99,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		veggieKingAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-hurt.gif"));
 
 
+		
+		
 		// reading moveList file
 		FileIO translator = new FileIO();
 		try
@@ -107,7 +110,6 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 			for(String s : temp)
 			{
 				Moves m = translator.translateMoveList(s);
-				System.out.println(m.getName());
 				moves.put(i, m);
 				i++;
 			}

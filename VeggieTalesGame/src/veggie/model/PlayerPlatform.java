@@ -41,12 +41,11 @@ public class PlayerPlatform extends MovingImage
 	public void walk(int dir)
 	{
 		velX += dir * 0.5;
-		if(Math.abs(velX) > 6) {
-			velX = dir*6;
+		if(Math.abs(velX) > 9) {
+			velX = dir*9;
 		}
 		isWalking = true;
 
-		System.out.println(velX);
 	}
 
 	/**
@@ -79,12 +78,15 @@ public class PlayerPlatform extends MovingImage
 			for(int i = 0; i < platform.getChildCount(); i++) {
 				float[] params = platform.getChild(i).getParams();
 				
+				
 				if(this.intersects(params[0], params[1], params[2]) && velY >= 0) {
 					this.moveTo(this.getX(), params[1] - this.getHeight());
 					onSurface = true;
 					velY = 0;
 					break;
 				}
+				
+				
 			}
 		}
 	}
