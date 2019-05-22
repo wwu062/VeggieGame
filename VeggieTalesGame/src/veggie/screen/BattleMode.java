@@ -57,8 +57,8 @@ public class BattleMode extends Screen
 		ienemyHealth = enemy.getBattler().getHealth();
 
 		// changes location of the player and enemy for battle arena
-		//player.getController().changeBy(150, 200);
-		//enemy.getController().changeBy(550, 200);
+		player.getController().changeBy(150, 200);
+		enemy.getController().changeBy(550, 200);
 
 		this.surface = surface;
 
@@ -168,7 +168,6 @@ public class BattleMode extends Screen
 				turnDone = false;
 				turnCounter++;
 			}
-			System.out.println(panelClick);
 
 		} else if(turnCounter % 2 == 0) {
 			checkpanelClick();

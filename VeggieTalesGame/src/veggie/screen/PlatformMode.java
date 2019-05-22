@@ -164,7 +164,6 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
-		System.out.println(player.getController().getX());
 		PlayerPlatform mainplayer = player.getController();
 
 		// drawing stuff

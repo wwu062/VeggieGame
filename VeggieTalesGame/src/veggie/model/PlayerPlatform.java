@@ -16,6 +16,10 @@ public class PlayerPlatform extends MovingImage
 	private double velY;
 	private boolean onSurface;
 	private boolean isWalking;
+	private boolean sliding;
+	
+	private static final double TERMINAL_VELOCITY = 14;
+	private static final double MAX_VELX = 8;
 
 	/**
 	 * Creates a new PlayerController object
@@ -31,6 +35,7 @@ public class PlayerPlatform extends MovingImage
 		velY = 0;
 		onSurface = false;
 		isWalking = false;
+		sliding = false;
 	}
 
 	/**
@@ -40,13 +45,16 @@ public class PlayerPlatform extends MovingImage
 	 */
 	public void walk(int dir)
 	{
-		velX += dir * 0.5;
-		if(Math.abs(velX) > 6) {
-			velX = dir*6;
-		}
-		isWalking = true;
-
-		System.out.println(velX);
+		if(!sliding)
+			velX += dir * 0.5;
+			if(Math.abs(velX) > MAX_VELX) {
+				velX = dir*MAX_VELX;
+			}
+			isWalking = true;
+	}
+	
+	public void slide() {
+		sliding = true;
 	}
 
 	/**
@@ -54,17 +62,17 @@ public class PlayerPlatform extends MovingImage
 	 */
 	public void fall()
 	{
-
-		if(Math.abs(velX) < 0.2)
-		{
-			isWalking = false;
+		if(Math.abs(velX) < 0.02) {
 			velX = 0;
+			isWalking = false;
 		}
 
-		if(velY < 14)
-			velY += 0.7;// GravityvelY);
-		if(isWalking && onSurface)
-			velX += -0.05 * (Math.abs(velX) / velX); // Friction
+		velY += 0.7;
+		if(velY > TERMINAL_VELOCITY)
+			velY = TERMINAL_VELOCITY;// GravityvelY);
+		
+		if(isWalking && onSurface && !sliding)
+			velX += -0.05 * (Math.abs(velX) / velX);// Friction
 
 
 		onSurface = false;
@@ -79,7 +87,7 @@ public class PlayerPlatform extends MovingImage
 			for(int i = 0; i < platform.getChildCount(); i++) {
 				float[] params = platform.getChild(i).getParams();
 				
-				if(this.intersects(params[0], params[1], params[2]) && velY >= 0) {
+				if(this.intersects(params[0], params[1], params[2]) && velY > 0) {
 					this.moveTo(this.getX(), params[1] - this.getHeight());
 					onSurface = true;
 					velY = 0;
@@ -96,6 +104,7 @@ public class PlayerPlatform extends MovingImage
 	{
 		if(onSurface)
 		{
+			sliding = false;
 			velY = -15;
 		}
 	}
