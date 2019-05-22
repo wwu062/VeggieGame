@@ -29,6 +29,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 
 	protected Map<String, PImage> lettuceAssets;
 	protected Map<String, PImage> tomatoAssets;
+	protected Map<String, PImage> veggieKingAssets;
+
 
 	protected Map<String, PImage> assets;
 	protected Map<Integer, Moves> moves;
@@ -43,6 +45,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets = new HashMap<String, PImage>();
 		moves = new HashMap<Integer, Moves>();
 		tomatoAssets = new HashMap<String, PImage>();
+		veggieKingAssets = new HashMap<String, PImage>();
 
 
 		screens = new ArrayList<Screen>();
@@ -88,6 +91,10 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
+		
+		veggieKingAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
+		veggieKingAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-attack.gif"));
+		veggieKingAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-hurt.gif"));
 
 
 		// reading moveList file
