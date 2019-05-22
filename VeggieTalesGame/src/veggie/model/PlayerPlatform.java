@@ -41,10 +41,12 @@ public class PlayerPlatform extends MovingImage
 	public void walk(int dir)
 	{
 		velX += dir * 0.5;
-		if(Math.abs(velX) > 5) {
-			velX = dir*5;
+		if(Math.abs(velX) > 6) {
+			velX = dir*6;
 		}
 		isWalking = true;
+
+		System.out.println(velX);
 	}
 
 	/**

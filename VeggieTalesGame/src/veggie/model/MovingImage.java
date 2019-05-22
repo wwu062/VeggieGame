@@ -100,7 +100,7 @@ public class MovingImage
 	 * @return true if MovingImage touches the shape
 	 */
 	public boolean intersects(double x, double y, double width) {
-		System.out.println(hitbox.height);
+		
 		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 14 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		return intersects;
 	}
