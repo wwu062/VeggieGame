@@ -221,6 +221,15 @@ public class PlatformMode extends Screen
 			player.getController().walk(1);
 		if(surface.isPressed(KeyEvent.VK_UP))
 			player.getController().jump();
+		if(surface.isPressed(KeyEvent.VK_SHIFT) && (surface.isPressed(KeyEvent.VK_RIGHT) || surface.isPressed(KeyEvent.VK_LEFT)))
+			player.getController().slide(true);
+		else if(surface.isPressed(KeyEvent.VK_SHIFT)) {
+			
+		} else {
+			player.getController().slide(false);
+		}
+		
+		
 		for(PlayerManager b : bot)
 		{
 			b.getController().fall();
@@ -232,6 +241,10 @@ public class PlatformMode extends Screen
 
 		if(!screenRect.intersects(player.getController().getBounds()))
 			spawnNewPlayer();
+	}
+	
+	public void isReleased() {
+		
 	}
 
 }

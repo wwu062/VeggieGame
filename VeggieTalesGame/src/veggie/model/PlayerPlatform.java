@@ -20,6 +20,9 @@ public class PlayerPlatform extends MovingImage
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double MAX_VELX = 8;
+	private static final double IN_AIR_MODIFIER = 0.25;
+	private static final double NO_MODIFIER = 1;
+	private static final double COEF_FRICTION = -0.05;
 
 	/**
 	 * Creates a new PlayerController object
@@ -43,36 +46,43 @@ public class PlayerPlatform extends MovingImage
 	 * 
 	 * @param dir 1 is right, -1 is left
 	 */
-	public void walk(int dir)
-	{
-		if(!sliding)
-			velX += dir * 0.5;
+	public void walk(int dir) {
+		double modifier = NO_MODIFIER;
+		if(!onSurface)
+			modifier = IN_AIR_MODIFIER;
+		if(!sliding) {
+			velX += dir * 0.5 * modifier;
 			if(Math.abs(velX) > MAX_VELX) {
 				velX = dir*MAX_VELX;
 			}
 			isWalking = true;
+		}
+			
 	}
 	
-	public void slide() {
-		sliding = true;
+	
+	public void slide(boolean status) {
+		sliding = status;
 	}
+	
 
 	/**
 	 * Changes vertical velocity of object and implements horizontal friction
 	 */
 	public void fall()
 	{
-		if(Math.abs(velX) < 0.02) {
+		if(Math.abs(velX) < 0.03) {
 			velX = 0;
 			isWalking = false;
 		}
+		System.out.println(velX);
 
 		velY += 0.7;
 		if(velY > TERMINAL_VELOCITY)
 			velY = TERMINAL_VELOCITY;// GravityvelY);
 		
 		if(isWalking && onSurface && !sliding)
-			velX += -0.05 * (Math.abs(velX) / velX);// Friction
+			velX += COEF_FRICTION * (Math.abs(velX) / velX);// Friction
 
 
 		onSurface = false;
