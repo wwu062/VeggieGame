@@ -1,4 +1,5 @@
 package veggie.model;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public class PlayerPlatform extends MovingImage
 	}
 
 	/**
-	 * Changes vertical velocity of object
+	 * Changes vertical velocity of object and implements horizontal friction
 	 */
 	public void fall()
 	{
@@ -58,7 +59,8 @@ public class PlayerPlatform extends MovingImage
 			velX = 0;
 		}
 
-		velY += 0.7; // Gravity
+		if(velY < 14)
+			velY += 0.7;// GravityvelY);
 		if(isWalking && onSurface)
 			velX += -0.05 * (Math.abs(velX) / velX); // Friction
 
@@ -68,19 +70,20 @@ public class PlayerPlatform extends MovingImage
 
 	}
 
-	public void checkPlayer(ArrayList<PShape> platform)
+	public void checkPlayer(PShape platform)
 	{
 		moveBy(velX, velY);
-		for(PShape rect : platform)
-		{
-			/*
-			if() {
+		if(platform.getChildCount() != 0) {
+			for(int i = 0; i < platform.getChildCount(); i++) {
+				float[] params = platform.getChild(i).getParams();
 				
-				onSurface = true;
-				velY = 0;
+				if(this.intersects(params[0], params[1], params[2]) && velY >= 0) {
+					this.moveTo(this.getX(), params[1] - this.getHeight());
+					onSurface = true;
+					velY = 0;
+					break;
+				}
 			}
-			*/
-			System.out.println(rect.getVertexCount());
 		}
 	}
 

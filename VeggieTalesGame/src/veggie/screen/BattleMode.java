@@ -103,10 +103,7 @@ public class BattleMode extends Screen
 	 * @post changes background color
 	 */
 	public void draw()
-	{
-		System.out.println("This is the ienemy: " + ienemyHealth);
-		System.out.println("This is the getStat health" + enemy.getBattler().getHealth());
-
+	{	
 		timer++;
 
 		attackScreen.beginDraw();
@@ -116,36 +113,33 @@ public class BattleMode extends Screen
 		attackScreen.image(healthPanel, 0, 0);
 
 
-		if(player.getBattler().getHealth() <= iplayerHealth / 2)
-		{
-			player.getController().draw(attackScreen, "hurt");
-		} else
-		{
+		//if(player.getBattler().getHealth() <= iplayerHealth / 2)
+		//{
+		//	player.getController().draw(attackScreen, "hurt");
+		//} else
+		//{
 			player.getController().draw(attackScreen, "bounce");
-		}
+		//}
 
-		if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
-		{
-			enemy.getController().draw(attackScreen, "hurt");
-		} else
-		{
+		//if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
+		//{
+		//	enemy.getController().draw(attackScreen, "hurt");
+		//} else
+		//{
 			enemy.getController().draw(attackScreen, "bounce");
-		}
-
-		System.out.println(enemy.getBattler().getHealth());
-		long c = System.currentTimeMillis();
+	//	}
 
 		if(turnDone)
 		{
+			//System.out.println(whichPlayer);
 			attackScreen.beginDraw();
 			attackScreen.background(255);
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			if(whichPlayer == 0)
-			{
-				// System.out.println("hit");
-				if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
+			if(whichPlayer == 0) {
+				
+				if(enemy.getBattler().getHealth() <= ienemyHealth)
 				{
 					enemy.getController().draw(attackScreen, "hurt");
 				} else
@@ -154,13 +148,11 @@ public class BattleMode extends Screen
 				}
 				player.getController().draw(attackScreen, "attack");
 				hitImage("enemy");
-			} else
-			{
-				if(player.getBattler().getHealth() <= iplayerHealth / 2)
-				{
+				
+			} else	{
+				if(player.getBattler().getHealth() <= iplayerHealth) {
 					player.getController().draw(attackScreen, "hurt");
-				} else
-				{
+				} else {
 					player.getController().draw(attackScreen, "bounce");
 				}
 				enemy.getController().draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
@@ -169,21 +161,19 @@ public class BattleMode extends Screen
 
 			if(timer % 20 == 0)
 			{
+				if(isDead() == 1 || isDead() == -1)	{
+					surface.switchScreen(2);
+					surface.removeScreen(3);
+				}
 				turnDone = false;
 				turnCounter++;
 			}
+			System.out.println(panelClick);
 
-		}
-
-		
-		if(turnCounter % 2 == 0 & timer % 20 == 0)
-		{
+		} else if(turnCounter % 2 == 0) {
 			checkpanelClick();
 			whichPlayer = 0;
-		}
-
-		if(turnCounter % 2 != 0 && timer % 20 == 0)
-		{
+		} else {
 			int move = (int) (Math.random() * 4);
 			drawMove(move, "enemy");
 
@@ -192,17 +182,12 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
-		if(checkDead() == 1 || checkDead() == -1)
-		{
-			System.out.println("is dead");
-			surface.switchScreen(2);
-		}
-
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
 
 		// System.out.println(System.currentTimeMillis() - c);
+	
 	}
 
 	public void drawHealthPanel()
@@ -284,8 +269,7 @@ public class BattleMode extends Screen
 	 * @pre Argument only takes "player" or "enemy"
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
-	private void hitImage(String Entity)
-	{
+	private void hitImage(String Entity) {
 		attackScreen.beginDraw();
 		if(Entity.equalsIgnoreCase("enemy"))
 		{
@@ -301,8 +285,7 @@ public class BattleMode extends Screen
 	/**
 	 * checks if mouse is being pressed and switches screens if it is on a button
 	 */
-	public void mousePressed()
-	{
+	public void mousePressed() {
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if(button[0].contains(p))
 			panelClick = 1;
@@ -321,8 +304,7 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(PlayerManager e, int damage)
-	{
+	public void changeHealth(PlayerManager e, int damage) {
 		int health = e.getBattler().getHealth();
 
 		e.getBattler().setHealth(health - damage);
@@ -334,8 +316,7 @@ public class BattleMode extends Screen
 	 * @param critChance the critical hit rate of the attacking entity
 	 * @return true if there was a critical, else false.
 	 */
-	private boolean crit(double critChance)
-	{
+	private boolean crit(double critChance) {
 		double crit = Math.random();
 
 		if(crit <= critChance)
@@ -347,8 +328,7 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public int checkDead()
-	{
+	public int isDead() {
 		if(enemy.getBattler().getHealth() == 0)
 			return -1;
 		else if(player.getBattler().getHealth() == 0)
