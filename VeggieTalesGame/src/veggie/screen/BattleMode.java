@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
+import veggie.model.Moves;
 import veggie.model.PlayerManager;
 
 /**
@@ -22,7 +23,7 @@ public class BattleMode extends Screen
 
 	private Rectangle[] button;
 
-	private Gif hitImage;
+	private Gif hitImage, critImage;
 
 	private int timer = 1;
 
@@ -39,6 +40,13 @@ public class BattleMode extends Screen
 
 	// sets to 0 before and after each mouse click
 	private int panelClick = 0;
+
+	private int effectDamage = 0;
+	
+	private boolean poisoned = false;
+	
+	private String poisonedPlayer = "";
+
 
 	/**
 	 * initializes the fields
@@ -83,8 +91,12 @@ public class BattleMode extends Screen
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
 
+		/*
+		critImage = (Gif) surface.assets.get("crit");
+		critImage.play();
+*/
 		panels = surface.createGraphics(800, 600);
-		attackScreen = surface.createGraphics(800, 300);
+		attackScreen = surface.createGraphics(800, 340);
 		healthPanel = surface.createGraphics(800, 300);
 		surface.createGraphics(800, 300);
 
@@ -103,9 +115,10 @@ public class BattleMode extends Screen
 	 * @post changes background color
 	 */
 	public void draw()
-	{	
-		timer++;
+	{
 
+		timer++;
+		
 		attackScreen.beginDraw();
 		attackScreen.background(255);
 
@@ -113,33 +126,36 @@ public class BattleMode extends Screen
 		attackScreen.image(healthPanel, 0, 0);
 
 
-		//if(player.getBattler().getHealth() <= iplayerHealth / 2)
-		//{
-		//	player.getController().draw(attackScreen, "hurt");
-		//} else
-		//{
+		if(player.getBattler().getHealth() <= iplayerHealth / 2)
+		{
+			player.getController().draw(attackScreen, "hurt");
+		} else
+		{
 			player.getController().draw(attackScreen, "bounce");
-		//}
+		}
 
-		//if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
-		//{
-		//	enemy.getController().draw(attackScreen, "hurt");
-		//} else
-		//{
+		if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
+		{
+			enemy.getController().draw(attackScreen, "hurt");
+		} else
+		{
 			enemy.getController().draw(attackScreen, "bounce");
-	//	}
+		}
+
+		System.out.println(enemy.getBattler().getHealth());
+		long c = System.currentTimeMillis();
 
 		if(turnDone)
 		{
-			//System.out.println(whichPlayer);
 			attackScreen.beginDraw();
 			attackScreen.background(255);
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			if(whichPlayer == 0) {
-				
-				if(enemy.getBattler().getHealth() <= ienemyHealth)
+			if(whichPlayer == 0)
+			{
+				// System.out.println("hit");
+				if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
 				{
 					enemy.getController().draw(attackScreen, "hurt");
 				} else
@@ -148,11 +164,13 @@ public class BattleMode extends Screen
 				}
 				player.getController().draw(attackScreen, "attack");
 				hitImage("enemy");
-				
-			} else	{
-				if(player.getBattler().getHealth() <= iplayerHealth) {
+			} else
+			{
+				if(player.getBattler().getHealth() <= iplayerHealth / 2)
+				{
 					player.getController().draw(attackScreen, "hurt");
-				} else {
+				} else
+				{
 					player.getController().draw(attackScreen, "bounce");
 				}
 				enemy.getController().draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
@@ -161,24 +179,33 @@ public class BattleMode extends Screen
 
 			if(timer % 20 == 0)
 			{
-				if(isDead() == 1 || isDead() == -1)	{
-					surface.switchScreen(2);
-					surface.removeScreen(3);
-				}
 				turnDone = false;
 				turnCounter++;
 			}
 
-		} else if(turnCounter % 2 == 0) {
+		}
+
+
+		if(turnCounter % 2 == 0 & timer % 20 == 0)
+		{
 			checkpanelClick();
 			whichPlayer = 0;
-		} else {
+		}
+
+		if(turnCounter % 2 != 0 && timer % 20 == 0)
+		{
 			int move = (int) (Math.random() * 4);
-			drawMove(move, "enemy");
+			drawMove(move, enemy, player);
 
 			turnDone = true;
 			timer = 1;
 			whichPlayer = 1;
+		}
+
+		if(checkDead() == 1 || checkDead() == -1)
+		{
+			System.out.println("is dead");
+			surface.switchScreen(2);
 		}
 
 		attackScreen.endDraw();
@@ -186,7 +213,6 @@ public class BattleMode extends Screen
 		surface.image(attackScreen, 0, 0);
 
 		// System.out.println(System.currentTimeMillis() - c);
-	
 	}
 
 	public void drawHealthPanel()
@@ -229,34 +255,53 @@ public class BattleMode extends Screen
 		{
 			turnDone = true;
 			timer = 1;
-			drawMove(panelClick - 1, "player");
+			drawMove(panelClick - 1, player, enemy);
 		}
 	}
 
-	private void drawMove(int num, String entity)
+	// the entity that is being damaged
+	private void drawMove(int num, PlayerManager attacker, PlayerManager opponent)
 	{
-		if(entity.equalsIgnoreCase("player"))
+		Moves move = attacker.getMoveList()[num];
+
+		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
-			boolean crit = crit(player.getBattler().getCritrate());
-			if(crit)
-			{
-				changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
-			} else
-			{
-				changeHealth(enemy, player.getMoveList()[num].getAttackval());
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, -10);
+			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, -10);
 			}
 		}
 
-		if(entity.equalsIgnoreCase("enemy"))
+		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
-			boolean crit = crit(enemy.getBattler().getCritrate());
-			if(crit)
-			{
-				changeHealth(player, enemy.getMoveList()[num].getAttackval() + 10);
-			} else
-			{
-				changeHealth(player, enemy.getMoveList()[num].getAttackval());
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, -20);
 			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, -20);
+			}
+			return;
+		}
+
+		if(move.getEffectName().equalsIgnoreCase("absorb"))
+		{
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, (move.getAttackval()/2) * -1);
+			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, (move.getAttackval()/2) * -1);
+			}
+		}
+
+		boolean crit = crit(attacker.getBattler().getCritrate());
+		if(crit)
+		{
+			changeHealth(opponent, attacker.getMoveList()[num].getAttackval() + 10);
+		} else
+		{
+			changeHealth(opponent, attacker.getMoveList()[num].getAttackval());
 		}
 
 		panelClick = 0;
@@ -268,7 +313,8 @@ public class BattleMode extends Screen
 	 * @pre Argument only takes "player" or "enemy"
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
-	private void hitImage(String Entity) {
+	private void hitImage(String Entity)
+	{
 		attackScreen.beginDraw();
 		if(Entity.equalsIgnoreCase("enemy"))
 		{
@@ -284,7 +330,8 @@ public class BattleMode extends Screen
 	/**
 	 * checks if mouse is being pressed and switches screens if it is on a button
 	 */
-	public void mousePressed() {
+	public void mousePressed()
+	{
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if(button[0].contains(p))
 			panelClick = 1;
@@ -303,7 +350,8 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(PlayerManager e, int damage) {
+	public void changeHealth(PlayerManager e, int damage)
+	{
 		int health = e.getBattler().getHealth();
 
 		e.getBattler().setHealth(health - damage);
@@ -315,7 +363,8 @@ public class BattleMode extends Screen
 	 * @param critChance the critical hit rate of the attacking entity
 	 * @return true if there was a critical, else false.
 	 */
-	private boolean crit(double critChance) {
+	private boolean crit(double critChance)
+	{
 		double crit = Math.random();
 
 		if(crit <= critChance)
@@ -327,7 +376,8 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public int isDead() {
+	public int checkDead()
+	{
 		if(enemy.getBattler().getHealth() == 0)
 			return -1;
 		else if(player.getBattler().getHealth() == 0)

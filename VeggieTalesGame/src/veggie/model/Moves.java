@@ -1,34 +1,47 @@
 package veggie.model;
 
-public class Moves {
-	
+public class Moves
+{
+
 	/**
 	 * The name of the Move
 	 */
 	private String name;
-	
+
 	/**
 	 * the attack value of the Move
 	 */
 	private int attackval;
-	
-	
-	public Moves(String name, int attackval) {
+
+	private String effectName;
+
+
+	public Moves(String name, int attackval, String effect)
+	{
 		this.name = name;
 		this.attackval = attackval;
+		this.effectName = effect;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
+
+	public String getEffectName()
+	{
+		return effectName;
+	}
+
 
 	/**
 	 * @return the attackval
 	 */
-	public int getAttackval() {
+	public int getAttackval()
+	{
 		return attackval;
 	}
 }

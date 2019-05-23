@@ -1,13 +1,16 @@
-Splash,10
-LettuceBomb,15
-CactusRanch,50
-FruitLoop,20
-Bulldoze,5
-Flop,6
-HungryChicken,7
-KungFu,8
-ToiletBed,9
-Boo,10
-Sleep,11
-Cash,12
-Money,13
+Splash,5,none
+Acid,6,poison
+Absorb,7,absorb
+Acid Spray,8,poison
+Avalanche,9,none
+Spinach Wrap,10,reduce
+Barrier,11,reduce
+Belch,12,poison
+Lettuce Rush,13,heal
+Bug Bite,14,poison
+Bullet,15,heal
+Camouflage,16,reduce
+Celebrate,17,leech
+Comet Punch,18,absorb
+Clamp,19,none
+Body Slam,20,none

@@ -53,8 +53,9 @@ public class FileIO {
 
 		String move = tokens[0];
 		int attack = Integer.parseInt(tokens[1]);
+		String effect = tokens[2];
 		
-		Moves m = new Moves(move, attack);
+		Moves m = new Moves(move, attack, effect);
 		
 		return m;
 	}
