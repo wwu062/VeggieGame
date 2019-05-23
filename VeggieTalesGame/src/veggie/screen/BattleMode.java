@@ -91,10 +91,8 @@ public class BattleMode extends Screen
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
 
-		/*
 		critImage = (Gif) surface.assets.get("crit");
 		critImage.play();
-*/
 		panels = surface.createGraphics(800, 600);
 		attackScreen = surface.createGraphics(800, 340);
 		healthPanel = surface.createGraphics(800, 300);
@@ -116,7 +114,6 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
-
 		timer++;
 		
 		attackScreen.beginDraw();
