@@ -34,7 +34,9 @@ public class PlatformMode extends Screen
 
 	private ArrayList<PlayerManager> bot;
 
-	private ArrayList<PShape> obstacles;
+	//private ArrayList<PShape> obstacles;
+	
+	private PShape obstacles;
 
 	private Gif playerRun, tomatoBounce;
 
@@ -57,7 +59,7 @@ public class PlatformMode extends Screen
 		
 
 		
-		obstacles = new ArrayList<PShape>();
+		//obstacles = surface.createShape(surface.GROUP);//new ArrayList<PShape>();
 		
 
 		bot = new ArrayList<PlayerManager>();
@@ -115,9 +117,9 @@ public class PlatformMode extends Screen
 		}
 		
 		// made it so that it automatically goes to battlemode for now. 
-		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
-		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
-
+		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
+		
 	}
 
 	// public void runMe() {
@@ -129,6 +131,7 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+		obstacles = surface.createShape(PConstants.GROUP);
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -146,11 +149,11 @@ public class PlatformMode extends Screen
 		
 		surface.popStyle();
 		
-		obstacles.add(p1);
-		obstacles.add(p2);
-		obstacles.add(p3);
-		obstacles.add(p4);
-		obstacles.add(p5);
+		obstacles.addChild(p1);
+		obstacles.addChild(p2);
+		obstacles.addChild(p3);
+		obstacles.addChild(p4);
+		obstacles.addChild(p5);
 		
 		spawnNewPlayer();
 		spawnNewBot();
@@ -172,10 +175,8 @@ public class PlatformMode extends Screen
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
-		for(PShape s : obstacles)
-		{
-			surface.shape(s);
-		}
+
+		surface.shape(obstacles);
 
 		mainplayer.draw(surface, "run");
 
@@ -220,6 +221,15 @@ public class PlatformMode extends Screen
 			player.getController().walk(1);
 		if(surface.isPressed(KeyEvent.VK_UP))
 			player.getController().jump();
+		if(surface.isPressed(KeyEvent.VK_SHIFT) && (surface.isPressed(KeyEvent.VK_RIGHT) || surface.isPressed(KeyEvent.VK_LEFT)))
+			player.getController().slide(true);
+		else if(surface.isPressed(KeyEvent.VK_SHIFT)) {
+			
+		} else {
+			player.getController().slide(false);
+		}
+		
+		
 		for(PlayerManager b : bot)
 		{
 			b.getController().fall();
@@ -231,6 +241,10 @@ public class PlatformMode extends Screen
 
 		if(!screenRect.intersects(player.getController().getBounds()))
 			spawnNewPlayer();
+	}
+	
+	public void isReleased() {
+		
 	}
 
 }

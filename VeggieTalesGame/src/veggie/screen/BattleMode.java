@@ -119,7 +119,7 @@ public class BattleMode extends Screen
 		System.out.println("This is the getStat health" + enemy.getBattler().getHealth());
 
 		timer++;
-
+		
 		attackScreen.beginDraw();
 		attackScreen.background(255);
 

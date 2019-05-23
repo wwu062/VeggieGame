@@ -6,7 +6,6 @@ import java.util.Map;
 import gifAnimation.Gif;
 import processing.core.PGraphics;
 import processing.core.PImage;
-import processing.core.PShape;
 import veggie.screen.DrawingSurface;
 
 /**
@@ -100,23 +99,11 @@ public class MovingImage
 	 * @param bounds Shape interacting with MovingImage
 	 * @return true if MovingImage touches the shape
 	 */
-	public boolean intersects(PShape bounds)
-	{
-
-		/*
-		double x = bounds.getVertexX();
-		double y = bounds.getVertexY();
-		double width = bounds.getBounds().getWidth();
-
-		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 16 && (hitbox.x > x && hitbox.x < x + width
-				|| hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
-
+	public boolean intersects(double x, double y, double width) {
+		if(hitbox.y != 186 && hitbox.y != 336)
+		System.out.println(hitbox.y);
+		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 14 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		return intersects;
-		/*
-		 * boolean intersects = false; if(bounds instanceof Rectangle) intersects =
-		 * hitbox.intersects((Rectangle)bounds); return intersects;
-		 */
-		return true;
 	}
 
 	/**

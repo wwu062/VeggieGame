@@ -88,7 +88,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 		assets.put("crit", new Gif(this, "images" + FileIO.fileSep + "crit.gif"));
-
+		
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
