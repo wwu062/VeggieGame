@@ -128,6 +128,10 @@ public class PlayerPlatform extends MovingImage
 		velX = 0;
 		velY = 0;
 	}
+	
+	public void stopHorizontal() {
+		velX = 0;
+	}
 
 
 }

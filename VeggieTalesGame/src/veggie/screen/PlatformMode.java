@@ -9,6 +9,7 @@ import processing.core.PConstants;
 import processing.core.PShape;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
+import veggie.model.Platform;
 import veggie.model.PlayerPlatform;
 import veggie.model.PlayerBattle;
 
@@ -41,6 +42,12 @@ public class PlatformMode extends Screen
 	private Gif playerRun, tomatoBounce;
 
 	private DrawingSurface surface;
+	
+	private Platform platform;
+	
+	private double timer;
+	
+	private boolean pause;
 
 	/**
 	 * Initializes fields
@@ -55,15 +62,6 @@ public class PlatformMode extends Screen
 		super(800, 600);
 		this.surface = surface;
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
-		
-		
-
-		
-		//obstacles = surface.createShape(surface.GROUP);//new ArrayList<PShape>();
-		
-
-		bot = new ArrayList<PlayerManager>();
-
 	}
 
 	/**
@@ -95,7 +93,7 @@ public class PlatformMode extends Screen
 		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
 	}
 
-	public void spawnNewBot()
+	public void spawnNewBot(int x, int y)
 	{
 		PlayerBattle istats = new PlayerBattle(100, 0.1);
 
@@ -117,7 +115,7 @@ public class PlatformMode extends Screen
 		}
 		
 		// made it so that it automatically goes to battlemode for now. 
-		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 1200 / 2 - 100, 600 / 2 - 100));
+		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y));
 		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 		
 	}
@@ -131,6 +129,18 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+		pause = false;
+		timer = 0;
+		bot = new ArrayList<PlayerManager>();
+		platform = new Platform(surface.width, surface.height, surface.platformAssets);
+
+		/*
+		platform.generateMovingImage(200, 400, 400, 50);
+		platform.generateMovingImage(0, 250, 100, 50);
+		platform.generateMovingImage(700, 250, 100, 50);
+		platform.generateMovingImage(300, 250, 200, 50);
+		*/
+		
 		obstacles = surface.createShape(PConstants.GROUP);
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
@@ -156,7 +166,7 @@ public class PlatformMode extends Screen
 		obstacles.addChild(p5);
 		
 		spawnNewPlayer();
-		spawnNewBot();
+		spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
 	}
 
 	/**
@@ -195,16 +205,33 @@ public class PlatformMode extends Screen
 
 	public void pause()
 	{
-		for(PlayerManager b : bot)
-		{
-			b.getController().stop();
-		}
-		player.getController().stop();
+		pause = true;
 	}
 
 	public void run()
 	{
-
+		
+		
+		int accel = (int)timer/10;
+		if(accel > 8) {
+			accel = 8;
+		}
+		
+		int shift = -1 - accel;
+		if(pause) {
+			for(PlayerManager b : bot)
+			{
+				b.getController().stop();
+			}
+			player.getController().stop();
+			shift = 0;
+			accel = 0;
+			timer = 0;
+			pause = false;
+		}
+		
+		shift(shift);
+		
 		for(int i = 0; i < bot.size(); i++)
 		{
 			if(player.getController().battle(bot.get(i).getController()))
@@ -241,10 +268,36 @@ public class PlatformMode extends Screen
 
 		if(!screenRect.intersects(player.getController().getBounds()))
 			spawnNewPlayer();
+		
+		randomSpawnBots();
+		
+		timer += 1;
 	}
 	
 	public void isReleased() {
 		
 	}
+	
+	private void shift(int shift) {
+		for(int i = 0; i < obstacles.getChildCount(); i++) {
+			obstacles.getChild(i).translate(shift, 0);
+			
+		}
+		for(int i = 0; i < obstacles.getChildCount(); i++) {
+			float[] params = obstacles.getChild(i).getParams();
+			if(params[0] + params[3] <= 0) {
+				obstacles.removeChild(i);
+				i--;
+			}
+		}
+	}
+	
+	private void randomSpawnBots() {
+		if(timer % 60 == 0) {
+			spawnNewBot((int)(Math.random() * surface.width), (int)(Math.random() * surface.height));
+		}
+	}
+	
+	
 
 }
