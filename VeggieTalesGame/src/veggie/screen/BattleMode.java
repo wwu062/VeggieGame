@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
+import veggie.model.Moves;
 import veggie.model.PlayerManager;
 
 /**
@@ -22,7 +23,7 @@ public class BattleMode extends Screen
 
 	private Rectangle[] button;
 
-	private Gif hitImage;
+	private Gif hitImage, critImage;
 
 	private int timer = 1;
 
@@ -39,6 +40,13 @@ public class BattleMode extends Screen
 
 	// sets to 0 before and after each mouse click
 	private int panelClick = 0;
+
+	private int effectDamage = 0;
+	
+	private boolean poisoned = false;
+	
+	private String poisonedPlayer = "";
+
 
 	/**
 	 * initializes the fields
@@ -83,8 +91,11 @@ public class BattleMode extends Screen
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
 
+		critImage = (Gif) surface.assets.get("crit");
+		critImage.play();
+
 		panels = surface.createGraphics(800, 600);
-		attackScreen = surface.createGraphics(800, 300);
+		attackScreen = surface.createGraphics(800, 340);
 		healthPanel = surface.createGraphics(800, 300);
 		surface.createGraphics(800, 300);
 
@@ -175,7 +186,7 @@ public class BattleMode extends Screen
 
 		}
 
-		
+
 		if(turnCounter % 2 == 0 & timer % 20 == 0)
 		{
 			checkpanelClick();
@@ -185,7 +196,7 @@ public class BattleMode extends Screen
 		if(turnCounter % 2 != 0 && timer % 20 == 0)
 		{
 			int move = (int) (Math.random() * 4);
-			drawMove(move, "enemy");
+			drawMove(move, enemy, player);
 
 			turnDone = true;
 			timer = 1;
@@ -245,34 +256,38 @@ public class BattleMode extends Screen
 		{
 			turnDone = true;
 			timer = 1;
-			drawMove(panelClick - 1, "player");
+			drawMove(panelClick - 1, player, enemy);
 		}
 	}
 
-	private void drawMove(int num, String entity)
+	// the entity that is being damaged
+	private void drawMove(int num, PlayerManager attacker, PlayerManager opponent)
 	{
-		if(entity.equalsIgnoreCase("player"))
+		Moves move = player.getMoveList()[num];
+
+		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
-			boolean crit = crit(player.getBattler().getCritrate());
-			if(crit)
-			{
-				changeHealth(enemy, player.getMoveList()[num].getAttackval() + 10);
-			} else
-			{
-				changeHealth(enemy, player.getMoveList()[num].getAttackval());
-			}
+			changeHealth(attacker, -10);
 		}
 
-		if(entity.equalsIgnoreCase("enemy"))
+		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
-			boolean crit = crit(enemy.getBattler().getCritrate());
-			if(crit)
-			{
-				changeHealth(player, enemy.getMoveList()[num].getAttackval() + 10);
-			} else
-			{
-				changeHealth(player, enemy.getMoveList()[num].getAttackval());
-			}
+			changeHealth(attacker, -20);
+			return;
+		}
+
+		if(move.getEffectName().equalsIgnoreCase("absorb"))
+		{
+			changeHealth(attacker, (move.getAttackval()/2) * -1);
+		}
+
+		boolean crit = crit(attacker.getBattler().getCritrate());
+		if(crit)
+		{
+			changeHealth(opponent, attacker.getMoveList()[num].getAttackval() + 10);
+		} else
+		{
+			changeHealth(opponent, attacker.getMoveList()[num].getAttackval());
 		}
 
 		panelClick = 0;
