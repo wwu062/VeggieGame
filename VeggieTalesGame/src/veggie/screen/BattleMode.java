@@ -263,22 +263,37 @@ public class BattleMode extends Screen
 	// the entity that is being damaged
 	private void drawMove(int num, PlayerManager attacker, PlayerManager opponent)
 	{
-		Moves move = player.getMoveList()[num];
+		Moves move = attacker.getMoveList()[num];
 
 		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
-			changeHealth(attacker, -10);
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, -10);
+			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, -10);
+			}
 		}
 
 		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
-			changeHealth(attacker, -20);
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, -20);
+			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, -20);
+			}
 			return;
 		}
 
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
-			changeHealth(attacker, (move.getAttackval()/2) * -1);
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, (move.getAttackval()/2) * -1);
+			}
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, (move.getAttackval()/2) * -1);
+			}
 		}
 
 		boolean crit = crit(attacker.getBattler().getCritrate());
