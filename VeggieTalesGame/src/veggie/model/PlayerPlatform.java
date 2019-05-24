@@ -17,12 +17,13 @@ public class PlayerPlatform extends MovingImage
 	private boolean onSurface;
 	private boolean isWalking;
 	private boolean sliding;
+	private boolean isFrozen;
 	
 	private final double MAX_VELX;
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double PLAYER_MAX_VELX = 8;
-	private static final double BOT_MAX_VELX = 5;
+	private static final double BOT_MAX_VELX = 6;
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
@@ -37,16 +38,20 @@ public class PlayerPlatform extends MovingImage
 	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y, boolean isBot)
 	{
 		super(x, y, lettuceAssets.get("bounce").width, lettuceAssets.get("bounce").height, lettuceAssets);
+		
 		velX = 0;
 		velY = 0;
 		onSurface = false;
 		isWalking = false;
 		sliding = false;
+		isFrozen = false;
+		
 		if(isBot) {
 			MAX_VELX = BOT_MAX_VELX;
 		} else {
 			MAX_VELX = PLAYER_MAX_VELX;
 		}
+		
 	}
 
 	/**
@@ -55,6 +60,11 @@ public class PlayerPlatform extends MovingImage
 	 * @param dir 1 is right, -1 is left
 	 */
 	public void walk(int dir) {
+	
+		if(isFrozen) {
+			return;
+		}
+		
 		double modifier = NO_MODIFIER;
 		if(!onSurface)
 			modifier = IN_AIR_MODIFIER;
@@ -70,6 +80,10 @@ public class PlayerPlatform extends MovingImage
 	
 	
 	public void slide(boolean status) {
+		if(isFrozen) {
+			return;
+		}
+		
 		sliding = status;
 	}
 	
@@ -79,6 +93,7 @@ public class PlayerPlatform extends MovingImage
 	 */
 	public void fall()
 	{
+		
 		if(Math.abs(velX) < 0.03) {
 			velX = 0;
 			isWalking = false;
@@ -133,6 +148,10 @@ public class PlayerPlatform extends MovingImage
 	 */
 	public void jump()
 	{
+		if(isFrozen) {
+			return;
+		}
+		
 		if(onSurface)
 		{
 			sliding = false;
@@ -154,6 +173,21 @@ public class PlayerPlatform extends MovingImage
 	public void stopHorizontal() {
 		velX = 0;
 	}
+	
+	public void freeze() {
+		isFrozen = true;
+	}
+	
+	public boolean isOnSurface() {
+		return onSurface;
+	}
+	
+	public void unFreeze() {
+		isFrozen = false;
+	}
 
+	public boolean isFrozen() {
+		return isFrozen;
+	}
 
 }

@@ -112,7 +112,9 @@ public class PlatformMode extends Screen
 		}
 		
 		// made it so that it automatically goes to battlemode for now. 
-		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y, true));
+		PlayerManager tempBot = new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y, true);
+		tempBot.getController().freeze();
+		bot.add(tempBot);
 		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 		
 	}
@@ -279,7 +281,7 @@ public class PlatformMode extends Screen
 		player.getController().checkPlayer(obstacles);
 
 		if(!screenRect.intersects(player.getController().getBounds()))
-			spawnNewPlayer();
+			surface.switchScreen(ScreenSwitcher.GAME_OVER);
 		
 		randomSpawnBots();
 		
@@ -313,7 +315,12 @@ public class PlatformMode extends Screen
 	}
 	
 	private void botRun() {
+		
+		
+		
 		for(PlayerManager tempBot : bot) {
+			if(tempBot.getController().isFrozen() && tempBot.getController().isOnSurface())
+				tempBot.getController().unFreeze();
 			if(player.getController().getX() > tempBot.getController().getX())
 				tempBot.getController().walk(1);
 			else if(player.getController().getX() < tempBot.getController().getX())
