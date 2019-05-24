@@ -105,6 +105,20 @@ public class PlayerPlatform extends MovingImage
 			}
 		}
 	}
+	
+	public void checkPlayer(ArrayList<Rectangle> platform)
+	{
+		moveBy(velX, velY);
+		for(Rectangle rect : platform) {
+			if(this.intersects(rect.x, rect.y, rect.width) && velY > 0) {
+				this.moveTo(this.getX(), rect.y - this.getHeight());
+				onSurface = true;
+				velY = 0;
+				break;
+			}
+		}
+		
+	}
 
 	/**
 	 * Changes vertical velocity of object

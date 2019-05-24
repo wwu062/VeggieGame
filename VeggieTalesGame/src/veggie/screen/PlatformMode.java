@@ -9,7 +9,6 @@ import processing.core.PConstants;
 import processing.core.PShape;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
-import veggie.model.Platform;
 import veggie.model.PlayerPlatform;
 import veggie.model.PlayerBattle;
 
@@ -37,13 +36,11 @@ public class PlatformMode extends Screen
 
 	//private ArrayList<PShape> obstacles;
 	
-	private PShape obstacles;
+	private ArrayList<Rectangle> obstacles;
 
 	private Gif playerRun, tomatoBounce;
 
 	private DrawingSurface surface;
-	
-	private Platform platform;
 	
 	private double timer;
 	
@@ -132,16 +129,9 @@ public class PlatformMode extends Screen
 		pause = false;
 		timer = 1;
 		bot = new ArrayList<PlayerManager>();
-		platform = new Platform(surface.width, surface.height, surface.platformAssets);
-
-		/*
-		platform.generateMovingImage(200, 400, 400, 50);
-		platform.generateMovingImage(0, 250, 100, 50);
-		platform.generateMovingImage(700, 250, 100, 50);
-		platform.generateMovingImage(300, 250, 200, 50);
-		*/
 		
-		obstacles = surface.createShape(PConstants.GROUP);
+		obstacles = new ArrayList<Rectangle>();
+		//obstacles = surface.createShape(PConstants.GROUP);
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -151,19 +141,36 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 		
+		Rectangle r1 = new Rectangle(200, 400, 400, 50);
+		Rectangle r2 = new Rectangle(0, 250, 100, 50);
+		Rectangle r3 = new Rectangle(700, 250, 100, 50);
+		Rectangle r4 = new Rectangle(375, 300, 50, 100);
+		Rectangle r5 = new Rectangle(300, 250, 200, 50);
+		
+		/*
 		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
 		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
 		PShape p3 = surface.createShape(PConstants.RECT, 700, 250, 100, 50);
 		PShape p4 = surface.createShape(PConstants.RECT, 375, 300, 50, 100);
 		PShape p5 = surface.createShape(PConstants.RECT, 300, 250, 200, 50);
+		*/
 		
 		surface.popStyle();
 		
+		/*
 		obstacles.addChild(p1);
 		obstacles.addChild(p2);
 		obstacles.addChild(p3);
 		obstacles.addChild(p4);
 		obstacles.addChild(p5);
+		*/
+		
+		obstacles.add(r1);
+		obstacles.add(r2);
+		obstacles.add(r3);
+		obstacles.add(r4);
+		obstacles.add(r5);
+		
 		
 		spawnNewPlayer();
 		spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
@@ -186,7 +193,10 @@ public class PlatformMode extends Screen
 
 		surface.fill(100);
 
-		surface.shape(obstacles);
+		//surface.shape(obstacles);
+		for(Rectangle rect : obstacles) {
+			surface.rect(rect.x, rect.y, rect.width, rect.height);
+		}
 
 		mainplayer.draw(surface, "run");
 
@@ -230,7 +240,7 @@ public class PlatformMode extends Screen
 			pause = false;
 		}
 		
-		shift(shift);
+		//shift(shift);
 		
 		for(int i = 0; i < bot.size(); i++)
 		{
@@ -256,6 +266,8 @@ public class PlatformMode extends Screen
 			player.getController().slide(false);
 		}
 		
+		botRun();
+		
 		
 		for(PlayerManager b : bot)
 		{
@@ -278,6 +290,7 @@ public class PlatformMode extends Screen
 		
 	}
 	
+	/*
 	private void shift(int shift) {
 		for(int i = 0; i < obstacles.getChildCount(); i++) {
 			obstacles.getChild(i).translate(shift, 0);
@@ -291,11 +304,23 @@ public class PlatformMode extends Screen
 			}
 		}
 	}
+	*/
 	
 	private void randomSpawnBots() {
 		if(timer % 60 == 0) {
-			spawnNewBot((int)(Math.random() * surface.width), (int)(Math.random() * surface.height));
+			spawnNewBot((int)(Math.random() * surface.width), 0);
 		}
+	}
+	
+	private void botRun() {
+		for(PlayerManager tempBot : bot) {
+			if(player.getController().getX() > tempBot.getController().getX())
+				tempBot.getController().walk(1);
+			else if(player.getController().getX() < tempBot.getController().getX())
+				tempBot.getController().walk(-1);
+			if(player.getController().getY() > tempBot.getController().getY())
+				tempBot.getController().jump();
+		} 
 	}
 	
 	
