@@ -8,6 +8,7 @@ import java.util.Map;
 
 import gifAnimation.Gif;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import veggie.model.Moves;
 import veggie.textReader.FileIO;
@@ -19,6 +20,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 * ratio for when the screen is resized
 	 */
 	public float ratioX, ratioY;
+
+	public PFont font;
 
 	private Screen activeScreen;
 
@@ -79,6 +82,9 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 */
 	public void setup()
 	{
+		font = loadFont("PokemonGB-12.vlw");
+		textFont(font);
+
 		lettuceAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-attack.gif"));
 		lettuceAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-run.gif"));
 		lettuceAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-bounce.gif"));
@@ -88,11 +94,11 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 		assets.put("crit", new Gif(this, "images" + FileIO.fileSep + "crit.gif"));
-		
+
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
-		
+
 		veggieKingAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
 		veggieKingAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-attack.gif"));
 		veggieKingAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-hurt.gif"));
