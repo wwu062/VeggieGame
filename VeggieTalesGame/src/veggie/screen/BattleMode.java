@@ -139,9 +139,6 @@ public class BattleMode extends Screen
 			enemy.getController().draw(attackScreen, "bounce");
 		}
 
-		System.out.println(enemy.getBattler().getHealth());
-		long c = System.currentTimeMillis();
-
 		if(turnDone)
 		{
 			attackScreen.beginDraw();

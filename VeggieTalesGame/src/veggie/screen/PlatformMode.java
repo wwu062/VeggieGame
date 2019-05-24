@@ -130,7 +130,7 @@ public class PlatformMode extends Screen
 	public void setup()
 	{
 		pause = false;
-		timer = 0;
+		timer = 1;
 		bot = new ArrayList<PlayerManager>();
 		platform = new Platform(surface.width, surface.height, surface.platformAssets);
 
