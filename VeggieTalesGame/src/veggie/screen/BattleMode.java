@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import gifAnimation.Gif;
 import processing.core.PGraphics;
 import veggie.model.Moves;
-import veggie.model.PlayerManager;
+import veggie.model.Player;
 
 /**
  * The battle screen for the game (think Pokemon battle)
@@ -15,7 +15,7 @@ import veggie.model.PlayerManager;
  */
 public class BattleMode extends Screen
 {
-	private PlayerManager player, enemy;
+	private Player player, enemy;
 
 	private int iplayerHealth, ienemyHealth;
 
@@ -46,7 +46,7 @@ public class BattleMode extends Screen
 
 	// private boolean poisoned = false;
 	private int poisonTurnCounter = 0;
-	private PlayerManager poisonedPlayer = null;
+	private Player poisonedPlayer = null;
 
 
 	/**
@@ -56,19 +56,19 @@ public class BattleMode extends Screen
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
-	public BattleMode(DrawingSurface surface, PlayerManager player, PlayerManager enemy)
+	public BattleMode(DrawingSurface surface, Player player, Player enemy)
 	{
 		super(800, 600);
 		this.player = player;
 		this.enemy = enemy;
 
-		iplayerHealth = player.getBattler().getHealth();
-		ienemyHealth = enemy.getBattler().getHealth();
+		iplayerHealth = player.getHealth();
+		ienemyHealth = enemy.getHealth();
 
 
 		// changes location of the player and enemy for battle arena
-		player.getController().changeBy(125, 200);
-		enemy.getController().changeBy(550, 200);
+		player.changeBy(125, 200);
+		enemy.changeBy(550, 200);
 
 		this.surface = surface;
 
@@ -129,20 +129,20 @@ public class BattleMode extends Screen
 		attackScreen.image(healthPanel, 0, 0);
 
 
-		if(player.getBattler().getHealth() <= iplayerHealth / 2)
+		if(player.getHealth() <= iplayerHealth / 2)
 		{
-			player.getController().draw(attackScreen, "hurt");
+			player.draw(attackScreen, "hurt");
 		} else
 		{
-			player.getController().draw(attackScreen, "bounce");
+			player.draw(attackScreen, "bounce");
 		}
 
-		if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
+		if(enemy.getHealth() <= ienemyHealth / 2)
 		{
-			enemy.getController().draw(attackScreen, "hurt");
+			enemy.draw(attackScreen, "hurt");
 		} else
 		{
-			enemy.getController().draw(attackScreen, "bounce");
+			enemy.draw(attackScreen, "bounce");
 		}
 
 		
@@ -164,27 +164,27 @@ public class BattleMode extends Screen
 
 			if(whichPlayer == 0)
 			{
-				if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
+				if(enemy.getHealth() <= ienemyHealth / 2)
 				{
-					enemy.getController().draw(attackScreen, "hurt");
+					enemy.draw(attackScreen, "hurt");
 				} else
 				{
-					enemy.getController().draw(attackScreen, "bounce");
+					enemy.draw(attackScreen, "bounce");
 				}
-				player.getController().draw(attackScreen, "attack");
+				player.draw(attackScreen, "attack");
 				hitImage("enemy");
 			}
 
 			if(whichPlayer == 1)
 			{
-				if(player.getBattler().getHealth() <= iplayerHealth / 2)
+				if(player.getHealth() <= iplayerHealth / 2)
 				{
-					player.getController().draw(attackScreen, "hurt");
+					player.draw(attackScreen, "hurt");
 				} else
 				{
-					player.getController().draw(attackScreen, "bounce");
+					player.draw(attackScreen, "bounce");
 				}
-				enemy.getController().draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
+				enemy.draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
 				hitImage("player");
 			}
 
@@ -228,10 +228,10 @@ public class BattleMode extends Screen
 
 	public void drawHealthPanel()
 	{
-		float playerHealth = player.getBattler().getHealth();
+		float playerHealth = player.getHealth();
 		float playerHealthRatio = playerHealth / iplayerHealth;
 
-		float enemyHealth = enemy.getBattler().getHealth();
+		float enemyHealth = enemy.getHealth();
 		float enemyHealthRatio = enemyHealth / ienemyHealth;
 
 		healthPanel.beginDraw();
@@ -256,7 +256,7 @@ public class BattleMode extends Screen
 			panels.pushStyle();
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
-			String move1 = player.getMoveList()[i].getName();
+			String move1 = player.getMove(i).getName();
 			float w = panels.textWidth(move1);
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
@@ -274,9 +274,9 @@ public class BattleMode extends Screen
 	}
 
 	// the entity that is being damaged
-	private void drawMove(int num, PlayerManager attacker, PlayerManager opponent)
+	private void drawMove(int num, Player attacker, Player opponent)
 	{
-		Moves move = attacker.getMoveList()[num];
+		Moves move = attacker.getMove(num);
 
 		if(move.getEffectName().equalsIgnoreCase("poison"))
 		{
@@ -286,11 +286,11 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
-			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth)
+			if(attacker == player && attacker.getHealth() != iplayerHealth)
 			{
 				changeHealth(attacker, -10);
 			}
-			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth)
+			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
 			{
 				changeHealth(attacker, -10);
 			}
@@ -298,11 +298,11 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
-			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth)
+			if(attacker == player && attacker.getHealth() != iplayerHealth)
 			{
 				changeHealth(attacker, -20);
 			}
-			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth)
+			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
 			{
 				changeHealth(attacker, -20);
 			}
@@ -311,21 +311,21 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
-			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+			if(attacker == player && attacker.getHealth() != iplayerHealth) {
 				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
-			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+			if(attacker == enemy && attacker.getHealth() != ienemyHealth) {
 				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
 		}
 
-		boolean crit = crit(attacker.getBattler().getCritrate());
+		boolean crit = crit(attacker.getCritrate());
 		if(crit)
 		{
-			changeHealth(opponent, attacker.getMoveList()[num].getAttackval() + 10);
+			changeHealth(opponent, attacker.getMove(num).getAttackval() + 10);
 		} else
 		{
-			changeHealth(opponent, attacker.getMoveList()[num].getAttackval());
+			changeHealth(opponent, attacker.getMove(num).getAttackval());
 		}
 
 		panelClick = 0;
@@ -374,11 +374,11 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(PlayerManager e, int damage)
+	public void changeHealth(Player e, int damage)
 	{
-		int health = e.getBattler().getHealth();
+		int health = e.getHealth();
 
-		e.getBattler().setHealth(health - damage);
+		e.setHealth(health - damage);
 	}
 
 	/**
@@ -418,9 +418,9 @@ public class BattleMode extends Screen
 
 	public int isDead()
 	{
-		if(enemy.getBattler().getHealth() <= 0)
+		if(enemy.getHealth() <= 0)
 			return -1;
-		else if(player.getBattler().getHealth() <= 0)
+		else if(player.getHealth() <= 0)
 			return 1;
 		else
 			return 0;

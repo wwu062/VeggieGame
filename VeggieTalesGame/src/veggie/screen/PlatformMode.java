@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import gifAnimation.Gif;
 import processing.core.PConstants;
 import processing.core.PShape;
-import veggie.model.PlayerManager;
 import veggie.model.Moves;
-import veggie.model.PlayerPlatform;
-import veggie.model.PlayerBattle;
+import veggie.model.Player;
+import veggie.model.Stats;
 
 /**
  * @author awang104 Creates the Platform game mode (think Mario)
@@ -30,9 +29,9 @@ public class PlatformMode extends Screen
 
 	private Rectangle screenRect;
 
-	private PlayerManager player;
+	private Player player;
 
-	private ArrayList<PlayerManager> bot;
+	private ArrayList<Player> bot;
 
 	//private ArrayList<PShape> obstacles;
 	
@@ -49,6 +48,12 @@ public class PlatformMode extends Screen
 	private ArrayList<Rectangle> items;
 	
 	private int spawnRequirement;
+	
+	private static final int[] LEVELS = new int[] {2, 4, 6, 8, 10};
+	
+	private int level;
+	
+	private Rectangle bottomRect;
 
 	/**
 	 * Initializes fields
@@ -63,6 +68,7 @@ public class PlatformMode extends Screen
 		super(800, 600);
 		this.surface = surface;
 		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
+		bottomRect = new Rectangle(0, DRAWING_HEIGHT - 1, DRAWING_WIDTH, 1);
 	}
 
 	/**
@@ -72,7 +78,7 @@ public class PlatformMode extends Screen
 	{
 
 		// player creation
-		PlayerBattle istats = new PlayerBattle(100, 0.1);
+		Stats istats = new Stats(100, 0.1);
 
 		Moves[] iplayerMovelist = new Moves[4];
 
@@ -91,12 +97,12 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 400 / 2 - 100, false);
+		player = new Player(surface.lettuceAssets, 800 / 2 - 100, 400 / 2 - 100, false, istats, iplayerMovelist);
 	}
 
 	public void spawnNewBot(int x, int y)
 	{
-		PlayerBattle istats = new PlayerBattle(100, 0.1);
+		Stats istats = new Stats(100, 0.1);
 
 		Moves[] iplayerMovelist = new Moves[4];
 
@@ -116,10 +122,10 @@ public class PlatformMode extends Screen
 		}
 		
 		// made it so that it automatically goes to battlemode for now. 
-		PlayerManager tempBot = new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y, true);
-		tempBot.getController().freeze();
+		Player tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
+		tempBot.freeze();
 		bot.add(tempBot);
-		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
+		//bot.add(new Player(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 		
 	}
 
@@ -135,8 +141,8 @@ public class PlatformMode extends Screen
 		pause = false;
 		timer = 1;
 		spawnRequirement = (int)(Math.random()*120);
-		
-		bot = new ArrayList<PlayerManager>();
+		level = 0;
+		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
 		
@@ -189,8 +195,6 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
-		PlayerPlatform mainplayer = player.getController();
-
 		// drawing stuff
 
 		surface.background(0, 255, 255);
@@ -213,11 +217,11 @@ public class PlatformMode extends Screen
 		}
 		surface.popStyle();
 		
-		mainplayer.draw(surface, "run");
+		player.draw(surface, "run");
 
-		for(PlayerManager b : bot)
+		for(Player b : bot)
 		{
-			b.getController().draw(surface, "bounce");
+			b.draw(surface, "bounce");
 		}
 		
 	
@@ -239,7 +243,7 @@ public class PlatformMode extends Screen
 	{
 		for(int i = 0; i < bot.size(); i++)
 		{
-			if(player.getController().battle(bot.get(i).getController()))
+			if(player.battle(bot.get(i)))
 			{
 				/*
 				try {
@@ -262,11 +266,11 @@ public class PlatformMode extends Screen
 		
 		int shift = -1 - accel;
 		if(pause) {
-			for(PlayerManager b : bot)
+			for(Player b : bot)
 			{
-				b.getController().stop();
+				b.stop();
 			}
-			player.getController().stop();
+			player.stop();
 			shift = 0;
 			accel = 0;
 			timer = 0;
@@ -278,36 +282,41 @@ public class PlatformMode extends Screen
 
 
 		if(surface.isPressed(KeyEvent.VK_LEFT))
-			player.getController().walk(-1);
+			player.walk(-1);
 		if(surface.isPressed(KeyEvent.VK_RIGHT))
-			player.getController().walk(1);
+			player.walk(1);
 		if(surface.isPressed(KeyEvent.VK_UP))
-			player.getController().jump();
+			player.jump();
 		if(surface.isPressed(KeyEvent.VK_SHIFT) && (surface.isPressed(KeyEvent.VK_RIGHT) || surface.isPressed(KeyEvent.VK_LEFT)))
-			player.getController().slide(true);
+			player.slide(true);
 		else if(surface.isPressed(KeyEvent.VK_SHIFT)) {
 			
 		} else {
-			player.getController().slide(false);
+			player.slide(false);
 		}
 		
 		botRun();
 		
 		
-		for(PlayerManager b : bot)
+		for(Player b : bot)
 		{
-			b.getController().fall();
-			b.getController().checkPlayer(obstacles);
+			b.fall();
+			b.checkPlayer(obstacles);
 		}
 
-		player.getController().fall();
-		player.getController().checkPlayer(obstacles);
+		player.fall();
+		player.checkPlayer(obstacles);
 
-		if(!screenRect.intersects(player.getController().getBounds()))
+		if(!screenRect.intersects(player.getBounds())) {
+			player.stopHorizontal();
+			System.out.println("stop horizontal");
+		}
+		
+		if(bottomRect.intersects(player.getBounds()))
 			surface.switchScreen(ScreenSwitcher.GAME_OVER);
 		
 		for(int i = 0; i < bot.size(); i++) {
-			if(!screenRect.intersects(bot.get(i).getController().getBounds())) {
+			if(!screenRect.intersects(bot.get(i).getBounds())) {
 				bot.remove(i);
 				i--;
 			}
@@ -345,8 +354,10 @@ public class PlatformMode extends Screen
 		for(int i = 0; i < obstacles.size(); i++) {
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
 				obstacles.remove(i);
-				generateNewPlatform();
 				i--;
+
+				if(timer%3 == 0)
+					generateNewPlatform();
 			}
 		}
 		
@@ -359,7 +370,6 @@ public class PlatformMode extends Screen
 		for(int i = 0; i < items.size(); i++) {
 			if(items.get(i).getWidth() + items.get(i).getX() <= 0) {
 				items.remove(i);
-				generateNewPlatform();
 				i--;
 			}
 		}
@@ -380,29 +390,35 @@ public class PlatformMode extends Screen
 	}
 	
 	private void botRun() {
-		for(PlayerManager tempBot : bot) {
-			if(tempBot.getController().isFrozen() && tempBot.getController().isOnSurface())
-				tempBot.getController().unFreeze();
-			if(player.getController().getX() > tempBot.getController().getX())
-				tempBot.getController().walk(1);
-			else if(player.getController().getX() < tempBot.getController().getX())
-				tempBot.getController().walk(-1);
-			//if(player.getController().getY() < tempBot.getController().getY())
-				//tempBot.getController().jump();
+		for(Player tempBot : bot) {
+			if(tempBot.isFrozen() && tempBot.isOnSurface())
+				tempBot.unFreeze();
+			if(player.getX() > tempBot.getX())
+				tempBot.walk(1);
+			else if(player.getX() < tempBot.getX())
+				tempBot.walk(-1);
+			//if(player.getY() < tempBot.getY())
+				//tempBot.jump();
 		} 
 	}
 	
 	private void generateNewPlatform() {
+		
+		
+		level += Math.random()*4 + 1;
+		level %= 5;
+		
 		int x = surface.width;
-		int y = (int)(Math.random()*(surface.height)*0.5 + surface.height*0.2);
-		int height = (int)(Math.random()*(surface.height*0.3) + (surface.height*0.1));
+		int y = (int)(Math.random()*(surface.height)/LEVELS[level] + surface.height*0.2);
+		int height = (int)(Math.random()*(surface.height/LEVELS[level]) + (surface.height*0.1));
 		int width = (int)(Math.random()*surface.width*0.7 + surface.width*0.3);
 		Rectangle r = new Rectangle(x, y, width, height);
 		obstacles.add(r);
 	}
 	
 	private void setNewMove() {
-		String s = (int)((Math.random() * 3) + 5) + "";
+		//if(player.intersects(rectangle))
+		//String s = (int)((Math.random() * 3) + 5) + "";
 		
 	}
 	

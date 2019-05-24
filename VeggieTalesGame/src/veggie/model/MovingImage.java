@@ -78,7 +78,6 @@ public class MovingImage
 		}
 		
 		marker.noFill();
-		System.out.println(hitbox.width + " " + hitbox.height);
 		marker.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 	}
 
@@ -105,6 +104,10 @@ public class MovingImage
 	public boolean intersects(double x, double y, double width) {
 		boolean intersects = Math.abs(hitbox.y + hitbox.height - y) < 14 && (hitbox.x > x && hitbox.x < x + width || hitbox.x + hitbox.width > x && hitbox.x + hitbox.width < x + width);
 		return intersects;
+	}
+	
+	public boolean intersects(Rectangle bounds) {
+		return this.intersects(bounds);
 	}
 
 	/**
