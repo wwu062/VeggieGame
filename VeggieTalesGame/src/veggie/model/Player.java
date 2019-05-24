@@ -203,7 +203,8 @@ public class Player extends MovingImage {
 		if(onSurface)
 		{
 			sliding = false;
-			velY = -15;
+			velY = -20;
+			
 		}
 	}
 
@@ -275,7 +276,7 @@ public class Player extends MovingImage {
 	 * Decreases the energy and max speed of the player
 	 */
 	public void drainLife() {
-		maxVelX--;
+		maxVelX -= 2.5;
 	}
 	
 	/**
@@ -283,7 +284,11 @@ public class Player extends MovingImage {
 	 * @return true if player's max speed is essentially 0.
 	 */
 	public boolean noLife() {
-		return Math.abs(maxVelX) < 0.2;
+		return maxVelX < 0;
+	}
+	
+	public void resetHealth() {
+		statistics.setHealth(statistics.getTotalHP());
 	}
 
 }

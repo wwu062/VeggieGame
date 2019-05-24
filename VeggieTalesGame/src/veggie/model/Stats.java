@@ -2,15 +2,9 @@ package veggie.model;
 
 public class Stats
 {
-
-	/**
-	 * the health statistic
-	 */
+	private final int totalHP;
 	private int health;
 
-	/**
-	 * the critical rate statistic
-	 */
 	private double critrate;
 
 	/**
@@ -23,6 +17,7 @@ public class Stats
 	{
 		this.health = ihealth;
 		this.critrate = critrate;
+		this.totalHP = ihealth;
 	}
 
 	/**
@@ -61,6 +56,10 @@ public class Stats
 	public void setCritrate(double critrate)
 	{
 		this.critrate = critrate;
+	}
+	
+	public int getTotalHP() {
+		return totalHP;
 	}
 	
 }

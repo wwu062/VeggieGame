@@ -39,7 +39,7 @@ public class PlatformMode extends Screen
 
 	private DrawingSurface surface;
 	
-	private double timer;
+	private int timer, spawnTimer;
 	private boolean pause;
 	
 	//platform
@@ -130,6 +130,7 @@ public class PlatformMode extends Screen
 	{
 		pause = false;
 		timer = 1;
+		spawnTimer = 0;
 		spawnRequirement = (int)(Math.random()*120);
 		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
@@ -177,7 +178,7 @@ public class PlatformMode extends Screen
 		
 		
 		spawnNewPlayer();
-		spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
+		//spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
 	}
 
 	/**
@@ -220,11 +221,9 @@ public class PlatformMode extends Screen
 
 
 		surface.popMatrix();
-
-		// modifying stuff
-		run();
 		
-
+		// modifying stuff
+			run();
 	}
 
 	public void pause()
@@ -241,11 +240,12 @@ public class PlatformMode extends Screen
 				player.drainLife();
 				if(player.noLife()) {
 					surface.switchScreen(ScreenSwitcher.GAME_OVER);
+				} else {
+					surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+					bot.remove(i);
+					pause();
+					spawnTimer = 0;
 				}
-				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-				bot.remove(i);
-				pause();
-				
 			}
 		}
 		
@@ -310,7 +310,8 @@ public class PlatformMode extends Screen
 		
 		//int chance = (int)((Math.random()*2)+1);
 		
-		randomSpawnBots();
+		if(spawnTimer > 180)
+			randomSpawnBots();
 		spawnNewItems();;
 		setNewMove();
 		
@@ -321,7 +322,8 @@ public class PlatformMode extends Screen
 		
 
 		
-		timer += 1;
+		timer++;
+		spawnTimer++;
 	}
 	
 	public void isReleased() {

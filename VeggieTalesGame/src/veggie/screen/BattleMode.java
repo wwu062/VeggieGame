@@ -239,10 +239,15 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
-		if(checkDead() == 1 || checkDead() == -1 && timer % 10 == 0)
+		if(timer % 7 == 0)
 		{
-			// System.out.println("is dead");
-			surface.switchScreen(2);
+			if(isDead() == -1) {
+				player.resetHealth();
+				surface.switchScreen(2);
+				surface.removeScreen(ScreenSwitcher.BATTLE);
+			} else if(isDead() == 1 ) {
+				surface.switchScreen(ScreenSwitcher.GAME_OVER);
+			}
 		}
 
 		attackScreen.endDraw();
@@ -531,7 +536,7 @@ public class BattleMode extends Screen
 		return hoverValue;
 	}
 
-	public int checkDead()
+	public int isDead()
 	{
 		if(enemy.getHealth() == 0)
 			return -1;
