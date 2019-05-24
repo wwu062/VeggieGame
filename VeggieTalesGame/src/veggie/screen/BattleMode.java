@@ -194,17 +194,18 @@ public class BattleMode extends Screen
 			turnDone = true;
 			timer = 1;
 			whichPlayer = 1;
+			if(isDead() == -1) {
+				surface.switchScreen(2);
+			} else if(isDead() == 1 ) {
+				surface.switchScreen(ScreenSwitcher.GAME_OVER);
+			}
 		}
 
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
 		
-		if(isDead() == -1) {
-			surface.switchScreen(2);
-		} else if(isDead() == 1 ) {
-			surface.switchScreen(ScreenSwitcher.GAME_OVER);
-		}
+		
 
 		// System.out.println(System.currentTimeMillis() - c);
 	}
@@ -372,9 +373,9 @@ public class BattleMode extends Screen
 
 	public int isDead()
 	{
-		if(enemy.getBattler().getHealth() == 0)
+		if(enemy.getBattler().getHealth() <= 0)
 			return -1;
-		else if(player.getBattler().getHealth() == 0)
+		else if(player.getBattler().getHealth() <= 0)
 			return 1;
 		else
 			return 0;
