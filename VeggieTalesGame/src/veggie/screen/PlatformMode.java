@@ -42,10 +42,11 @@ public class PlatformMode extends Screen
 	private DrawingSurface surface;
 	
 	private double timer;
-	
 	private boolean pause;
 	
+	//platform
 	private ArrayList<Rectangle> items;
+	private Rectangle bottomPlatform;
 	
 	private int spawnRequirement;
 	
@@ -67,8 +68,7 @@ public class PlatformMode extends Screen
 	{
 		super(800, 600);
 		this.surface = surface;
-		screenRect = new Rectangle(0, 0, DRAWING_WIDTH, DRAWING_HEIGHT);
-		bottomRect = new Rectangle(0, DRAWING_HEIGHT - 1, DRAWING_WIDTH, 1);
+		screenRect = new Rectangle(-100, -100, DRAWING_WIDTH + 200, DRAWING_HEIGHT + 200);
 	}
 
 	/**
@@ -138,6 +138,7 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+		
 		pause = false;
 		timer = 1;
 		spawnRequirement = (int)(Math.random()*120);
@@ -155,6 +156,7 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 		
+		bottomPlatform = new Rectangle(0, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH, 100);
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
 		Rectangle r3 = new Rectangle(700, 250, 100, 50);
@@ -209,6 +211,7 @@ public class PlatformMode extends Screen
 		for(Rectangle rect : obstacles) {
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
+		surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width, bottomPlatform.height);
 		
 		surface.pushStyle();
 		surface.fill(255,0,0);
@@ -253,9 +256,9 @@ public class PlatformMode extends Screen
 					e.printStackTrace();
 				}
 				*/
-				//surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-				//bot.remove(i);
-				//pause();
+				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+				bot.remove(i);
+				pause();
 			}
 		}
 		
@@ -297,7 +300,7 @@ public class PlatformMode extends Screen
 		
 		botRun();
 		
-		
+		obstacles.add(bottomPlatform);
 		for(Player b : bot)
 		{
 			b.fall();
@@ -306,13 +309,9 @@ public class PlatformMode extends Screen
 
 		player.fall();
 		player.checkPlayer(obstacles);
+		obstacles.remove(obstacles.size() - 1);
 
-		if(!screenRect.intersects(player.getBounds())) {
-			player.stopHorizontal();
-			System.out.println("stop horizontal");
-		}
-		
-		if(bottomRect.intersects(player.getBounds()))
+		if(!screenRect.intersects(player.getBounds()))
 			surface.switchScreen(ScreenSwitcher.GAME_OVER);
 		
 		for(int i = 0; i < bot.size(); i++) {
@@ -325,6 +324,7 @@ public class PlatformMode extends Screen
 		
 		randomSpawnBots();
 		spawnNewItems();
+		generateNewPlatform();
 		
 		timer += 1;
 	}
@@ -355,9 +355,6 @@ public class PlatformMode extends Screen
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
 				obstacles.remove(i);
 				i--;
-
-				if(timer%3 == 0)
-					generateNewPlatform();
 			}
 		}
 		
@@ -384,8 +381,8 @@ public class PlatformMode extends Screen
 	}
 	
 	private void randomSpawnBots() {
-		if(timer % 60 == 0) {
-			spawnNewBot((int)(Math.random() * surface.width), 0);
+		if(timer % (20*60) == 0) {
+			spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
 		}
 	}
 	
@@ -403,17 +400,22 @@ public class PlatformMode extends Screen
 	}
 	
 	private void generateNewPlatform() {
-		
-		
-		level += Math.random()*4 + 1;
-		level %= 5;
-		
-		int x = surface.width;
-		int y = (int)(Math.random()*(surface.height)/LEVELS[level] + surface.height*0.2);
-		int height = (int)(Math.random()*(surface.height/LEVELS[level]) + (surface.height*0.1));
-		int width = (int)(Math.random()*surface.width*0.7 + surface.width*0.3);
-		Rectangle r = new Rectangle(x, y, width, height);
+		/*
+		int option = (int)(Math.random()*4 + 1);
+		int y = DRAWING_HEIGHT/(int)(Math.random()*6 + 1);
+		Rectangle r;
+		if(option == 1) {
+			r = new Rectangle(DRAWING_WIDTH, y, 200, 100);
+		} else if(option == 2) {
+			r = new Rectangle(DRAWING_WIDTH, y, 300, 50);
+		} else if(option == 3) {
+			r = new Rectangle(DRAWING_WIDTH, y, 400, 200);
+		} else {
+			r = new Rectangle(DRAWING_WIDTH, y, 100, 50);
+		}
 		obstacles.add(r);
+		*/
+		//obstacles.add(new Rectangle(DRAWING_WIDTH, (int)(DRAWING_HEIGHT*0.8), DRAWING_WIDTH, 100));
 	}
 	
 	private void setNewMove() {
@@ -424,7 +426,7 @@ public class PlatformMode extends Screen
 	
 	private void spawnNewItems() {
 		if(timer%spawnRequirement == 0) {
-			Rectangle r = new Rectangle(surface.width, 100, 20, 20);
+			Rectangle r = new Rectangle(DRAWING_WIDTH, 100, 20, 20);
 			items.add(r);
 			spawnRequirement = (int)(Math.random()*3600 + 1800);
 		}
