@@ -120,10 +120,6 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
-		// System.out.println("This is the ienemy: " + ienemyHealth);
-		// System.out.println("This is the getStat health" +
-		// enemy.getBattler().getHealth());
-
 		timer++;
 
 		attackScreen.beginDraw();
@@ -149,8 +145,7 @@ public class BattleMode extends Screen
 			enemy.getController().draw(attackScreen, "bounce");
 		}
 
-		// System.out.println(enemy.getBattler().getHealth());
-		long c = System.currentTimeMillis();
+		
 		
 		
 
@@ -165,12 +160,10 @@ public class BattleMode extends Screen
 			{
 				changeHealth(poisonedPlayer, 10);
 				poisonTurnCounter--;
-				// System.out.println("poisoned" + turnCounter);
 			}
 
 			if(whichPlayer == 0)
 			{
-				// System.out.println("hit");
 				if(enemy.getBattler().getHealth() <= ienemyHealth / 2)
 				{
 					enemy.getController().draw(attackScreen, "hurt");
@@ -247,9 +240,6 @@ public class BattleMode extends Screen
 		healthPanel.rect(50, 85, 250, 15, 20, 20, 20, 20);
 		healthPanel.fill(255, 0, 0);
 		healthPanel.rect(50, 85, playerHealthRatio * 250, 15, 20, 20, 20, 20);
-		System.out.println(playerHealthRatio * 250);
-		System.out.println("This is player health" + player.getBattler().getHealth());
-		System.out.println("This is iplayer" + iplayerHealth);
 		// enemy
 		healthPanel.fill(255);
 		healthPanel.rect(500, 85, 250, 15, 20, 20, 20, 20);
@@ -264,8 +254,6 @@ public class BattleMode extends Screen
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
-			// System.out.println("button" + i + " " + button[i].x + button[i].y + ", " +
-			// button[i].width + ", " + button[i].height);
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
 			String move1 = player.getMoveList()[i].getName();
