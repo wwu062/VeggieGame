@@ -409,28 +409,20 @@ public class PlatformMode extends Screen
 			// tempBot.jump();
 		}
 	}
-
-	private void generateNewPlatform()
-	{
-
-		int y = DRAWING_HEIGHT / (int) (8 * Math.random() + 1) + 200;
-		Rectangle r = null;
-		int i = 0;
-		boolean contains = false;
-		while(!contains)
-		{
-			r = new Rectangle(DRAWING_WIDTH, y, 200, (int) (DRAWING_HEIGHT * 0.1));
-			for(Rectangle plat : obstacles)
-			{
-				contains = plat.intersects(r) || plat.contains(r);
+	
+	private void generateNewPlatform() {
+			Rectangle r = null;
+			boolean contains = true;
+			while(contains) { 
+				int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 100;
+				r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
+				for(Rectangle plat : obstacles) {
+					contains = r.intersects(plat) || r.contains(plat);
+				}
 			}
-			y = DRAWING_HEIGHT / (int) (8 * Math.random() + 1) + 200;
-			i++;
-			break;
-		}
-
-		// if(r != null)
-		obstacles.add(r);
+			
+			if(r != null)
+				obstacles.add(r);
 	}
 
 	private void setNewMove()

@@ -71,10 +71,12 @@ public class GameOver extends Screen{
 		 */
 		public void mousePressed()
 		{
-			Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
-			if(backButton.contains(p)) {
-				surface.setup();
-				surface.switchScreen(ScreenSwitcher.MENU);
+			if(timer >= 255) {
+				Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
+				if(backButton.contains(p)) {
+					surface.setup();
+					surface.switchScreen(ScreenSwitcher.MENU);
+				}
 			}
 
 		}

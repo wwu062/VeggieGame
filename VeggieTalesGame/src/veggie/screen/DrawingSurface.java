@@ -107,6 +107,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 
 
 		veggieKingAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
+		veggieKingAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
 		veggieKingAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-attack.gif"));
 		veggieKingAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-hurt.gif"));
 
