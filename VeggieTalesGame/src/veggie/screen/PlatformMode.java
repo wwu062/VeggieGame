@@ -193,7 +193,7 @@ public class PlatformMode extends Screen
 		surface.background(255);
 
 
-		surface.image(backimg, 0, 0);
+		//surface.image(backimg, 0, 0);
 
 
 		surface.pushMatrix();

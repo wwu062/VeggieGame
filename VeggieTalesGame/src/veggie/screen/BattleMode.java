@@ -25,11 +25,15 @@ public class BattleMode extends Screen
 
 	private Rectangle[] button;
 
-	private Rectangle textRect;
+	private Rectangle textRect, backRect;
 
 	private Gif hitImage, critImage;
 
 	private int timer = 1;
+
+	private boolean crit = false;
+
+	private boolean selfAttack = false;
 
 	// 0 = player, 1 = enemy
 	private int whichPlayer = 0;
@@ -92,7 +96,8 @@ public class BattleMode extends Screen
 			button[i + 2] = new Rectangle(305, 410 + 70 * i, 185, 60);
 		}
 
-		textRect = new Rectangle(500, 400, 220, 150);
+		textRect = new Rectangle(500, 400, 260, 150);
+		backRect = new Rectangle(100, 400, 400, 150);
 
 	}
 
@@ -199,6 +204,7 @@ public class BattleMode extends Screen
 				}
 				player.draw(attackScreen, "attack");
 				hitImage("enemy");
+				critImage(crit);
 			}
 
 			if(whichPlayer == 1)
@@ -212,12 +218,15 @@ public class BattleMode extends Screen
 				}
 				enemy.draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
 				hitImage("player");
+				critImage(crit);
 			}
 
 			if(timer % 10 == 0)
 			{
 				turnDone = false;
 				turnCounter++;
+				crit = false;
+				selfAttack = false;
 			}
 
 		}
@@ -290,6 +299,12 @@ public class BattleMode extends Screen
 
 	private void drawPanel()
 	{
+
+		panels.pushStyle();
+		panels.fill(255);
+		panels.rect(100, 400, 400, 150);
+		panels.popStyle();
+
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
@@ -302,6 +317,8 @@ public class BattleMode extends Screen
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
 		}
+
+
 		drawTextScreen();
 	}
 
@@ -319,26 +336,26 @@ public class BattleMode extends Screen
 
 			if(hoverValue == 0)
 			{
-				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
-				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 10, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 10, textRect.y + 45 + 40);
 			}
 
 			if(hoverValue == 1)
 			{
-				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
-				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 10, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 10, textRect.y + 45 + 40);
 			}
 
 			if(hoverValue == 2)
 			{
-				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
-				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 10, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 10, textRect.y + 45 + 40);
 			}
 
 			if(hoverValue == 3)
 			{
-				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
-				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 10, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 10, textRect.y + 45 + 40);
 			}
 		}
 		panels.popStyle();
@@ -378,7 +395,12 @@ public class BattleMode extends Screen
 
 		if(!moveEffect.equalsIgnoreCase("none"))
 		{
-			String effect = "Enemy is " + moveEffect;
+			String effect = player + " is " + moveEffect;
+
+			if(selfAttack)
+			{
+				effect = player + moveEffect;
+			}
 			panels.text(effect, textRect.x + 15, textRect.y + 25 + 40, textRect.width, textRect.height);
 		}
 
@@ -401,14 +423,16 @@ public class BattleMode extends Screen
 	{
 		Moves move = attacker.getMove(num);
 
-		if(move.getEffectName().equalsIgnoreCase("poison"))
+		if(move.getEffectName().equalsIgnoreCase("poisoned"))
 		{
 			poisonTurnCounter += 3;
 			poisonedPlayer = opponent;
 		}
 
-		if(move.getEffectName().equalsIgnoreCase("leech"))
+		if(move.getEffectName().equalsIgnoreCase("leeched"))
 		{
+			selfAttack = true;
+
 			if(attacker == player && attacker.getHealth() != iplayerHealth)
 			{
 				changeHealth(attacker, -10);
@@ -419,8 +443,10 @@ public class BattleMode extends Screen
 			}
 		}
 
-		if(move.getEffectName().equalsIgnoreCase("heal"))
+		if(move.getEffectName().equalsIgnoreCase("healed"))
 		{
+			selfAttack = true;
+
 			if(attacker == player && attacker.getHealth() != iplayerHealth)
 			{
 				changeHealth(attacker, -20);
@@ -432,8 +458,10 @@ public class BattleMode extends Screen
 			return;
 		}
 
-		if(move.getEffectName().equalsIgnoreCase("absorb"))
+		if(move.getEffectName().equalsIgnoreCase("absorbed"))
 		{
+			selfAttack = true;
+
 			if(attacker == player && attacker.getHealth() != iplayerHealth)
 			{
 				changeHealth(attacker, (move.getAttackval() / 5) * -1);
@@ -447,10 +475,9 @@ public class BattleMode extends Screen
 		attackScreen.beginDraw();
 
 		boolean crit = crit(attacker.getCritrate());
-		if(!crit)
+		if(crit)
 		{
-			System.out.println("hr");
-			attackScreen.image(critImage, 350, 100);
+			this.crit = true;
 			changeHealth(opponent, attacker.getMove(num).getAttackval() + 10);
 		} else
 		{
