@@ -62,6 +62,7 @@ public class Menu extends Screen
 		surface.image(logoimg, DRAWING_WIDTH / 2 - 200, DRAWING_HEIGHT / 4 - 75);
 
 		surface.pushStyle();
+		surface.fill(255);
 		surface.rect(playbutton.x, playbutton.y, playbutton.width, playbutton.height);
 		surface.fill(0);
 		String a = "Play";
@@ -70,6 +71,7 @@ public class Menu extends Screen
 		surface.popStyle();
 
 		surface.pushStyle();
+		surface.fill(255);
 		surface.rect(instructbutton.x, instructbutton.y, instructbutton.width, instructbutton.height);
 		surface.fill(0);
 		String b = "Instructions";

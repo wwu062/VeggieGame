@@ -241,4 +241,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	{
 		screens.remove(screens.size() - 1);
 	}
+	
+	public void gameOver() {
+		this.setup();
+	}
 }

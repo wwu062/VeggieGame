@@ -23,6 +23,8 @@ public interface ScreenSwitcher {
 	 */
 	public static final int BATTLE = 3;
 	
+	public static final int GAME_OVER = 4;
+	
 	
 	public void switchScreen(int i);
 }

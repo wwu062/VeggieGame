@@ -196,15 +196,15 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
-		if(checkDead() == 1 || checkDead() == -1)
-		{
-			System.out.println("is dead");
-			surface.switchScreen(2);
-		}
-
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
+		
+		if(isDead() == -1) {
+			surface.switchScreen(2);
+		} else if(isDead() == 1 ) {
+			surface.switchScreen(ScreenSwitcher.GAME_OVER);
+		}
 
 		// System.out.println(System.currentTimeMillis() - c);
 	}
@@ -282,10 +282,10 @@ public class BattleMode extends Screen
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
 			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
-				changeHealth(attacker, (move.getAttackval()/2) * -1);
+				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
 			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
-				changeHealth(attacker, (move.getAttackval()/2) * -1);
+				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
 		}
 
@@ -370,7 +370,7 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public int checkDead()
+	public int isDead()
 	{
 		if(enemy.getBattler().getHealth() == 0)
 			return -1;
