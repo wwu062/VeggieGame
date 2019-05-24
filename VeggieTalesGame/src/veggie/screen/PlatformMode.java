@@ -361,7 +361,10 @@ public class PlatformMode extends Screen
 	
 	private void randomSpawnBots() {
 		if(timer % (10*60) == 0) {
-			spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
+			if(((int)(Math.random()*2)) < 1.5)
+				spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
+			else
+				spawnNewBot(DRAWING_WIDTH/10, DRAWING_HEIGHT - 50);
 		}
 	}
 	
@@ -389,11 +392,13 @@ public class PlatformMode extends Screen
 				for(Rectangle plat : obstacles) {
 					contains = plat.intersects(r) || plat.contains(r);
 				}
+				y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 200;
 				i++;
+				break;
 			}
 			
-			if(r != null)
-				obstacles.add(r);
+			//if(r != null)
+			obstacles.add(r);
 	}
 	
 	private void setNewMove() {

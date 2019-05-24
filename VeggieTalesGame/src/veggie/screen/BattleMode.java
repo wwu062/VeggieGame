@@ -7,9 +7,11 @@ import gifAnimation.Gif;
 import processing.core.PGraphics;
 import veggie.model.Moves;
 import veggie.model.Player;
+import veggie.model.Player;
 
 /**
- * The battle screen for the game (think Pokemon battle)
+ * The Battle Screen for the game. In this mode, there are 4 buttons at the
+ * bottom of the screen that are the player's attack moves. Once they
  * 
  * @author williamwu
  */
@@ -22,7 +24,7 @@ public class BattleMode extends Screen
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
-	
+
 	private Rectangle textRect;
 
 	private Gif hitImage, critImage;
@@ -32,11 +34,15 @@ public class BattleMode extends Screen
 	// 0 = player, 1 = enemy
 	private int whichPlayer = 0;
 
+	private Moves prevPlayerMove = null;
+
+	private Moves prevEnemyMove = null;
+
 	private boolean turnDone = false;
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, attackScreen, healthPanel, textScreen;
+	private PGraphics panels, attackScreen, healthPanel;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turnCounter = 0;
@@ -85,8 +91,8 @@ public class BattleMode extends Screen
 		{
 			button[i + 2] = new Rectangle(305, 410 + 70 * i, 185, 60);
 		}
-		
-		textRect = new Rectangle(500, 400, 200, 150);
+
+		textRect = new Rectangle(500, 400, 220, 150);
 
 	}
 
@@ -101,16 +107,11 @@ public class BattleMode extends Screen
 		panels = surface.createGraphics(800, 600);
 		attackScreen = surface.createGraphics(800, 340);
 		healthPanel = surface.createGraphics(800, 300);
-		textScreen = surface.createGraphics(800, 600);
 		// surface.createGraphics(800, 300);
 
 		surface.background(255, 255, 255);
 
-		panels.beginDraw();
-		drawPanel();
-		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
-		panels.endDraw();
-		surface.image(panels, 0, 0);
+
 	}
 
 	/**
@@ -120,24 +121,22 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
-		if(turnCounter%2 == 0) {
-			if(isDead() == -1) {
-				try {
-					Thread.currentThread().sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				surface.switchScreen(2);
-			} else if(isDead() == 1 ) {
-				try {
-					Thread.currentThread().sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				surface.switchScreen(ScreenSwitcher.GAME_OVER);
-			}
-		}
-		
+		panels.beginDraw();
+		panels.textFont(surface.font);
+		drawPanel();
+		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
+		panels.endDraw();
+
+		// textScreen.beginDraw();
+		// drawTextScreen();
+		// textScreen.endDraw();
+		// panels.image(textScreen, 0, 0);
+		// surface.image(panels, 0, 0);
+
+		// System.out.println("This is the ienemy: " + ienemyHealth);
+		// System.out.println("This is the getStat health" +
+		// enemy.getHealth());
+
 		timer++;
 
 		attackScreen.beginDraw();
@@ -163,25 +162,31 @@ public class BattleMode extends Screen
 			enemy.draw(attackScreen, "bounce");
 		}
 
-		
-		
-		
+		// System.out.println(enemy.getHealth());
+		long c = System.currentTimeMillis();
+
 
 		if(turnDone)
 		{
+			panels.beginDraw();
+			drawTextAttackScreen();
+			panels.endDraw();
+
 			attackScreen.beginDraw();
 			attackScreen.background(255);
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			if(poisonTurnCounter > 0)
-			{
-				changeHealth(poisonedPlayer, 10);
-				poisonTurnCounter--;
-			}
+			// if(poisonTurnCounter > 0)
+			// {
+			// changeHealth(poisonedPlayer, 10);
+			// poisonTurnCounter--;
+			// // System.out.println("poisoned" + turnCounter);
+			// }
 
 			if(whichPlayer == 0)
 			{
+				// System.out.println("hit");
 				if(enemy.getHealth() <= ienemyHealth / 2)
 				{
 					enemy.draw(attackScreen, "hurt");
@@ -206,7 +211,7 @@ public class BattleMode extends Screen
 				hitImage("player");
 			}
 
-			if(timer % 20 == 0)
+			if(timer % 10 == 0)
 			{
 				turnDone = false;
 				turnCounter++;
@@ -214,16 +219,18 @@ public class BattleMode extends Screen
 
 		}
 
+		surface.image(panels, 0, 0);
 
-		if(turnCounter % 2 == 0 & timer % 20 == 0)
+		if(turnCounter % 2 == 0 & timer % 10 == 0)
 		{
 			checkpanelClick();
 			whichPlayer = 0;
 		}
 
-		if(turnCounter % 2 != 0 && timer % 20 == 0)
+		if(turnCounter % 2 != 0 && timer % 10 == 0)
 		{
 			int move = (int) (Math.random() * 4);
+			prevEnemyMove = enemy.getMove(move);
 			drawMove(move, enemy, player);
 
 
@@ -231,12 +238,18 @@ public class BattleMode extends Screen
 			timer = 1;
 			whichPlayer = 1;
 		}
-		
 
+		if(checkDead() == 1 || checkDead() == -1 && timer % 10 == 0)
+		{
+			// System.out.println("is dead");
+			surface.switchScreen(2);
+		}
 
 		attackScreen.endDraw();
 
 		surface.image(attackScreen, 0, 0);
+
+		//System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -253,6 +266,9 @@ public class BattleMode extends Screen
 		healthPanel.rect(50, 85, 250, 15, 20, 20, 20, 20);
 		healthPanel.fill(255, 0, 0);
 		healthPanel.rect(50, 85, playerHealthRatio * 250, 15, 20, 20, 20, 20);
+		//System.out.println(playerHealthRatio * 250);
+//		System.out.println("This is player health" + player.getHealth());
+//		System.out.println("This is iplayer" + iplayerHealth);
 		// enemy
 		healthPanel.fill(255);
 		healthPanel.rect(500, 85, 250, 15, 20, 20, 20, 20);
@@ -267,6 +283,8 @@ public class BattleMode extends Screen
 		for(int i = 0; i < 4; i++)
 		{
 			panels.pushStyle();
+			// System.out.println("button" + i + " " + button[i].x + button[i].y + ", " +
+			// button[i].width + ", " + button[i].height);
 			panels.rect(button[i].x, button[i].y, button[i].width, button[i].height);
 			panels.fill(0);
 			String move1 = player.getMove(i).getName();
@@ -274,6 +292,86 @@ public class BattleMode extends Screen
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
 		}
+		drawTextScreen();
+	}
+
+	private void drawTextScreen()
+	{
+		panels.pushStyle();
+		panels.rect(textRect.x, textRect.y, textRect.width, textRect.height);
+		// float w = panels.textWidth("Hi");
+		panels.fill(0);
+		// panels.text("Hi", textRect.x + textRect.width / 2 - w / 2, textRect.y +
+		// textRect.height / 2);
+		if(mouseHoverTest() != -1)
+		{
+			int hoverValue = mouseHoverTest();
+
+			if(hoverValue == 0)
+			{
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+
+			if(hoverValue == 1)
+			{
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+
+			if(hoverValue == 2)
+			{
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+
+			if(hoverValue == 3)
+			{
+				panels.text("ATK: " + player.getMove(hoverValue).getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMove(hoverValue).getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+		}
+		panels.popStyle();
+	}
+
+	private void drawTextAttackScreen()
+	{
+		panels.pushStyle();
+		panels.rect(textRect.x, textRect.y, textRect.width, textRect.height);
+		panels.fill(0);
+
+		String player = "";
+		String move = "";
+		String moveEffect = "";
+
+		if(whichPlayer == 0)
+		{
+			player = "Player";
+			move = prevPlayerMove.getName();
+			moveEffect = prevPlayerMove.getEffectName();
+
+		}
+		if(whichPlayer == 1)
+		{
+			player = "Enemy";
+			move = prevEnemyMove.getName();
+			moveEffect = prevEnemyMove.getEffectName();
+		}
+
+		String total = player + " used " + move;
+		
+//		for(char e: total) {
+//			System.out.print(e);
+//		}
+
+		panels.text(total, textRect.x + 15, textRect.y + 25, textRect.width, textRect.height);
+		
+		if(!moveEffect.equalsIgnoreCase("none")) {
+			String effect = "Enemy is " + moveEffect;
+			panels.text(effect, textRect.x + 15, textRect.y + 25 +40, textRect.width, textRect.height);
+		}
+
+		panels.popStyle();
 	}
 
 	private void checkpanelClick()
@@ -282,6 +380,7 @@ public class BattleMode extends Screen
 		{
 			turnDone = true;
 			timer = 1;
+			prevPlayerMove = player.getMove(panelClick - 1);
 			drawMove(panelClick - 1, player, enemy);
 		}
 	}
@@ -324,11 +423,13 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
-			if(attacker == player && attacker.getHealth() != iplayerHealth) {
-				changeHealth(attacker, (move.getAttackval()/5) * -1);
+			if(attacker == player && attacker.getHealth() != iplayerHealth)
+			{
+				changeHealth(attacker, (move.getAttackval() / 5) * -1);
 			}
-			if(attacker == enemy && attacker.getHealth() != ienemyHealth) {
-				changeHealth(attacker, (move.getAttackval()/5) * -1);
+			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
+			{
+				changeHealth(attacker, (move.getAttackval() / 5) * -1);
 			}
 		}
 
@@ -339,6 +440,7 @@ public class BattleMode extends Screen
 		} else
 		{
 			changeHealth(opponent, attacker.getMove(num).getAttackval());
+
 		}
 
 		panelClick = 0;
@@ -413,27 +515,27 @@ public class BattleMode extends Screen
 		}
 	}
 
-	private boolean mouseHoverTest()
+	private int mouseHoverTest()
 	{
-		boolean hover = false;
+		int hoverValue = -1;
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if(button[0].contains(p))
-			hover = true;
+			hoverValue = 0;
 		if(button[1].contains(p))
-			hover = true;
+			hoverValue = 1;
 		if(button[2].contains(p))
-			hover = true;
+			hoverValue = 2;
 		if(button[3].contains(p))
-			hover = true;
-		
-		return hover;
+			hoverValue = 3;
+
+		return hoverValue;
 	}
 
-	public int isDead()
+	public int checkDead()
 	{
-		if(enemy.getHealth() <= 0)
+		if(enemy.getHealth() == 0)
 			return -1;
-		else if(player.getHealth() <= 0)
+		else if(player.getHealth() == 0)
 			return 1;
 		else
 			return 0;
