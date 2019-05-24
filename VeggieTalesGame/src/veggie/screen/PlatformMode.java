@@ -135,7 +135,6 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
-		backimg = surface.assets.get("background2");
 
 		distanceTracker = 0;
 		pause = false;
@@ -184,10 +183,12 @@ public class PlatformMode extends Screen
 		obstacles.add(r3);
 		obstacles.add(r4);
 		obstacles.add(r5);
-
-
 		spawnNewPlayer();
 		// spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
+
+
+		backimg = surface.assets.get("background2");
+		System.out.println(backimg.width + " " + backimg.height);
 	}
 
 	/**
@@ -197,7 +198,7 @@ public class PlatformMode extends Screen
 	{
 		// drawing stuff
 		
-		surface.background(255);
+		surface.background(backimg);
 
 
 		//surface.image(backimg, 0, 0);
