@@ -9,7 +9,8 @@ Lettuce RPG Platformer
 — Introduction—
 
 
-You are lettuce. Seemingly nothing special, just an ordinary piece of lettuce. However, you don’t want to stick with the crowd; you want to show that you are not the same as everyone else. You want to prove that you are the veggie king. In an effort to do so, you will have to trek across entire supermarkets, and fight a variety of vegetables and vegan foods until you finally arrive at the palace of the Veggie burger king. As lettuce, you will do this through a platform system where you have to survive until you reach the bosses. At a boss battle, you will have to utilize a turn based system with different movies to ultimately win. And only by defeating the veggie burger will you show that you are the best lettuce, and the true veggie king.
+Your a piece of lettuce on the run, getting chased by tomatoes and burgers. You die when you hit a tomato or a burger. At some point, you will need to fight your way through burgers and tomatoes via an rpg-style turn-based battle system. Going off the screen will kill you if you go too far. Your goal is to survive as long as possible. You can pick up red boxes to swap out your moves.
+It's a risk, though, as the moves may not be better and are randomly swapped.
 
 
 — Instructions—
@@ -69,11 +70,11 @@ Stretch features:
    * Instructions: draws the instructions of the game to the screen 
    * DrawingSurface: draws the different screens.
    * Main: starts the program
+   * GameOver: game over screen when you lose
 * veggie.model
-   * Entity: the player or enemy object 
    * Moves: an attack move that an Entity object can have
    * MovingImage: a shape that adheres to physics such as gravity, consistent with platformers
-   * PlayerController: moves the Entity object around
+   * Player: models the player object
    * Stats: the stats that an Entity object can have
 * veggie.textReader
    * FileIO: reads in a text file and translates it into different Move objects.
@@ -108,4 +109,5 @@ Stretch features:
 * block.png = https://lh3.googleusercontent.com/eT33UQU7wHS0fx19MgjXGBOfbRTMLNBAfH5RZhYrd6IcYAU71xbJ0H72LgVsFJ8kH9zVgTlE7UaAcjMQpa_-MBw=s400
 * clouds.png = http://tse3.mm.bing.net/th?id=OIP.4_5G3toRzBjrgizBzuvDfAHaFj
 * Shelby Screen Switching Demo
+* 
 * AnimationDemo
