@@ -143,7 +143,10 @@ public class Player extends MovingImage {
 			
 	}
 	
-	
+	/**
+	 * 
+	 * @param status true if player is "sliding"
+	 */
 	public void slide(boolean status) {
 		if(isFrozen) {
 			return;
@@ -291,6 +294,9 @@ public class Player extends MovingImage {
 		return maxVelX < 0;
 	}
 	
+	/**
+	 * Resets player health to full health.
+	 */
 	public void resetHealth() {
 		statistics.setHealth(statistics.getTotalHP());
 	}

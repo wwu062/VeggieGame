@@ -96,6 +96,11 @@ public class PlatformMode extends Screen
 		player = new Player(surface.lettuceAssets, 800 / 2 - 100, 400 / 2 - 100, false, istats, iplayerMovelist);
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void spawnNewBot(int x, int y)
 	{
 		Stats istats = new Stats(100, 0.1);

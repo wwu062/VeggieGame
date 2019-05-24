@@ -115,18 +115,34 @@ public class MovingImage
 		return hitbox;
 	}
 	
+	/**
+	 * 
+	 * @return the x-coordinate value
+	 */
 	public double getX() {
 		return hitbox.getX();
 	}
 	
+	/**
+	 * 
+	 * @return the y-coordinate value
+	 */
 	public double getY() {
 		return hitbox.getY();
 	}
 	
+	/**
+	 * 
+	 * @return the height of the MovingImage
+	 */
 	public double getHeight() {
 		return hitbox.getHeight();
 	}
 	
+	/**
+	 * 
+	 * @return the width of the MovingImage
+	 */
 	public double getWidth() {
 		return hitbox.getWidth();
 	}

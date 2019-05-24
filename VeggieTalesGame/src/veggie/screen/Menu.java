@@ -5,7 +5,12 @@ import java.awt.Rectangle;
 
 import processing.core.PConstants;
 import processing.core.PImage;
-
+/**
+ * 
+ * @author William
+ *
+ * Menu has a play button and an instructions button and is the main menu for the game.
+ */
 public class Menu extends Screen
 {
 
