@@ -11,6 +11,8 @@ public class PlayerManager {
 
 	private Moves[] moveList;
 
+	private String name;
+	
 	private PlayerPlatform controller;
 
 	/**
@@ -25,6 +27,10 @@ public class PlayerManager {
 		this.statistics = statistics;
 		this.moveList = moveList;
 		this.controller = new PlayerPlatform(lettuceAssets, x, y, isBot);
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	/**

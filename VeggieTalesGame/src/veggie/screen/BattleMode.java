@@ -9,7 +9,8 @@ import veggie.model.Moves;
 import veggie.model.PlayerManager;
 
 /**
- * The battle screen for the game (think Pokemon battle)
+ * The Battle Screen for the game. In this mode, there are 4 buttons at the
+ * bottom of the screen that are the player's attack moves. Once they
  * 
  * @author williamwu
  */
@@ -22,7 +23,7 @@ public class BattleMode extends Screen
 	private DrawingSurface surface;
 
 	private Rectangle[] button;
-	
+
 	private Rectangle textRect;
 
 	private Gif hitImage, critImage;
@@ -36,7 +37,7 @@ public class BattleMode extends Screen
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, attackScreen, healthPanel, textScreen;
+	private PGraphics panels, attackScreen, healthPanel;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turnCounter = 0;
@@ -85,7 +86,7 @@ public class BattleMode extends Screen
 		{
 			button[i + 2] = new Rectangle(305, 410 + 70 * i, 185, 60);
 		}
-		
+
 		textRect = new Rectangle(500, 400, 200, 150);
 
 	}
@@ -101,16 +102,11 @@ public class BattleMode extends Screen
 		panels = surface.createGraphics(800, 600);
 		attackScreen = surface.createGraphics(800, 340);
 		healthPanel = surface.createGraphics(800, 300);
-		textScreen = surface.createGraphics(800, 600);
 		// surface.createGraphics(800, 300);
 
 		surface.background(255, 255, 255);
 
-		panels.beginDraw();
-		drawPanel();
-		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
-		panels.endDraw();
-		surface.image(panels, 0, 0);
+
 	}
 
 	/**
@@ -120,6 +116,20 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
+		
+		panels.beginDraw();
+		panels.textFont(surface.font);
+		drawPanel();
+		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
+		panels.endDraw();
+		surface.image(panels, 0, 0);
+
+		// textScreen.beginDraw();
+		// drawTextScreen();
+		// textScreen.endDraw();
+		// panels.image(textScreen, 0, 0);
+		// surface.image(panels, 0, 0);
+
 		// System.out.println("This is the ienemy: " + ienemyHealth);
 		// System.out.println("This is the getStat health" +
 		// enemy.getBattler().getHealth());
@@ -151,8 +161,7 @@ public class BattleMode extends Screen
 
 		// System.out.println(enemy.getBattler().getHealth());
 		long c = System.currentTimeMillis();
-		
-		
+
 
 		if(turnDone)
 		{
@@ -195,7 +204,7 @@ public class BattleMode extends Screen
 				hitImage("player");
 			}
 
-			if(timer % 20 == 0)
+			if(timer % 10 == 0)
 			{
 				turnDone = false;
 				turnCounter++;
@@ -204,13 +213,13 @@ public class BattleMode extends Screen
 		}
 
 
-		if(turnCounter % 2 == 0 & timer % 20 == 0)
+		if(turnCounter % 2 == 0 & timer % 10 == 0)
 		{
 			checkpanelClick();
 			whichPlayer = 0;
 		}
 
-		if(turnCounter % 2 != 0 && timer % 20 == 0)
+		if(turnCounter % 2 != 0 && timer % 10 == 0)
 		{
 			int move = (int) (Math.random() * 4);
 			drawMove(move, enemy, player);
@@ -231,7 +240,7 @@ public class BattleMode extends Screen
 
 		surface.image(attackScreen, 0, 0);
 
-		// System.out.println(System.currentTimeMillis() - c);
+		System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -274,6 +283,45 @@ public class BattleMode extends Screen
 			panels.text(move1, button[i].x + button[i].width / 2 - w / 2, button[i].y + button[i].height / 2);
 			panels.popStyle();
 		}
+		drawTextScreen();
+	}
+
+	private void drawTextScreen()
+	{
+		panels.pushStyle();
+		panels.rect(textRect.x, textRect.y, textRect.width, textRect.height);
+		float w = panels.textWidth("Hi");
+		panels.fill(0);
+		//panels.text("Hi", textRect.x + textRect.width / 2 - w / 2, textRect.y + textRect.height / 2);
+		if(mouseHoverTest() != -1)
+		{
+			int hoverValue = mouseHoverTest();
+			
+			if(hoverValue == 0)
+			{
+				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+			
+			if(hoverValue == 1)
+			{
+				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+			
+			if(hoverValue == 2)
+			{
+				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+			
+			if(hoverValue == 3)
+			{
+				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
+				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
+			}
+		}
+		panels.popStyle();
 	}
 
 	private void checkpanelClick()
@@ -324,11 +372,13 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
-			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
-				changeHealth(attacker, (move.getAttackval()/5) * -1);
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth)
+			{
+				changeHealth(attacker, (move.getAttackval() / 5) * -1);
 			}
-			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
-				changeHealth(attacker, (move.getAttackval()/5) * -1);
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth)
+			{
+				changeHealth(attacker, (move.getAttackval() / 5) * -1);
 			}
 		}
 
@@ -413,20 +463,20 @@ public class BattleMode extends Screen
 		}
 	}
 
-	private boolean mouseHoverTest()
+	private int mouseHoverTest()
 	{
-		boolean hover = false;
+		int hoverValue = -1;
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if(button[0].contains(p))
-			hover = true;
+			hoverValue = 0;
 		if(button[1].contains(p))
-			hover = true;
+			hoverValue = 1;
 		if(button[2].contains(p))
-			hover = true;
+			hoverValue = 2;
 		if(button[3].contains(p))
-			hover = true;
-		
-		return hover;
+			hoverValue = 3;
+
+		return hoverValue;
 	}
 
 	public int checkDead()
