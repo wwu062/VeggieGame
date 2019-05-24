@@ -120,6 +120,24 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
+		if(turnCounter%2 == 0) {
+			if(isDead() == -1) {
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				surface.switchScreen(2);
+			} else if(isDead() == 1 ) {
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				surface.switchScreen(ScreenSwitcher.GAME_OVER);
+			}
+		}
+		
 		timer++;
 
 		attackScreen.beginDraw();
@@ -214,11 +232,6 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 		
-		if(isDead() == -1) {
-			surface.switchScreen(2);
-		} else if(isDead() == 1 ) {
-			surface.switchScreen(ScreenSwitcher.GAME_OVER);
-		}
 
 
 		attackScreen.endDraw();

@@ -76,9 +76,6 @@ public class MovingImage
 		{
 			((Gif) image.get(key)).play();
 		}
-		
-		marker.noFill();
-		marker.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 	}
 
 	/**

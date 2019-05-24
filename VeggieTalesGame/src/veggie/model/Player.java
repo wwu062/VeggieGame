@@ -26,7 +26,7 @@ public class Player extends MovingImage {
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double PLAYER_MAX_VELX = 8;
-	private static final double BOT_MAX_VELX = 6;
+	private static final double BOT_MAX_VELX = 4.5;
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
@@ -65,13 +65,8 @@ public class Player extends MovingImage {
 	 * @param move  the new move
 	 * @param rmove the move that will be replaced
 	 */
-	public void setMoveList(Moves move, Moves rmove) {
-		for (int i = 0; i < moveList.length; i++) {
-			if(moveList[i].getName().equals(rmove.getName())) {
-				moveList[i] = move;
-				break;
-			}
-		}
+	public void setMoveList(Moves move, int rmove) {
+		moveList[rmove] = move;
 	}
 	
 	/**

@@ -28,7 +28,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	private ArrayList<Screen> screens;
 
 	// used to hold key codes from the keyboard
-	private ArrayList<Integer> keys;
+	protected ArrayList<Integer> keys;
 
 	protected Map<String, PImage> lettuceAssets;
 	protected Map<String, PImage> tomatoAssets;
@@ -122,7 +122,6 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 			for(String s : temp)
 			{
 				Moves m = translator.translateMoveList(s);
-				System.out.println(m.getName());
 				moves.put(i, m);
 				i++;
 			}

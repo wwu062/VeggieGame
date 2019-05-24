@@ -5,8 +5,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import gifAnimation.Gif;
-import processing.core.PConstants;
-import processing.core.PShape;
 import veggie.model.Moves;
 import veggie.model.Player;
 import veggie.model.Stats;
@@ -49,12 +47,6 @@ public class PlatformMode extends Screen
 	private Rectangle bottomPlatform;
 	
 	private int spawnRequirement;
-	
-	private static final int[] LEVELS = new int[] {2, 4, 6, 8, 10};
-	
-	private int level;
-	
-	private Rectangle bottomRect;
 
 	/**
 	 * Initializes fields
@@ -138,11 +130,9 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
-		
 		pause = false;
 		timer = 1;
 		spawnRequirement = (int)(Math.random()*120);
-		level = 0;
 		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
@@ -234,6 +224,7 @@ public class PlatformMode extends Screen
 
 		// modifying stuff
 		run();
+		
 
 	}
 
@@ -249,16 +240,10 @@ public class PlatformMode extends Screen
 			if(player.battle(bot.get(i)))
 			{
 				/*
-				try {
-					Thread.currentThread().sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
 				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 				bot.remove(i);
 				pause();
+				*/
 			}
 		}
 		
@@ -325,6 +310,7 @@ public class PlatformMode extends Screen
 		randomSpawnBots();
 		spawnNewItems();
 		generateNewPlatform();
+		setNewMove();
 		
 		timer += 1;
 	}
@@ -400,33 +386,28 @@ public class PlatformMode extends Screen
 	}
 	
 	private void generateNewPlatform() {
-		/*
-		int option = (int)(Math.random()*4 + 1);
-		int y = DRAWING_HEIGHT/(int)(Math.random()*6 + 1);
-		Rectangle r;
-		if(option == 1) {
-			r = new Rectangle(DRAWING_WIDTH, y, 200, 100);
-		} else if(option == 2) {
-			r = new Rectangle(DRAWING_WIDTH, y, 300, 50);
-		} else if(option == 3) {
-			r = new Rectangle(DRAWING_WIDTH, y, 400, 200);
-		} else {
-			r = new Rectangle(DRAWING_WIDTH, y, 100, 50);
+		if(timer%45 == 0) {
+			int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 200;
+			Rectangle r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
+			obstacles.add(r);
 		}
-		obstacles.add(r);
-		*/
-		//obstacles.add(new Rectangle(DRAWING_WIDTH, (int)(DRAWING_HEIGHT*0.8), DRAWING_WIDTH, 100));
 	}
 	
 	private void setNewMove() {
-		//if(player.intersects(rectangle))
-		//String s = (int)((Math.random() * 3) + 5) + "";
+		
+		for(Rectangle r : items) {
+			if(player.getBounds().intersects(r)) {
+				Integer key = (int)(Math.random()*surface.moves.size() + 1);
+				Moves temp = surface.moves.get(key);
+				player.setMoveList(temp, (int)(Math.random()*4));
+			}
+		}
 		
 	}
 	
 	private void spawnNewItems() {
 		if(timer%spawnRequirement == 0) {
-			Rectangle r = new Rectangle(DRAWING_WIDTH, 100, 20, 20);
+			Rectangle r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int)(Math.random()*4)*100, 20, 20);
 			items.add(r);
 			spawnRequirement = (int)(Math.random()*3600 + 1800);
 		}
