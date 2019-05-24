@@ -324,13 +324,11 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("absorb"))
 		{
-			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth)
-			{
-				changeHealth(attacker, (move.getAttackval() / 2) * -1);
+			if(attacker == player && attacker.getBattler().getHealth() != iplayerHealth) {
+				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
-			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth)
-			{
-				changeHealth(attacker, (move.getAttackval() / 2) * -1);
+			if(attacker == enemy && attacker.getBattler().getHealth() != ienemyHealth) {
+				changeHealth(attacker, (move.getAttackval()/5) * -1);
 			}
 		}
 

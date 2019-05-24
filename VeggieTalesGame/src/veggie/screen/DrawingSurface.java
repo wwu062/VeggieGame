@@ -37,6 +37,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 
 	protected Map<String, PImage> assets;
 	protected Map<Integer, Moves> moves;
+	
+	protected Map<String, PImage> platformAssets;
 
 
 	/**
@@ -48,6 +50,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets = new HashMap<String, PImage>();
 		moves = new HashMap<Integer, Moves>();
 		tomatoAssets = new HashMap<String, PImage>();
+		platformAssets = new HashMap<String, PImage>();
 		veggieKingAssets = new HashMap<String, PImage>();
 
 
@@ -98,6 +101,8 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
+
+		platformAssets.put("plat1", new Gif(this, "images" + FileIO.fileSep + "platform" + FileIO.fileSep + "brickblock.gif"));
 
 		veggieKingAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
 		veggieKingAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-attack.gif"));
@@ -241,5 +246,9 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	public void removeScreen(int i)
 	{
 		screens.remove(screens.size() - 1);
+	}
+	
+	public void gameOver() {
+		this.setup();
 	}
 }

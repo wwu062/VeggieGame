@@ -21,10 +21,10 @@ public class PlayerManager {
 	 * @param x the initial x-coordinate of the object
 	 * @param y the initial y-coordinate of the object
 	 */
-	public PlayerManager(Map<String, PImage> lettuceAssets, PlayerBattle statistics, Moves[] moveList, int x, int y) {
+	public PlayerManager(Map<String, PImage> lettuceAssets, PlayerBattle statistics, Moves[] moveList, int x, int y, boolean isBot) {
 		this.statistics = statistics;
 		this.moveList = moveList;
-		this.controller = new PlayerPlatform(lettuceAssets, x, y);
+		this.controller = new PlayerPlatform(lettuceAssets, x, y, isBot);
 	}
 
 	/**

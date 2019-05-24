@@ -27,10 +27,10 @@ public class MovingImage
 	 * @param height        height of the MovingImage
 	 * @param lettuceAssets texture used to represent the MovingImage
 	 */
-	public MovingImage(int x, int y, int width, int height, Map<String, PImage> lettuceAssets)
+	public MovingImage(int x, int y, int width, int height, Map<String, PImage> imageassets)
 	{
 		hitbox = new Rectangle(x, y, width, height);
-		this.image = lettuceAssets;
+		this.image = imageassets;
 	}
 
 	/**
@@ -90,7 +90,6 @@ public class MovingImage
 			((Gif) image.get(key)).play();
 		}
 		graphics.beginDraw();
-		// I CHANGED THE SIZE OF THE IMAGE FOR BATTLEMODE HERE!!@Q@!@!Q$@#$@#$ 
 		graphics.image(image.get(key), (float) hitbox.x, (float) hitbox.y, 125, 125);
 		graphics.endDraw();
 	}
