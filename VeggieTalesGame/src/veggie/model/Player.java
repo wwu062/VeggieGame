@@ -10,8 +10,11 @@ import processing.core.PShape;
  * @author awang104 PlayerController is the player character for the platform
  *         mode with physics traits.
  */
-public class PlayerPlatform extends MovingImage
-{
+public class Player extends MovingImage {
+	
+	private Stats statistics;
+	private Moves[] moveList;
+	
 	private double velX;
 	private double velY;
 	private boolean onSurface;
@@ -23,7 +26,7 @@ public class PlayerPlatform extends MovingImage
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double PLAYER_MAX_VELX = 8;
-	private static final double BOT_MAX_VELX = 6;
+	private static final double BOT_MAX_VELX = 4.5;
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
@@ -35,10 +38,13 @@ public class PlayerPlatform extends MovingImage
 	 * @param y             y coordinate of object
 	 * @param playerImages image texture of object
 	 */
-	public PlayerPlatform(Map<String, PImage> playerImages, int x, int y, boolean isBot)
+	public Player(Map<String, PImage> playerImages, int x, int y, boolean isBot, Stats statistics, Moves[] moveList)
 	{
 		
 		super(x, y, playerImages.get("run").width, playerImages.get("run").height, playerImages);
+		
+		this.statistics = statistics;
+		this.moveList = moveList;
 		
 		velX = 0;
 		velY = 0;
@@ -54,7 +60,61 @@ public class PlayerPlatform extends MovingImage
 		}
 		
 	}
+	
+	/**
+	 * @param move  the new move
+	 * @param rmove the move that will be replaced
+	 */
+	public void setMoveList(Moves move, int rmove) {
+		moveList[rmove] = move;
+	}
+	
+	/**
+	 * 
+	 * @param i the index of of MovesList.
+	 */
+	public Moves getMove(int i) {
+		return moveList[i];
+	}
+	
+	/**
+	 * @return the health
+	 */
+	public int getHealth()
+	{
+		return statistics.getHealth();
+	}
 
+	/**
+	 * @param health the health to set
+	 */
+	public void setHealth(int health)
+	{
+		if(health < 0)
+		{
+			statistics.setHealth(0);
+		} else
+		{
+			statistics.setHealth(health);;
+		}
+	}
+
+	/**
+	 * @return the critical rate
+	 */
+	public double getCritrate()
+	{
+		return statistics.getCritrate();
+	}
+
+	/**
+	 * @param critrate the critical rate to set
+	 */
+	public void setCritrate(double critrate)
+	{
+		statistics.setCritrate(critrate);
+	}
+	
 	/**
 	 * Increases horizontal velocity of object
 	 * 
@@ -143,6 +203,7 @@ public class PlayerPlatform extends MovingImage
 		}
 		
 	}
+	
 
 	/**
 	 * Changes vertical velocity of object
@@ -160,7 +221,7 @@ public class PlayerPlatform extends MovingImage
 		}
 	}
 
-	public boolean battle(PlayerPlatform bot)
+	public boolean battle(Player bot)
 	{
 		return bot.getBounds().intersects(this.getBounds());
 	}
@@ -189,6 +250,14 @@ public class PlayerPlatform extends MovingImage
 
 	public boolean isFrozen() {
 		return isFrozen;
+	}
+	
+	public double getX() {
+		return super.getX();
+	}
+	
+	public double getY() {
+		return super.getY();
 	}
 
 }

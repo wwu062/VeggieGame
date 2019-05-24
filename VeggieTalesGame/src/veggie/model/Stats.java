@@ -1,6 +1,6 @@
 package veggie.model;
 
-public class PlayerBattle
+public class Stats
 {
 
 	/**
@@ -19,7 +19,7 @@ public class PlayerBattle
 	 * @param ihealth  initial health statistic
 	 * @param critrate initial critical rate statistic
 	 */
-	public PlayerBattle(int ihealth, double critrate)
+	public Stats(int ihealth, double critrate)
 	{
 		this.health = ihealth;
 		this.critrate = critrate;

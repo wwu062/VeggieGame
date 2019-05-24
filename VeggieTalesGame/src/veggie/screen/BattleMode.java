@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 import gifAnimation.Gif;
 import processing.core.PGraphics;
 import veggie.model.Moves;
-import veggie.model.PlayerManager;
+import veggie.model.Player;
+import veggie.model.Player;
 
 /**
  * The Battle Screen for the game. In this mode, there are 4 buttons at the
@@ -16,7 +17,7 @@ import veggie.model.PlayerManager;
  */
 public class BattleMode extends Screen
 {
-	private PlayerManager player, enemy;
+	private Player player, enemy;
 
 	private int iplayerHealth, ienemyHealth;
 
@@ -51,7 +52,7 @@ public class BattleMode extends Screen
 
 	// private boolean poisoned = false;
 	private int poisonTurnCounter = 0;
-	private PlayerManager poisonedPlayer = null;
+	private Player poisonedPlayer = null;
 
 
 	/**
@@ -61,7 +62,7 @@ public class BattleMode extends Screen
 	 * @param player  the Player Entity object
 	 * @param enemy   the Enemy Entity object
 	 */
-	public BattleMode(DrawingSurface surface, PlayerManager player, PlayerManager enemy)
+	public BattleMode(DrawingSurface surface, Player player, Player enemy)
 	{
 		super(800, 600);
 		this.player = player;
@@ -385,7 +386,7 @@ public class BattleMode extends Screen
 	}
 
 	// the entity that is being damaged
-	private void drawMove(int num, PlayerManager attacker, PlayerManager opponent)
+	private void drawMove(int num, Player attacker, Player opponent)
 	{
 		Moves move = attacker.getMoveList()[num];
 
@@ -488,7 +489,7 @@ public class BattleMode extends Screen
 	 * @param e      the Entity that is being attacked/ healed
 	 * @param damage the damage/healing that is occurring to the Entity object
 	 */
-	public void changeHealth(PlayerManager e, int damage)
+	public void changeHealth(Player e, int damage)
 	{
 		int health = e.getBattler().getHealth();
 

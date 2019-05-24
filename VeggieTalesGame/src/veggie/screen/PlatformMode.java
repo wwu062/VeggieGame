@@ -5,12 +5,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import gifAnimation.Gif;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import processing.core.PShape;
-import processing.opengl.PGraphics2D;
-import veggie.model.PlayerManager;
 import veggie.model.Moves;
 import veggie.model.PlayerPlatform;
 import veggie.model.PlayerBattle;
@@ -260,6 +254,7 @@ public class PlatformMode extends Screen
 				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 				bot.remove(i);
 				pause();
+				*/
 			}
 		}
 		
