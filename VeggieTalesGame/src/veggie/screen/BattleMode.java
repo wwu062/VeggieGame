@@ -32,6 +32,10 @@ public class BattleMode extends Screen
 
 	// 0 = player, 1 = enemy
 	private int whichPlayer = 0;
+	
+	private Moves prevPlayerMove = null;
+	
+	private Moves prevEnemyMove = null;
 
 	private boolean turnDone = false;
 
@@ -165,17 +169,19 @@ public class BattleMode extends Screen
 
 		if(turnDone)
 		{
+			
+			
 			attackScreen.beginDraw();
 			attackScreen.background(255);
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			if(poisonTurnCounter > 0)
-			{
-				changeHealth(poisonedPlayer, 10);
-				poisonTurnCounter--;
-				// System.out.println("poisoned" + turnCounter);
-			}
+//			if(poisonTurnCounter > 0)
+//			{
+//				changeHealth(poisonedPlayer, 10);
+//				poisonTurnCounter--;
+//				// System.out.println("poisoned" + turnCounter);
+//			}
 
 			if(whichPlayer == 0)
 			{
@@ -389,6 +395,7 @@ public class BattleMode extends Screen
 		} else
 		{
 			changeHealth(opponent, attacker.getMoveList()[num].getAttackval());
+			
 		}
 
 		panelClick = 0;
