@@ -50,7 +50,7 @@ public class PlatformMode extends Screen
 
 	private int spawnRequirement;
 	
-	private static final int BATTLE_REQUIREMENT = 10;
+	private int battleRequirement = 10;
 
 	/**
 	 * Initializes fields
@@ -119,7 +119,7 @@ public class PlatformMode extends Screen
 
 		
 		Player tempBot;
-		if(distanceTracker != 20*60)
+		if(((int)(Math.random()*2)) == 1)
 			tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
 		else
 			tempBot = new Player(surface.veggieKingAssets, x, y, true, istats, iplayerMovelist);
@@ -239,7 +239,7 @@ public class PlatformMode extends Screen
 		run();
 		surface.pushStyle();
 		surface.fill(255, 0, 0);
-		surface.text("Battle Upcoming", 0 + 5*((BATTLE_REQUIREMENT-3)*60-distanceTracker), 50);
+		surface.text("Battle Upcoming", 0 + 5*((battleRequirement-3)*60-distanceTracker), 50);
 		surface.popStyle();
 	}
 
@@ -250,11 +250,13 @@ public class PlatformMode extends Screen
 
 	public void run()
 	{
-		if(distanceTracker == 60*BATTLE_REQUIREMENT) {
+		if(distanceTracker == 60*battleRequirement) {
 			spawnNewBot(100,100);
 			surface.addScreen(new BattleMode(surface, player, bot.get(bot.size()-1)));
-			bot.remove(bot.size()-1);
+			bot = new ArrayList<Player>();
+			//bot.remove(bot.size()-1);
 			distanceTracker = 0;
+			battleRequirement += 5;
 		}
 		
 		for(int i = 0; i < bot.size(); i++)
@@ -460,20 +462,18 @@ public class PlatformMode extends Screen
 	{
 		if(timer % spawnRequirement == 0)
 		{
-			Rectangle r;
-			while(true)
+			Rectangle r = null;
+			boolean contains = true;
+			while(contains)
 			{
 				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int) (Math.random() * 4) * 100, 20, 20);
-				boolean contains = false;
 				for(Rectangle plat : obstacles) {
 					contains = plat.intersects(r) || plat.contains(r);
 				}
-				if(!contains) {
-					break;
-				}
 			}
 
-			items.add(r);
+			if(r != null)
+				items.add(r);
 			spawnRequirement = (int) (Math.random() *20*60);
 		}
 

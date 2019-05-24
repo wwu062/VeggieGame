@@ -56,7 +56,7 @@ public class Player extends MovingImage {
 		isFrozen = false;
 		
 		if(isBot) {
-			maxVelX = BOT_MAX_VELX;
+			maxVelX = (BOT_MAX_VELX - 2) + 2*Math.random();
 			maxVelY = MAX_VELY_BOT;
 		} else {
 			maxVelX = PLAYER_MAX_VELX;
