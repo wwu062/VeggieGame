@@ -113,7 +113,11 @@ public class PlatformMode extends Screen
 			k++;
 		}
 		
-		Player tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
+		Player tempBot;
+		if((Math.random()*2) == 1)
+			tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
+		else
+			tempBot = new Player(surface.veggieKingAssets, x, y, true, istats, iplayerMovelist);
 		tempBot.freeze();
 		bot.add(tempBot);
 		
@@ -316,7 +320,7 @@ public class PlatformMode extends Screen
 		setNewMove();
 		
 		if(timer%45 == 0)
-			for(int c = 0; c < 1; c++) {
+			for(int c = 0; c < 2; c++) {
 				generateNewPlatform();
 			}
 		
@@ -384,23 +388,18 @@ public class PlatformMode extends Screen
 	}
 	
 	private void generateNewPlatform() {
-		
-			int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 200;
 			Rectangle r = null;
-			int i = 0;
-			boolean contains = false;
-			while(!contains) { 
+			boolean contains = true;
+			while(contains) { 
+				int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 100;
 				r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
 				for(Rectangle plat : obstacles) {
-					contains = plat.intersects(r) || plat.contains(r);
+					contains = r.intersects(plat) || r.contains(plat);
 				}
-				y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 200;
-				i++;
-				break;
 			}
 			
-			//if(r != null)
-			obstacles.add(r);
+			if(r != null)
+				obstacles.add(r);
 	}
 	
 	private void setNewMove() {
