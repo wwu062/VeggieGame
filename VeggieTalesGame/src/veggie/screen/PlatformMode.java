@@ -49,6 +49,8 @@ public class PlatformMode extends Screen
 	private Rectangle bottomPlatform;
 
 	private int spawnRequirement;
+	
+	private static final int BATTLE_REQUIREMENT = 10;
 
 	/**
 	 * Initializes fields
@@ -198,9 +200,6 @@ public class PlatformMode extends Screen
 		surface.background(backimg);
 
 
-		//surface.image(backimg, 0, 0);
-
-
 		surface.pushMatrix();
 
 		surface.scale(surface.ratioX, surface.ratioY);
@@ -240,7 +239,7 @@ public class PlatformMode extends Screen
 		run();
 		surface.pushStyle();
 		surface.fill(255, 0, 0);
-		surface.text("Battle Upcoming", 0 + 5*(12*60-distanceTracker), 50);
+		surface.text("Battle Upcoming", 0 + 5*((BATTLE_REQUIREMENT-3)*60-distanceTracker), 50);
 		surface.popStyle();
 	}
 
@@ -251,7 +250,7 @@ public class PlatformMode extends Screen
 
 	public void run()
 	{
-		if(distanceTracker == 60*20) {
+		if(distanceTracker == 60*BATTLE_REQUIREMENT) {
 			spawnNewBot(100,100);
 			surface.addScreen(new BattleMode(surface, player, bot.get(bot.size()-1)));
 			bot.remove(bot.size()-1);
@@ -262,19 +261,6 @@ public class PlatformMode extends Screen
 		{
 			if(player.battle(bot.get(i)))
 			{
-				/*
-				player.drainLife();
-				if(player.noLife())
-				{
-					surface.switchScreen(ScreenSwitcher.GAME_OVER);
-				} else
-				{
-					surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-					bot.remove(i);
-					pause();
-					spawnTimer = 0;
-				}
-				*/
 				surface.switchScreen(ScreenSwitcher.GAME_OVER);
 			}
 			
@@ -451,9 +437,9 @@ public class PlatformMode extends Screen
 	private void setNewMove()
 	{
 
-		int i = 0;
-		for(Rectangle r : items)
+		for(int i = 0; i < items.size(); i++)
 		{
+			Rectangle r = items.get(i);
 			if(i > 20)
 			{
 				break;
@@ -463,8 +449,9 @@ public class PlatformMode extends Screen
 				Integer key = (int) (Math.random() * surface.moves.size() + 1);
 				Moves temp = surface.moves.get(key);
 				player.setMoveList(temp, (int) (Math.random() * 4));
+				items.remove(i);
+				i--;
 			}
-			i++;
 		}
 
 	}
@@ -487,7 +474,7 @@ public class PlatformMode extends Screen
 			}
 
 			items.add(r);
-			spawnRequirement = (int) (Math.random() * 3600 + 1800);
+			spawnRequirement = (int) (Math.random() *20*60);
 		}
 
 	}

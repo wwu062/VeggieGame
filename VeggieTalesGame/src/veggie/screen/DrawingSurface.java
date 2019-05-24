@@ -86,7 +86,6 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 */
 	public void setup()
 	{
-		size(800, 600);
 		font = loadFont("PokemonGB-12.vlw");
 		textFont(font);
 
