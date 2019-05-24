@@ -41,12 +41,14 @@ public class PlatformMode extends Screen
 	
 	private int timer, spawnTimer;
 	private boolean pause;
+	private int distanceTracker;
 	
 	//platform
 	private ArrayList<Rectangle> items;
 	private Rectangle bottomPlatform;
 	
 	private int spawnRequirement;
+	private int botSpawnRequirement;
 
 	/**
 	 * Initializes fields
@@ -136,6 +138,8 @@ public class PlatformMode extends Screen
 		timer = 1;
 		spawnTimer = 0;
 		spawnRequirement = (int)(Math.random()*120);
+		botSpawnRequirement = 60;
+		
 		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
@@ -149,7 +153,7 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 		
-		bottomPlatform = new Rectangle(-100, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH + 200, 100);
+		bottomPlatform = new Rectangle(-200, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH + 200, 400);
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
 		Rectangle r3 = new Rectangle(700, 250, 100, 50);
@@ -320,7 +324,7 @@ public class PlatformMode extends Screen
 		setNewMove();
 		
 		if(timer%45 == 0)
-			for(int c = 0; c < 2; c++) {
+			for(int c = 0; c < 3; c++) {
 				generateNewPlatform();
 			}
 		
@@ -366,11 +370,13 @@ public class PlatformMode extends Screen
 	}
 	
 	private void randomSpawnBots() {
-		if(timer % (10*60) == 0) {
+		if(timer % (5*60) == 0) {
+			/*
 			if(((int)(Math.random()*2)) < 1.5)
 				spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
-			else
-				spawnNewBot(DRAWING_WIDTH/10, DRAWING_HEIGHT - 50);
+			*/
+			//else
+				spawnNewBot(-64, DRAWING_HEIGHT - 100 - 70);
 		}
 	}
 	
@@ -382,8 +388,8 @@ public class PlatformMode extends Screen
 				tempBot.walk(1);
 			else if(player.getX() < tempBot.getX())
 				tempBot.walk(-1);
-			//if(player.getY() < tempBot.getY())
-				//tempBot.jump();
+			if(player.getY() < tempBot.getY())
+				tempBot.jump();
 		} 
 	}
 	
@@ -392,7 +398,7 @@ public class PlatformMode extends Screen
 			boolean contains = true;
 			while(contains) { 
 				int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 100;
-				r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
+				r = new Rectangle(DRAWING_WIDTH, y, (int)(200*Math.random()) + 50, (int)(DRAWING_HEIGHT/15));
 				for(Rectangle plat : obstacles) {
 					contains = r.intersects(plat) || r.contains(plat);
 				}

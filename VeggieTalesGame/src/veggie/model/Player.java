@@ -22,6 +22,7 @@ public class Player extends MovingImage {
 	private boolean isFrozen;
 	
 	private double maxVelX;
+	private final double maxVelY;
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double PLAYER_MAX_VELX = 8;
@@ -29,6 +30,8 @@ public class Player extends MovingImage {
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
+	private static final double MAX_VELY_BOT = -10;
+	private static final double MAX_VELY_PLAYER = -20;
 
 	/**
 	 * Creates a new PlayerController object
@@ -54,8 +57,10 @@ public class Player extends MovingImage {
 		
 		if(isBot) {
 			maxVelX = BOT_MAX_VELX;
+			maxVelY = MAX_VELY_BOT;
 		} else {
 			maxVelX = PLAYER_MAX_VELX;
+			maxVelY = MAX_VELY_PLAYER;
 		}
 		
 	}
@@ -202,7 +207,7 @@ public class Player extends MovingImage {
 		if(onSurface)
 		{
 			sliding = false;
-			velY = -20;
+			velY = maxVelY;
 			
 		}
 	}
