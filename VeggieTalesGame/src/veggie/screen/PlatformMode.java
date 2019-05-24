@@ -226,16 +226,17 @@ public class PlatformMode extends Screen
 		{
 			if(player.getController().battle(bot.get(i).getController()))
 			{
+				/*
 				try {
 					Thread.currentThread().sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-				bot.remove(i);
-				pause();
+				*/
+				//surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+				//bot.remove(i);
+				//pause();
 			}
 		}
 		
@@ -327,6 +328,7 @@ public class PlatformMode extends Screen
 		for(int i = 0; i < obstacles.size(); i++) {
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
 				obstacles.remove(i);
+				generateNewPlatform();
 				i--;
 			}
 		}
@@ -356,6 +358,15 @@ public class PlatformMode extends Screen
 			//if(player.getController().getY() < tempBot.getController().getY())
 				//tempBot.getController().jump();
 		} 
+	}
+	
+	private void generateNewPlatform() {
+		int x = surface.width;
+		int y = (int)(Math.random()*(surface.height)*0.5 + surface.height*0.5);
+		int height = (int)(Math.random() *(surface.height*0.25));
+		int width = (int)(Math.random()*surface.width*0.9 + surface.width*0.1);
+		Rectangle r = new Rectangle(x, y, width, height);
+		obstacles.add(r);
 	}
 	
 	
