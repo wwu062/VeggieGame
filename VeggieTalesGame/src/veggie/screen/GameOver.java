@@ -3,12 +3,6 @@ package veggie.screen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import javax.tools.FileObject;
-
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import veggie.textReader.FileIO;
 
 public class GameOver extends Screen{
 	

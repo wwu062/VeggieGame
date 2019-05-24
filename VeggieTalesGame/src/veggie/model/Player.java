@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import processing.core.PImage;
-import processing.core.PShape;
 
 /**
  * @author awang104 PlayerController is the player character for the platform

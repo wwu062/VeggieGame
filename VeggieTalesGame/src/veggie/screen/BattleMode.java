@@ -51,8 +51,8 @@ public class BattleMode extends Screen
 	private int panelClick = 0;
 
 	// private boolean poisoned = false;
-	private int poisonTurnCounter = 0;
-	private Player poisonedPlayer = null;
+	private int poisonTurnCounter;
+	private Player poisonedPlayer;
 
 
 	/**
@@ -98,6 +98,9 @@ public class BattleMode extends Screen
 
 	public void setup()
 	{
+		int poisonTurnCounter = 0;
+		Player poisonedPlayer = null;
+
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
 
