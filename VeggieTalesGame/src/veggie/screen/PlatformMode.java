@@ -87,7 +87,7 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100);
+		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100, false);
 	}
 
 	public void spawnNewBot(int x, int y)
@@ -112,7 +112,7 @@ public class PlatformMode extends Screen
 		}
 		
 		// made it so that it automatically goes to battlemode for now. 
-		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y));
+		bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, x, y, true));
 		//bot.add(new PlayerManager(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 		
 	}
@@ -318,8 +318,8 @@ public class PlatformMode extends Screen
 				tempBot.getController().walk(1);
 			else if(player.getController().getX() < tempBot.getController().getX())
 				tempBot.getController().walk(-1);
-			if(player.getController().getY() > tempBot.getController().getY())
-				tempBot.getController().jump();
+			//if(player.getController().getY() < tempBot.getController().getY())
+				//tempBot.getController().jump();
 		} 
 	}
 	

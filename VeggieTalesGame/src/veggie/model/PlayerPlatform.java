@@ -18,8 +18,11 @@ public class PlayerPlatform extends MovingImage
 	private boolean isWalking;
 	private boolean sliding;
 	
+	private final double MAX_VELX;
+	
 	private static final double TERMINAL_VELOCITY = 14;
-	private static final double MAX_VELX = 8;
+	private static final double PLAYER_MAX_VELX = 8;
+	private static final double BOT_MAX_VELX = 5;
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
@@ -31,7 +34,7 @@ public class PlayerPlatform extends MovingImage
 	 * @param y             y coordinate of object
 	 * @param lettuceAssets image texture of object
 	 */
-	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y)
+	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y, boolean isBot)
 	{
 		super(x, y, lettuceAssets.get("bounce").width, lettuceAssets.get("bounce").height, lettuceAssets);
 		velX = 0;
@@ -39,6 +42,11 @@ public class PlayerPlatform extends MovingImage
 		onSurface = false;
 		isWalking = false;
 		sliding = false;
+		if(isBot) {
+			MAX_VELX = BOT_MAX_VELX;
+		} else {
+			MAX_VELX = PLAYER_MAX_VELX;
+		}
 	}
 
 	/**
