@@ -12,7 +12,13 @@ import processing.core.PFont;
 import processing.core.PImage;
 import veggie.model.Moves;
 import veggie.textReader.FileIO;
-
+/**
+ * 
+ * @author Alex and William
+ * 
+ * A surface on which the other screens and graphical elements are drawn on.
+ *
+ */
 public class DrawingSurface extends PApplet implements ScreenSwitcher
 {
 
@@ -199,7 +205,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 * records the key that is pressed
 	 * 
 	 * @param code the code of the key that is pressed
-	 * @return
+	 * @return returns the keycode of the keys pressed
 	 */
 	public boolean isPressed(Integer code)
 	{

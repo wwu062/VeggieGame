@@ -7,6 +7,13 @@ import processing.core.PConstants;
 import processing.core.PImage;
 import veggie.textReader.FileIO;
 
+/**
+ * 
+ * @author Alex
+ * 
+ * Represents the "Instructions" screen when you click the instructions button on the menu.
+ *
+ */
 public class Instructions extends Screen {
 
 	private DrawingSurface surface;
@@ -14,17 +21,21 @@ public class Instructions extends Screen {
 
 	private Rectangle backbutton;
 
+	/** Constructs a new Instructions screen
+	 * 
+	 * @param surface the DrawingSurface on which the screen is to be drawn on.
+	 */
 	public Instructions(DrawingSurface surface) {
 		super(800, 600);
 		this.surface = surface;
 
 		backbutton = new Rectangle(800 / 2 - 75, 600 / 2 + 100, 150, 100);
 	}
-
+	
 	public void setup() {
 		backimg = surface.loadImage("images" + FileIO.fileSep + "clouds.png");
 	}
-
+	
 	public void draw() {
 
 		backimg.resize(DRAWING_WIDTH, DRAWING_HEIGHT);
@@ -50,7 +61,7 @@ public class Instructions extends Screen {
 		surface.popStyle();
 
 	}
-
+	
 	public void mousePressed() {
 		Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
 		if (backbutton.contains(p))

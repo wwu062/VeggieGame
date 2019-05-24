@@ -3,6 +3,13 @@ package veggie.screen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+/**
+ * 
+ * @author Alex
+ * 
+ * Represents the "game over" screen when the Player dies and loses.
+ * 
+ */
 
 public class GameOver extends Screen{
 	

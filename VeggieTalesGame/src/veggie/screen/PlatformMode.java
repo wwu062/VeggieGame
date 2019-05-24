@@ -52,13 +52,9 @@ public class PlatformMode extends Screen
 	
 	private int battleRequirement = 10;
 
-	/**
-	 * Initializes fields
+	/** Constructs a new Screen used for modeling the platforming part of the game.
 	 * 
-	 * @param surface the DrawingSurface ======= /** Creates a new platform for the
-	 *                game
-	 * @param surface the DrawingSurface sued to draw the platform >>>>>>> branch
-	 *                'master' of https://github.com/wwu062/VeggieGame.git
+	 * @param surface the DrawingSurface used to draw the platform 
 	 */
 	public PlatformMode(DrawingSurface surface)
 	{
@@ -68,7 +64,7 @@ public class PlatformMode extends Screen
 	}
 
 	/**
-	 * creates a new controllable Entity object
+	 * Creates a new controllable Entity object
 	 */
 	public void spawnNewPlayer()
 	{
@@ -96,10 +92,10 @@ public class PlatformMode extends Screen
 		player = new Player(surface.lettuceAssets, 800 / 2 - 100, 400 / 2 - 100, false, istats, iplayerMovelist);
 	}
 
-	/**
+	/** Spawns a new bot at the designated coordinates
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	public void spawnNewBot(int x, int y)
 	{
@@ -247,12 +243,7 @@ public class PlatformMode extends Screen
 		surface.text("Battle Upcoming", 0 + 5*((battleRequirement-3)*60-distanceTracker), 50);
 		surface.popStyle();
 	}
-
-	public void pause()
-	{
-		pause = true;
-	}
-
+	
 	public void run()
 	{
 		if(distanceTracker == 60*battleRequirement) {
@@ -355,11 +346,6 @@ public class PlatformMode extends Screen
 		timer++;
 		spawnTimer++;
 		distanceTracker++;
-	}
-
-	public void isReleased()
-	{
-
 	}
 
 	private void shift(int shift)

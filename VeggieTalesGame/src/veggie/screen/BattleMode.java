@@ -59,7 +59,7 @@ public class BattleMode extends Screen
 
 
 	/**
-	 * initializes the fields
+	 * Constructs a new BattleMode screen
 	 * 
 	 * @param surface DrawingSurface object
 	 * @param player  the Player Entity object
@@ -124,7 +124,6 @@ public class BattleMode extends Screen
 	/**
 	 * Draws the battle
 	 * 
-	 * @post changes background color
 	 */
 	public void draw()
 	{

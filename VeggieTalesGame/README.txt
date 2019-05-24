@@ -86,10 +86,12 @@ Stretch features:
 * Alex
    * The Platforming part of the game
 	   * MovingImage
-	   * PlayerController
+	   * Player
 	   * PlatformMode
 	   * Main
 	   * Stats
+	   * DrawingSurface
+	   * GameOver
    
   
 * William

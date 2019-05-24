@@ -6,8 +6,8 @@ import java.util.Map;
 import processing.core.PImage;
 
 /**
- * @author awang104 PlayerController is the player character for the platform
- *         mode with physics traits.
+ * @author awang104 
+ * PlayerController is the player character for the platform mode with physics traits.
  */
 public class Player extends MovingImage {
 	
@@ -33,12 +33,14 @@ public class Player extends MovingImage {
 	private static final double MAX_VELY_BOT = -10;
 	private static final double MAX_VELY_PLAYER = -20;
 
-	/**
-	 * Creates a new PlayerController object
+	/** Creates a new PlayerController object
 	 * 
-	 * @param x             x coordinate of object
-	 * @param y             y coordinate of object
 	 * @param playerImages image texture of object
+	 * @param x x coordinate of object
+	 * @param y y coordinate of object
+	 * @param isBot true if Player is a bot
+	 * @param statistics a Stats object holding the statistics of the Player
+	 * @param moveList an array of Moves that represent the player's moves.
 	 */
 	public Player(Map<String, PImage> playerImages, int x, int y, boolean isBot, Stats statistics, Moves[] moveList)
 	{
@@ -75,7 +77,8 @@ public class Player extends MovingImage {
 	
 	/**
 	 * 
-	 * @param i the index of of MovesList.
+	 * @param i the index of the Move in the list of Moves.
+	 * @return the Moves object of the move desired
 	 */
 	public Moves getMove(int i) {
 		return moveList[i];
@@ -269,14 +272,6 @@ public class Player extends MovingImage {
 	 */
 	public boolean isFrozen() {
 		return isFrozen;
-	}
-	
-	public double getX() {
-		return super.getX();
-	}
-	
-	public double getY() {
-		return super.getY();
 	}
 	
 	/**

@@ -1,5 +1,11 @@
 package veggie.model;
 
+/**
+ * 
+ * @author William
+ *
+ * Represents each attack move as a Moves object, with attack values and names.
+ */
 public class Moves {
 	
 	private String name;
@@ -29,6 +35,10 @@ public class Moves {
 		return name;
 	}
 
+	/**
+	 * 
+	 * @return the effect name
+	 */
 	public String getEffectName()
 	{
 		return effectName;
