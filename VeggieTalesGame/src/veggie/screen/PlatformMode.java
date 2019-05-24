@@ -135,7 +135,6 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
-
 		distanceTracker = 0;
 		pause = false;
 		timer = 1;
@@ -188,7 +187,6 @@ public class PlatformMode extends Screen
 
 
 		backimg = surface.assets.get("background2");
-		System.out.println(backimg.width + " " + backimg.height);
 	}
 
 	/**
@@ -197,7 +195,6 @@ public class PlatformMode extends Screen
 	public void draw()
 	{
 		// drawing stuff
-		
 		surface.background(backimg);
 
 
