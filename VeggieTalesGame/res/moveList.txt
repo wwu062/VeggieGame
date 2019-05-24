@@ -1,16 +1,16 @@
 Splash,20,none
-Acid,23,poison
-Absorb,12,absorb
-Acid Spray,25,poison
+Acid,23,poisoned
+Absorb,12,absorbed
+Acid Spray,25,poisoned
 Avalanche,18,none
-Spinach Wrap,15,reduce
-Barrier,19,reduce
+Spinach Wrap,15,reduced
+Barrier,19,reduced
 Belch,18,poison
-Lettuce Rush,32,heal
-Bug Bite,15,poison
+Lettuce Rush,32,healed
+Bug Bite,15,poisoned
 Bullet,19,heal
-Camouflage,23,reduce
-Celebrate,18,leech
-Comet Punch,20,absorb
+Camouflage,23,reduced
+Celebrate,18,leeched
+Comet Punch,20,absorbed
 Clamp,19,none
 Body Slam,20,none
