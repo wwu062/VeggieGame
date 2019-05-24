@@ -1,12 +1,13 @@
 package veggie.model;
 
-public class PlayerBattle {
-	
+public class PlayerBattle
+{
+
 	/**
 	 * the health statistic
 	 */
 	private int health;
-	
+
 	/**
 	 * the critical rate statistic
 	 */
@@ -14,10 +15,12 @@ public class PlayerBattle {
 
 	/**
 	 * Initializes fields
-	 * @param ihealth initial health statistic
+	 * 
+	 * @param ihealth  initial health statistic
 	 * @param critrate initial critical rate statistic
 	 */
-	public PlayerBattle(int ihealth, double critrate) {
+	public PlayerBattle(int ihealth, double critrate)
+	{
 		this.health = ihealth;
 		this.critrate = critrate;
 	}
@@ -25,17 +28,21 @@ public class PlayerBattle {
 	/**
 	 * @return the health
 	 */
-	public int getHealth() {
+	public int getHealth()
+	{
 		return health;
 	}
 
 	/**
 	 * @param health the health to set
 	 */
-	public void setHealth(int health) {
-		if(health < 0) {
+	public void setHealth(int health)
+	{
+		if(health < 0)
+		{
 			this.health = 0;
-		} else {
+		} else
+		{
 			this.health = health;
 		}
 	}
@@ -43,16 +50,17 @@ public class PlayerBattle {
 	/**
 	 * @return the critical rate
 	 */
-	public double getCritrate() {
+	public double getCritrate()
+	{
 		return critrate;
 	}
 
 	/**
 	 * @param critrate the critical rate to set
 	 */
-	public void setCritrate(double critrate) {
+	public void setCritrate(double critrate)
+	{
 		this.critrate = critrate;
 	}
-	
 	
 }
