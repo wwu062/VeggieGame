@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import gifAnimation.Gif;
+import processing.core.PImage;
 import veggie.model.Moves;
 import veggie.model.Player;
 import veggie.model.Stats;
@@ -31,24 +32,23 @@ public class PlatformMode extends Screen
 
 	private ArrayList<Player> bot;
 
-	//private ArrayList<PShape> obstacles;
-	
+	// private ArrayList<PShape> obstacles;
+
 	private ArrayList<Rectangle> obstacles;
 
 	private Gif playerRun, tomatoBounce;
 
+	private PImage backimg;
+
 	private DrawingSurface surface;
-	
+
 	private int timer, spawnTimer;
 	private boolean pause;
 	private int distanceTracker;
-	
-	//platform
 	private ArrayList<Rectangle> items;
 	private Rectangle bottomPlatform;
-	
+
 	private int spawnRequirement;
-	private int botSpawnRequirement;
 
 	/**
 	 * Initializes fields
@@ -114,15 +114,16 @@ public class PlatformMode extends Screen
 			i++;
 			k++;
 		}
+
 		
 		Player tempBot;
-		if((Math.random()*2) == 1)
+		if(distanceTracker != 20*60)
 			tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
 		else
 			tempBot = new Player(surface.veggieKingAssets, x, y, true, istats, iplayerMovelist);
 		tempBot.freeze();
 		bot.add(tempBot);
-		
+
 	}
 
 	// public void runMe() {
@@ -134,59 +135,59 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+		backimg = surface.assets.get("background2");
+
+		distanceTracker = 0;
 		pause = false;
 		timer = 1;
 		spawnTimer = 0;
-		spawnRequirement = (int)(Math.random()*120);
-		botSpawnRequirement = 60;
+		spawnRequirement = (int)(Math.random()*20) + 100;
 		
 		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
-		
+
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
-		
+
 		tomatoBounce = (Gif) surface.tomatoAssets.get("bounce");
 		tomatoBounce.play();
-		
+
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 		
-		bottomPlatform = new Rectangle(-200, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH + 200, 400);
+		bottomPlatform = new Rectangle(-200, (int)(DRAWING_HEIGHT - 68), DRAWING_WIDTH + 200, 500);
+
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
 		Rectangle r3 = new Rectangle(700, 250, 100, 50);
 		Rectangle r4 = new Rectangle(375, 300, 50, 100);
 		Rectangle r5 = new Rectangle(300, 250, 200, 50);
-		
+
 		/*
-		PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50);
-		PShape p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50);
-		PShape p3 = surface.createShape(PConstants.RECT, 700, 250, 100, 50);
-		PShape p4 = surface.createShape(PConstants.RECT, 375, 300, 50, 100);
-		PShape p5 = surface.createShape(PConstants.RECT, 300, 250, 200, 50);
-		*/
-		
+		 * PShape p1 = surface.createShape(PConstants.RECT, 200, 400, 400, 50); PShape
+		 * p2 = surface.createShape(PConstants.RECT, 0, 250, 100, 50); PShape p3 =
+		 * surface.createShape(PConstants.RECT, 700, 250, 100, 50); PShape p4 =
+		 * surface.createShape(PConstants.RECT, 375, 300, 50, 100); PShape p5 =
+		 * surface.createShape(PConstants.RECT, 300, 250, 200, 50);
+		 */
+
 		surface.popStyle();
-		
+
 		/*
-		obstacles.addChild(p1);
-		obstacles.addChild(p2);
-		obstacles.addChild(p3);
-		obstacles.addChild(p4);
-		obstacles.addChild(p5);
-		*/
-		
+		 * obstacles.addChild(p1); obstacles.addChild(p2); obstacles.addChild(p3);
+		 * obstacles.addChild(p4); obstacles.addChild(p5);
+		 */
+
 		obstacles.add(r1);
 		obstacles.add(r2);
 		obstacles.add(r3);
 		obstacles.add(r4);
 		obstacles.add(r5);
-		
-		
+
+
 		spawnNewPlayer();
-		//spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
+		// spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
 	}
 
 	/**
@@ -195,28 +196,37 @@ public class PlatformMode extends Screen
 	public void draw()
 	{
 		// drawing stuff
+		
+		surface.background(255);
 
-		surface.background(0, 255, 255);
+
+		surface.image(backimg, 0, 0);
+
 
 		surface.pushMatrix();
 
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
+		
+		
+		
 
-		//surface.shape(obstacles);
-		for(Rectangle rect : obstacles) {
+		// surface.shape(obstacles);
+		for(Rectangle rect : obstacles)
+		{
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
-		surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width, bottomPlatform.height);
-		
+		//surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width, bottomPlatform.height);
+
 		surface.pushStyle();
-		surface.fill(255,0,0);
-		for(Rectangle rect : items) {
+		surface.fill(255, 0, 0);
+		for(Rectangle rect : items)
+		{
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
 		surface.popStyle();
-		
+
 
 		for(Player b : bot)
 		{
@@ -224,14 +234,16 @@ public class PlatformMode extends Screen
 		}
 
 		player.draw(surface, "run");
-		
-	
 
 
 		surface.popMatrix();
-		
+
 		// modifying stuff
-			run();
+		run();
+		surface.pushStyle();
+		surface.fill(255, 0, 0);
+		surface.text("Battle Upcoming", 0 + 5*(12*60-distanceTracker), 50);
+		surface.popStyle();
 	}
 
 	public void pause()
@@ -241,29 +253,44 @@ public class PlatformMode extends Screen
 
 	public void run()
 	{
+		if(distanceTracker == 60*20) {
+			spawnNewBot(100,100);
+			surface.addScreen(new BattleMode(surface, player, bot.get(bot.size()-1)));
+			bot.remove(bot.size()-1);
+			distanceTracker = 0;
+		}
+		
 		for(int i = 0; i < bot.size(); i++)
 		{
 			if(player.battle(bot.get(i)))
 			{
+				/*
 				player.drainLife();
-				if(player.noLife()) {
+				if(player.noLife())
+				{
 					surface.switchScreen(ScreenSwitcher.GAME_OVER);
-				} else {
+				} else
+				{
 					surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 					bot.remove(i);
 					pause();
 					spawnTimer = 0;
 				}
+				*/
+				surface.switchScreen(ScreenSwitcher.GAME_OVER);
 			}
+			
 		}
-		
-		int accel = (int)timer/10;
-		if(accel > 8) {
+
+		int accel = (int) timer / 10;
+		if(accel > 8)
+		{
 			accel = 8;
 		}
-		
+
 		int shift = -1 - accel;
-		if(pause) {
+		if(pause)
+		{
 			for(Player b : bot)
 			{
 				b.stop();
@@ -274,8 +301,8 @@ public class PlatformMode extends Screen
 			timer = 0;
 			pause = false;
 		}
-		
-		//shift(shift);
+
+		// shift(shift);
 		shift(shift);
 
 
@@ -287,14 +314,16 @@ public class PlatformMode extends Screen
 			player.jump();
 		if(surface.isPressed(KeyEvent.VK_SHIFT) && (surface.isPressed(KeyEvent.VK_RIGHT) || surface.isPressed(KeyEvent.VK_LEFT)))
 			player.slide(true);
-		else if(surface.isPressed(KeyEvent.VK_SHIFT)) {
-			
-		} else {
+		else if(surface.isPressed(KeyEvent.VK_SHIFT))
+		{
+
+		} else
+		{
 			player.slide(false);
 		}
-		
+
 		botRun();
-		
+
 		obstacles.add(bottomPlatform);
 		for(Player b : bot)
 		{
@@ -308,65 +337,76 @@ public class PlatformMode extends Screen
 
 		if(!screenRect.intersects(player.getBounds()))
 			surface.switchScreen(ScreenSwitcher.GAME_OVER);
-		
-		for(int i = 0; i < bot.size(); i++) {
-			if(!screenRect.intersects(bot.get(i).getBounds())) {
+
+		for(int i = 0; i < bot.size(); i++)
+		{
+			if(!screenRect.intersects(bot.get(i).getBounds()))
+			{
 				bot.remove(i);
 				i--;
 			}
 		}
-		
-		//int chance = (int)((Math.random()*2)+1);
-		
+
+		// int chance = (int)((Math.random()*2)+1);
+
 		if(spawnTimer > 180)
 			randomSpawnBots();
-		spawnNewItems();;
+		spawnNewItems();
 		setNewMove();
-		
-		if(timer%45 == 0)
-			for(int c = 0; c < 3; c++) {
+
+		if(timer % 45 == 0)
+			for(int c = 0; c < 3; c++)
+			{
 				generateNewPlatform();
 			}
-		
 
-		
+
 		timer++;
 		spawnTimer++;
+		distanceTracker++;
 	}
-	
-	public void isReleased() {
-		
+
+	public void isReleased()
+	{
+
 	}
-	
-	private void shift(int shift) {
-		//platform
-		for(int i = 0; i < obstacles.size(); i++) {
-			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
+
+	private void shift(int shift)
+	{
+		// platform
+		for(int i = 0; i < obstacles.size(); i++)
+		{
+			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0)
+			{
 				obstacles.remove(i);
 				i--;
 			}
 		}
-		
-		for(int i = 0; i < obstacles.size(); i++) {
+
+		for(int i = 0; i < obstacles.size(); i++)
+		{
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() - shift < 0)
-				shift = (int)(obstacles.get(i).getWidth() + obstacles.get(i).getX());
+				shift = (int) (obstacles.get(i).getWidth() + obstacles.get(i).getX());
 			obstacles.get(i).translate(shift, 0);
 		}
-		//items
-		for(int i = 0; i < items.size(); i++) {
-			if(items.get(i).getWidth() + items.get(i).getX() <= 0) {
+		// items
+		for(int i = 0; i < items.size(); i++)
+		{
+			if(items.get(i).getWidth() + items.get(i).getX() <= 0)
+			{
 				items.remove(i);
 				i--;
 			}
 		}
-		
-		for(int i = 0; i < items.size(); i++) {
+
+		for(int i = 0; i < items.size(); i++)
+		{
 			if(items.get(i).getWidth() + items.get(i).getX() - shift < 0)
-				shift = (int)(items.get(i).getWidth() + items.get(i).getX());
+				shift = (int) (items.get(i).getWidth() + items.get(i).getX());
 			items.get(i).translate(shift, 0);
 		}
-		
-		
+
+
 	}
 	
 	private void randomSpawnBots() {
@@ -379,9 +419,11 @@ public class PlatformMode extends Screen
 				spawnNewBot(-64, DRAWING_HEIGHT - 100 - 70);
 		}
 	}
-	
-	private void botRun() {
-		for(Player tempBot : bot) {
+
+	private void botRun()
+	{
+		for(Player tempBot : bot)
+		{
 			if(tempBot.isFrozen() && tempBot.isOnSurface())
 				tempBot.unFreeze();
 			if(player.getX() > tempBot.getX())
@@ -407,29 +449,36 @@ public class PlatformMode extends Screen
 			if(r != null)
 				obstacles.add(r);
 	}
-	
-	private void setNewMove() {
-		
+
+	private void setNewMove()
+	{
+
 		int i = 0;
-		for(Rectangle r : items) {
-			if(i > 20) {
+		for(Rectangle r : items)
+		{
+			if(i > 20)
+			{
 				break;
 			}
-			if(player.getBounds().intersects(r)) {
-				Integer key = (int)(Math.random()*surface.moves.size() + 1);
+			if(player.getBounds().intersects(r))
+			{
+				Integer key = (int) (Math.random() * surface.moves.size() + 1);
 				Moves temp = surface.moves.get(key);
-				player.setMoveList(temp, (int)(Math.random()*4));
+				player.setMoveList(temp, (int) (Math.random() * 4));
 			}
 			i++;
 		}
-		
+
 	}
-	
-	private void spawnNewItems() {
-		if(timer%spawnRequirement == 0) {
+
+	private void spawnNewItems()
+	{
+		if(timer % spawnRequirement == 0)
+		{
 			Rectangle r;
-			while(true) { 
-				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int)(Math.random()*4)*100, 20, 20);
+			while(true)
+			{
+				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int) (Math.random() * 4) * 100, 20, 20);
 				boolean contains = false;
 				for(Rectangle plat : obstacles) {
 					contains = plat.intersects(r) || plat.contains(r);
@@ -438,12 +487,12 @@ public class PlatformMode extends Screen
 					break;
 				}
 			}
-			
+
 			items.add(r);
-			spawnRequirement = (int)(Math.random()*3600 + 1800);
+			spawnRequirement = (int) (Math.random() * 3600 + 1800);
 		}
-			
+
 	}
-	
+
 
 }
