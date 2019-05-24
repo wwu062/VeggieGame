@@ -244,11 +244,13 @@ public class BattleMode extends Screen
 
 		if(timer % 7 == 0)
 		{
-			if(isDead() == -1) {
+			if(isDead() == -1)
+			{
 				player.resetHealth();
 				surface.switchScreen(2);
 				surface.removeScreen(ScreenSwitcher.BATTLE);
-			} else if(isDead() == 1 ) {
+			} else if(isDead() == 1)
+			{
 				surface.switchScreen(ScreenSwitcher.GAME_OVER);
 			}
 		}
@@ -257,7 +259,7 @@ public class BattleMode extends Screen
 
 		surface.image(attackScreen, 0, 0);
 
-		//System.out.println(System.currentTimeMillis() - c);
+		// System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -274,9 +276,9 @@ public class BattleMode extends Screen
 		healthPanel.rect(50, 85, 250, 15, 20, 20, 20, 20);
 		healthPanel.fill(255, 0, 0);
 		healthPanel.rect(50, 85, playerHealthRatio * 250, 15, 20, 20, 20, 20);
-		//System.out.println(playerHealthRatio * 250);
-//		System.out.println("This is player health" + player.getHealth());
-//		System.out.println("This is iplayer" + iplayerHealth);
+		// System.out.println(playerHealthRatio * 250);
+		// System.out.println("This is player health" + player.getHealth());
+		// System.out.println("This is iplayer" + iplayerHealth);
 		// enemy
 		healthPanel.fill(255);
 		healthPanel.rect(500, 85, 250, 15, 20, 20, 20, 20);
@@ -367,16 +369,17 @@ public class BattleMode extends Screen
 		}
 
 		String total = player + " used " + move;
-		
-//		for(char e: total) {
-//			System.out.print(e);
-//		}
+
+		// for(char e: total) {
+		// System.out.print(e);
+		// }
 
 		panels.text(total, textRect.x + 15, textRect.y + 25, textRect.width, textRect.height);
-		
-		if(!moveEffect.equalsIgnoreCase("none")) {
+
+		if(!moveEffect.equalsIgnoreCase("none"))
+		{
 			String effect = "Enemy is " + moveEffect;
-			panels.text(effect, textRect.x + 15, textRect.y + 25 +40, textRect.width, textRect.height);
+			panels.text(effect, textRect.x + 15, textRect.y + 25 + 40, textRect.width, textRect.height);
 		}
 
 		panels.popStyle();
@@ -441,17 +444,33 @@ public class BattleMode extends Screen
 			}
 		}
 
+		attackScreen.beginDraw();
+
 		boolean crit = crit(attacker.getCritrate());
-		if(crit)
+		if(!crit)
 		{
+			System.out.println("hr");
+			attackScreen.image(critImage, 350, 100);
 			changeHealth(opponent, attacker.getMove(num).getAttackval() + 10);
 		} else
 		{
 			changeHealth(opponent, attacker.getMove(num).getAttackval());
 
 		}
+		attackScreen.endDraw();
+
 
 		panelClick = 0;
+	}
+
+	private void critImage(boolean crit)
+	{
+		attackScreen.beginDraw();
+		if(crit)
+		{
+			attackScreen.image(critImage, 350, 100);
+		}
+		attackScreen.endDraw();
 	}
 
 	/**
