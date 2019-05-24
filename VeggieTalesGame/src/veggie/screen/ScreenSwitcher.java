@@ -21,9 +21,11 @@ public interface ScreenSwitcher {
 	/**
 	 * the integer code of the battleMode screen
 	 */
-	public static final int BATTLE = 3;
+
+	public static final int GAME_OVER = 3;
 	
-	public static final int GAME_OVER = 4;
+	public static final int BATTLE = 4;
+	
 	
 	
 	public void switchScreen(int i);

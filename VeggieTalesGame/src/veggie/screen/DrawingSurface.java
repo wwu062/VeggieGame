@@ -63,6 +63,9 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 
 		PlatformMode screen3 = new PlatformMode(this);
 		screens.add(screen3);
+		
+		GameOver screen4 = new GameOver(this);
+		screens.add(screen4);
 
 		switchScreen(ScreenSwitcher.MENU);
 	}
@@ -93,6 +96,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("crit", new Gif(this, "images" + FileIO.fileSep + "crit.gif"));
 		
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
+		tomatoAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
 		

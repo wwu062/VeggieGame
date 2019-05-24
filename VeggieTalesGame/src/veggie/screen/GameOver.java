@@ -15,7 +15,7 @@ public class GameOver extends Screen{
 
 		private DrawingSurface surface;
 
-		private Rectangle playbutton, instructbutton;
+		private Rectangle backButton;
 
 		private PImage backimg;
 		private PImage logoimg;
@@ -31,9 +31,7 @@ public class GameOver extends Screen{
 			super(800, 600);
 			this.surface = surface;
 
-			playbutton = new Rectangle(800 / 2 - 100, 600 / 2 - 100, 200, 150);
-
-			instructbutton = new Rectangle(800 / 2 - 100, 600 / 2 + 100, 200, 150);
+			backButton = new Rectangle(800 / 2 - 100, 1000 / 2 - 100, 200, 150);
 		}
 
 		/**
@@ -62,21 +60,14 @@ public class GameOver extends Screen{
 			surface.image(logoimg, DRAWING_WIDTH / 2 - 200, DRAWING_HEIGHT / 4 - 75);
 
 			surface.pushStyle();
-			surface.rect(playbutton.x, playbutton.y, playbutton.width, playbutton.height);
+			surface.fill(255);
+			surface.rect(backButton.x, backButton.y, backButton.width, backButton.height);
 			surface.fill(0);
-			String a = "Play";
+			String a = "Back";
 			float w = surface.textWidth(a);
-			surface.text(a, playbutton.x + playbutton.width / 2 - w / 2, playbutton.y + playbutton.height / 2);
+			surface.text(a, backButton.x + backButton.width / 2 - w / 2, backButton.y + backButton.height / 2);
 			surface.popStyle();
 
-			surface.pushStyle();
-			surface.rect(instructbutton.x, instructbutton.y, instructbutton.width, instructbutton.height);
-			surface.fill(0);
-			String b = "Instructions";
-			float y = surface.textWidth(b);
-			surface.text(b, instructbutton.x + instructbutton.width / 2 - y / 2,
-					instructbutton.y + instructbutton.height / 2);
-			surface.popStyle();
 		}
 
 		/**
@@ -85,10 +76,10 @@ public class GameOver extends Screen{
 		public void mousePressed()
 		{
 			Point p = surface.actualCoordinates(new Point(surface.mouseX, surface.mouseY));
-			if(playbutton.contains(p))
-				surface.switchScreen(ScreenSwitcher.PLATFORM);
-			if(instructbutton.contains(p))
-				surface.switchScreen(ScreenSwitcher.INSTRUCTION);
+			if(backButton.contains(p)) {
+				surface.setup();
+				surface.switchScreen(ScreenSwitcher.MENU);
+			}
 
 		}
 

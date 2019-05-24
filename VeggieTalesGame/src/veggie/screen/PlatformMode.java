@@ -87,7 +87,7 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100, false);
+		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 400 / 2 - 100, false);
 	}
 
 	public void spawnNewBot(int x, int y)
@@ -222,7 +222,22 @@ public class PlatformMode extends Screen
 
 	public void run()
 	{
-		
+		for(int i = 0; i < bot.size(); i++)
+		{
+			if(player.getController().battle(bot.get(i).getController()))
+			{
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+				bot.remove(i);
+				pause();
+			}
+		}
 		
 		int accel = (int)timer/10;
 		if(accel > 8) {
@@ -243,16 +258,8 @@ public class PlatformMode extends Screen
 		}
 		
 		//shift(shift);
-		
-		for(int i = 0; i < bot.size(); i++)
-		{
-			if(player.getController().battle(bot.get(i).getController()))
-			{
-				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-				bot.remove(i);
-				pause();
-			}
-		}
+		shift(shift);
+
 
 		if(surface.isPressed(KeyEvent.VK_LEFT))
 			player.getController().walk(-1);
@@ -283,6 +290,14 @@ public class PlatformMode extends Screen
 		if(!screenRect.intersects(player.getController().getBounds()))
 			surface.switchScreen(ScreenSwitcher.GAME_OVER);
 		
+		for(int i = 0; i < bot.size(); i++) {
+			if(!screenRect.intersects(bot.get(i).getController().getBounds())) {
+				bot.remove(i);
+				i--;
+			}
+		}
+		
+		
 		randomSpawnBots();
 		
 		timer += 1;
@@ -308,6 +323,22 @@ public class PlatformMode extends Screen
 	}
 	*/
 	
+	private void shift(int shift) {
+		for(int i = 0; i < obstacles.size(); i++) {
+			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
+				obstacles.remove(i);
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < obstacles.size(); i++) {
+			
+			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() - shift < 0)
+				shift = (int)(obstacles.get(i).getWidth() + obstacles.get(i).getX());
+			obstacles.get(i).translate(shift, 0);
+		}
+	}
+	
 	private void randomSpawnBots() {
 		if(timer % 60 == 0) {
 			spawnNewBot((int)(Math.random() * surface.width), 0);
@@ -315,9 +346,6 @@ public class PlatformMode extends Screen
 	}
 	
 	private void botRun() {
-		
-		
-		
 		for(PlayerManager tempBot : bot) {
 			if(tempBot.getController().isFrozen() && tempBot.getController().isOnSurface())
 				tempBot.getController().unFreeze();
