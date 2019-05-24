@@ -113,11 +113,9 @@ public class PlatformMode extends Screen
 			k++;
 		}
 		
-		// made it so that it automatically goes to battlemode for now. 
 		Player tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
 		tempBot.freeze();
 		bot.add(tempBot);
-		//bot.add(new Player(surface.tomatoAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100));
 		
 	}
 
@@ -146,7 +144,7 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 		
-		bottomPlatform = new Rectangle(0, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH, 100);
+		bottomPlatform = new Rectangle(-100, (int)(DRAWING_HEIGHT - 50), DRAWING_WIDTH + 200, 100);
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
 		Rectangle r3 = new Rectangle(700, 250, 100, 50);
@@ -210,12 +208,13 @@ public class PlatformMode extends Screen
 		}
 		surface.popStyle();
 		
-		player.draw(surface, "run");
 
 		for(Player b : bot)
 		{
 			b.draw(surface, "bounce");
 		}
+
+		player.draw(surface, "run");
 		
 	
 
@@ -239,11 +238,14 @@ public class PlatformMode extends Screen
 		{
 			if(player.battle(bot.get(i)))
 			{
-				/*
+				player.drainLife();
+				if(player.noLife()) {
+					surface.switchScreen(ScreenSwitcher.GAME_OVER);
+				}
 				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
 				bot.remove(i);
 				pause();
-				*/
+				
 			}
 		}
 		
@@ -306,11 +308,18 @@ public class PlatformMode extends Screen
 			}
 		}
 		
+		//int chance = (int)((Math.random()*2)+1);
 		
 		randomSpawnBots();
-		spawnNewItems();
-		generateNewPlatform();
+		spawnNewItems();;
 		setNewMove();
+		
+		if(timer%45 == 0)
+			for(int c = 0; c < 1; c++) {
+				generateNewPlatform();
+			}
+		
+
 		
 		timer += 1;
 	}
@@ -318,22 +327,6 @@ public class PlatformMode extends Screen
 	public void isReleased() {
 		
 	}
-	
-	/*
-	private void shift(int shift) {
-		for(int i = 0; i < obstacles.getChildCount(); i++) {
-			obstacles.getChild(i).translate(shift, 0);
-			
-		}
-		for(int i = 0; i < obstacles.getChildCount(); i++) {
-			float[] params = obstacles.getChild(i).getParams();
-			if(params[0] + params[3] <= 0) {
-				obstacles.removeChild(i);
-				i--;
-			}
-		}
-	}
-	*/
 	
 	private void shift(int shift) {
 		//platform
@@ -367,7 +360,7 @@ public class PlatformMode extends Screen
 	}
 	
 	private void randomSpawnBots() {
-		if(timer % (20*60) == 0) {
+		if(timer % (10*60) == 0) {
 			spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
 		}
 	}
@@ -386,28 +379,54 @@ public class PlatformMode extends Screen
 	}
 	
 	private void generateNewPlatform() {
-		if(timer%45 == 0) {
+		
 			int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 200;
-			Rectangle r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
-			obstacles.add(r);
-		}
+			Rectangle r = null;
+			int i = 0;
+			boolean contains = false;
+			while(!contains) { 
+				r = new Rectangle(DRAWING_WIDTH, y, 200, (int)(DRAWING_HEIGHT*0.1));
+				for(Rectangle plat : obstacles) {
+					contains = plat.intersects(r) || plat.contains(r);
+				}
+				i++;
+			}
+			
+			if(r != null)
+				obstacles.add(r);
 	}
 	
 	private void setNewMove() {
 		
+		int i = 0;
 		for(Rectangle r : items) {
+			if(i > 20) {
+				break;
+			}
 			if(player.getBounds().intersects(r)) {
 				Integer key = (int)(Math.random()*surface.moves.size() + 1);
 				Moves temp = surface.moves.get(key);
 				player.setMoveList(temp, (int)(Math.random()*4));
 			}
+			i++;
 		}
 		
 	}
 	
 	private void spawnNewItems() {
 		if(timer%spawnRequirement == 0) {
-			Rectangle r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int)(Math.random()*4)*100, 20, 20);
+			Rectangle r;
+			while(true) { 
+				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int)(Math.random()*4)*100, 20, 20);
+				boolean contains = false;
+				for(Rectangle plat : obstacles) {
+					contains = plat.intersects(r) || plat.contains(r);
+				}
+				if(!contains) {
+					break;
+				}
+			}
+			
 			items.add(r);
 			spawnRequirement = (int)(Math.random()*3600 + 1800);
 		}

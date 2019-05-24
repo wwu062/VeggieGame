@@ -22,11 +22,11 @@ public class Player extends MovingImage {
 	private boolean sliding;
 	private boolean isFrozen;
 	
-	private final double MAX_VELX;
+	private double maxVelX;
 	
 	private static final double TERMINAL_VELOCITY = 14;
 	private static final double PLAYER_MAX_VELX = 8;
-	private static final double BOT_MAX_VELX = 4.5;
+	private static final double BOT_MAX_VELX = 3;
 	private static final double IN_AIR_MODIFIER = 0.25;
 	private static final double NO_MODIFIER = 1;
 	private static final double COEF_FRICTION = -0.05;
@@ -54,9 +54,9 @@ public class Player extends MovingImage {
 		isFrozen = false;
 		
 		if(isBot) {
-			MAX_VELX = BOT_MAX_VELX;
+			maxVelX = BOT_MAX_VELX;
 		} else {
-			MAX_VELX = PLAYER_MAX_VELX;
+			maxVelX = PLAYER_MAX_VELX;
 		}
 		
 	}
@@ -131,8 +131,8 @@ public class Player extends MovingImage {
 			modifier = IN_AIR_MODIFIER;
 		if(!sliding) {
 			velX += dir * 0.5 * modifier;
-			if(Math.abs(velX) > MAX_VELX) {
-				velX = dir*MAX_VELX;
+			if(Math.abs(velX) > maxVelX) {
+				velX = dir*maxVelX;
 			}
 			isWalking = true;
 		}
@@ -172,24 +172,10 @@ public class Player extends MovingImage {
 
 
 	}
-
-	public void checkPlayer(PShape platform)
-	{
-		moveBy(velX, velY);
-		if(platform.getChildCount() != 0) {
-			for(int i = 0; i < platform.getChildCount(); i++) {
-				float[] params = platform.getChild(i).getParams();
-				
-				if(this.intersects(params[0], params[1], params[2]) && velY > 0) {
-					this.moveTo(this.getX(), params[1] - this.getHeight());
-					onSurface = true;
-					velY = 0;
-					break;
-				}
-			}
-		}
-	}
-	
+	/** Checks to see if the player can fall onto the platform.
+	 * 
+	 * @param platform an ArrayList of Rectangles that represents the platform the player is on.
+	 */
 	public void checkPlayer(ArrayList<Rectangle> platform)
 	{
 		moveBy(velX, velY);
@@ -221,33 +207,58 @@ public class Player extends MovingImage {
 		}
 	}
 
+	/** Determines when to "battle" and switch to battle mode.
+	 * 
+	 * @param bot the other player this player object is battling
+	 * @return true if the bot intersects and will battle with the player
+	 */
 	public boolean battle(Player bot)
 	{
 		return bot.getBounds().intersects(this.getBounds());
 	}
 
+	/**
+	 * Completely stops the player's velocity.
+	 */
 	public void stop()
 	{
 		velX = 0;
 		velY = 0;
 	}
 	
+	/**
+	 * Completely stops the player's horizontal velocity.
+	 */
 	public void stopHorizontal() {
 		velX = 0;
 	}
 	
+	/**
+	 * Freezes the player, preventing it from changing velocity.
+	 */
 	public void freeze() {
 		isFrozen = true;
 	}
 	
+	/**
+	 * 
+	 * @return true if player is on a surface such as a platform.
+	 */
 	public boolean isOnSurface() {
 		return onSurface;
 	}
 	
+	/**
+	 * Unfreezes the player, allowing them to accelerate again.
+	 */
 	public void unFreeze() {
 		isFrozen = false;
 	}
 
+	/**
+	 * 
+	 * @return true if player is frozen and cannot accelerate.
+	 */
 	public boolean isFrozen() {
 		return isFrozen;
 	}
@@ -258,6 +269,21 @@ public class Player extends MovingImage {
 	
 	public double getY() {
 		return super.getY();
+	}
+	
+	/**
+	 * Decreases the energy and max speed of the player
+	 */
+	public void drainLife() {
+		maxVelX--;
+	}
+	
+	/**
+	 * 
+	 * @return true if player's max speed is essentially 0.
+	 */
+	public boolean noLife() {
+		return Math.abs(maxVelX) < 0.2;
 	}
 
 }
