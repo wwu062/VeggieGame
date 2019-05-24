@@ -32,9 +32,9 @@ public class BattleMode extends Screen
 
 	// 0 = player, 1 = enemy
 	private int whichPlayer = 0;
-	
+
 	private Moves prevPlayerMove = null;
-	
+
 	private Moves prevEnemyMove = null;
 
 	private boolean turnDone = false;
@@ -91,7 +91,7 @@ public class BattleMode extends Screen
 			button[i + 2] = new Rectangle(305, 410 + 70 * i, 185, 60);
 		}
 
-		textRect = new Rectangle(500, 400, 200, 150);
+		textRect = new Rectangle(500, 400, 220, 150);
 
 	}
 
@@ -120,13 +120,11 @@ public class BattleMode extends Screen
 	 */
 	public void draw()
 	{
-		
 		panels.beginDraw();
 		panels.textFont(surface.font);
 		drawPanel();
 		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
 		panels.endDraw();
-		surface.image(panels, 0, 0);
 
 		// textScreen.beginDraw();
 		// drawTextScreen();
@@ -169,19 +167,21 @@ public class BattleMode extends Screen
 
 		if(turnDone)
 		{
-			
-			
+			panels.beginDraw();
+			drawTextAttackScreen();
+			panels.endDraw();
+
 			attackScreen.beginDraw();
 			attackScreen.background(255);
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-//			if(poisonTurnCounter > 0)
-//			{
-//				changeHealth(poisonedPlayer, 10);
-//				poisonTurnCounter--;
-//				// System.out.println("poisoned" + turnCounter);
-//			}
+			// if(poisonTurnCounter > 0)
+			// {
+			// changeHealth(poisonedPlayer, 10);
+			// poisonTurnCounter--;
+			// // System.out.println("poisoned" + turnCounter);
+			// }
 
 			if(whichPlayer == 0)
 			{
@@ -218,6 +218,7 @@ public class BattleMode extends Screen
 
 		}
 
+		surface.image(panels, 0, 0);
 
 		if(turnCounter % 2 == 0 & timer % 10 == 0)
 		{
@@ -228,6 +229,7 @@ public class BattleMode extends Screen
 		if(turnCounter % 2 != 0 && timer % 10 == 0)
 		{
 			int move = (int) (Math.random() * 4);
+			prevEnemyMove = enemy.getMoveList()[move];
 			drawMove(move, enemy, player);
 
 
@@ -236,7 +238,7 @@ public class BattleMode extends Screen
 			whichPlayer = 1;
 		}
 
-		if(checkDead() == 1 || checkDead() == -1)
+		if(checkDead() == 1 || checkDead() == -1 && timer % 10 == 0)
 		{
 			// System.out.println("is dead");
 			surface.switchScreen(2);
@@ -246,7 +248,7 @@ public class BattleMode extends Screen
 
 		surface.image(attackScreen, 0, 0);
 
-		System.out.println(System.currentTimeMillis() - c);
+		//System.out.println(System.currentTimeMillis() - c);
 	}
 
 	public void drawHealthPanel()
@@ -263,9 +265,9 @@ public class BattleMode extends Screen
 		healthPanel.rect(50, 85, 250, 15, 20, 20, 20, 20);
 		healthPanel.fill(255, 0, 0);
 		healthPanel.rect(50, 85, playerHealthRatio * 250, 15, 20, 20, 20, 20);
-		System.out.println(playerHealthRatio * 250);
-		System.out.println("This is player health" + player.getBattler().getHealth());
-		System.out.println("This is iplayer" + iplayerHealth);
+		//System.out.println(playerHealthRatio * 250);
+//		System.out.println("This is player health" + player.getBattler().getHealth());
+//		System.out.println("This is iplayer" + iplayerHealth);
 		// enemy
 		healthPanel.fill(255);
 		healthPanel.rect(500, 85, 250, 15, 20, 20, 20, 20);
@@ -296,31 +298,32 @@ public class BattleMode extends Screen
 	{
 		panels.pushStyle();
 		panels.rect(textRect.x, textRect.y, textRect.width, textRect.height);
-		float w = panels.textWidth("Hi");
+		// float w = panels.textWidth("Hi");
 		panels.fill(0);
-		//panels.text("Hi", textRect.x + textRect.width / 2 - w / 2, textRect.y + textRect.height / 2);
+		// panels.text("Hi", textRect.x + textRect.width / 2 - w / 2, textRect.y +
+		// textRect.height / 2);
 		if(mouseHoverTest() != -1)
 		{
 			int hoverValue = mouseHoverTest();
-			
+
 			if(hoverValue == 0)
 			{
 				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
 				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
 			}
-			
+
 			if(hoverValue == 1)
 			{
 				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
 				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
 			}
-			
+
 			if(hoverValue == 2)
 			{
 				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
 				panels.text("EFFECT: " + player.getMoveList()[hoverValue].getEffectName(), textRect.x + 25, textRect.y + 45 + 40);
 			}
-			
+
 			if(hoverValue == 3)
 			{
 				panels.text("ATK: " + player.getMoveList()[hoverValue].getAttackval(), textRect.x + 25, textRect.y + 45);
@@ -330,12 +333,53 @@ public class BattleMode extends Screen
 		panels.popStyle();
 	}
 
+	private void drawTextAttackScreen()
+	{
+		panels.pushStyle();
+		panels.rect(textRect.x, textRect.y, textRect.width, textRect.height);
+		panels.fill(0);
+
+		String player = "";
+		String move = "";
+		String moveEffect = "";
+
+		if(whichPlayer == 0)
+		{
+			player = "Player";
+			move = prevPlayerMove.getName();
+			moveEffect = prevPlayerMove.getEffectName();
+
+		}
+		if(whichPlayer == 1)
+		{
+			player = "Enemy";
+			move = prevEnemyMove.getName();
+			moveEffect = prevEnemyMove.getEffectName();
+		}
+
+		String total = player + " used " + move;
+		
+//		for(char e: total) {
+//			System.out.print(e);
+//		}
+
+		panels.text(total, textRect.x + 15, textRect.y + 25, textRect.width, textRect.height);
+		
+		if(!moveEffect.equalsIgnoreCase("none")) {
+			String effect = "Enemy is " + moveEffect;
+			panels.text(effect, textRect.x + 15, textRect.y + 25 +40, textRect.width, textRect.height);
+		}
+
+		panels.popStyle();
+	}
+
 	private void checkpanelClick()
 	{
 		if(0 != panelClick) // when mouse is clicked, clears with white screen.
 		{
 			turnDone = true;
 			timer = 1;
+			prevPlayerMove = player.getMoveList()[panelClick - 1];
 			drawMove(panelClick - 1, player, enemy);
 		}
 	}
@@ -395,7 +439,7 @@ public class BattleMode extends Screen
 		} else
 		{
 			changeHealth(opponent, attacker.getMoveList()[num].getAttackval());
-			
+
 		}
 
 		panelClick = 0;

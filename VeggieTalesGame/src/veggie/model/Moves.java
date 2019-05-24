@@ -1,5 +1,7 @@
 package veggie.model;
 
+import veggie.screen.DrawingSurface;
+
 public class Moves
 {
 
@@ -43,5 +45,15 @@ public class Moves
 	public int getAttackval()
 	{
 		return attackval;
+	}
+	
+	public void draw(DrawingSurface marker, float x, float y, int radius) {
+		marker.ellipse(x, y, radius*2, radius*2);
+	}
+	
+	public void randomDraw(DrawingSurface marker, int width, int height) {
+		float x = (float)(Math.random()*width);
+		float y = (float)(Math.random()*height);
+		this.draw(marker, x, y, 20);
 	}
 }

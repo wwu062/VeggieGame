@@ -6,7 +6,10 @@ import java.util.ArrayList;
 
 import gifAnimation.Gif;
 import processing.core.PConstants;
+import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PShape;
+import processing.opengl.PGraphics2D;
 import veggie.model.PlayerManager;
 import veggie.model.Moves;
 import veggie.model.PlayerPlatform;
@@ -45,6 +48,10 @@ public class PlatformMode extends Screen
 	private double timer;
 	
 	private boolean pause;
+	
+	private ArrayList<Rectangle> items;
+	
+	private int spawnRequirement;
 
 	/**
 	 * Initializes fields
@@ -87,7 +94,7 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 600 / 2 - 100, false);
+		player = new PlayerManager(surface.lettuceAssets, istats, iplayerMovelist, 800 / 2 - 100, 400 / 2 - 100, false);
 	}
 
 	public void spawnNewBot(int x, int y)
@@ -128,12 +135,17 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+
+		
+		
 		pause = false;
 		timer = 1;
-		bot = new ArrayList<PlayerManager>();
+		spawnRequirement = (int)(Math.random()*120);
 		
+		bot = new ArrayList<PlayerManager>();
+		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
-		//obstacles = surface.createShape(PConstants.GROUP);
+		
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -183,11 +195,13 @@ public class PlatformMode extends Screen
 	 */
 	public void draw()
 	{
+		
+		surface.background(255);
+		
 		PlayerPlatform mainplayer = player.getController();
 
 		// drawing stuff
-
-		surface.background(0, 255, 255);
+		
 
 		surface.pushMatrix();
 
@@ -199,13 +213,22 @@ public class PlatformMode extends Screen
 		for(Rectangle rect : obstacles) {
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
-
+		
+		surface.pushStyle();
+		surface.fill(255,0,0);
+		for(Rectangle rect : items) {
+			surface.rect(rect.x, rect.y, rect.width, rect.height);
+		}
+		surface.popStyle();
+		
 		mainplayer.draw(surface, "run");
 
 		for(PlayerManager b : bot)
 		{
 			b.getController().draw(surface, "bounce");
 		}
+		
+	
 
 
 		surface.popMatrix();
@@ -222,7 +245,23 @@ public class PlatformMode extends Screen
 
 	public void run()
 	{
-		
+		for(int i = 0; i < bot.size(); i++)
+		{
+			if(player.getController().battle(bot.get(i).getController()))
+			{
+				
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
+				bot.remove(i);
+				pause();
+			}
+		}
 		
 		int accel = (int)timer/10;
 		if(accel > 8) {
@@ -243,16 +282,8 @@ public class PlatformMode extends Screen
 		}
 		
 		//shift(shift);
-		
-		for(int i = 0; i < bot.size(); i++)
-		{
-			if(player.getController().battle(bot.get(i).getController()))
-			{
-				surface.addScreen(new BattleMode(surface, player, bot.get(i)));
-				bot.remove(i);
-				pause();
-			}
-		}
+		shift(shift);
+
 
 		if(surface.isPressed(KeyEvent.VK_LEFT))
 			player.getController().walk(-1);
@@ -283,7 +314,16 @@ public class PlatformMode extends Screen
 		if(!screenRect.intersects(player.getController().getBounds()))
 			surface.switchScreen(ScreenSwitcher.GAME_OVER);
 		
+		for(int i = 0; i < bot.size(); i++) {
+			if(!screenRect.intersects(bot.get(i).getController().getBounds())) {
+				bot.remove(i);
+				i--;
+			}
+		}
+		
+		
 		randomSpawnBots();
+		spawnNewItems();
 		
 		timer += 1;
 	}
@@ -308,6 +348,39 @@ public class PlatformMode extends Screen
 	}
 	*/
 	
+	private void shift(int shift) {
+		//platform
+		for(int i = 0; i < obstacles.size(); i++) {
+			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
+				obstacles.remove(i);
+				generateNewPlatform();
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < obstacles.size(); i++) {
+			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() - shift < 0)
+				shift = (int)(obstacles.get(i).getWidth() + obstacles.get(i).getX());
+			obstacles.get(i).translate(shift, 0);
+		}
+		//items
+		for(int i = 0; i < items.size(); i++) {
+			if(items.get(i).getWidth() + items.get(i).getX() <= 0) {
+				items.remove(i);
+				generateNewPlatform();
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < items.size(); i++) {
+			if(items.get(i).getWidth() + items.get(i).getX() - shift < 0)
+				shift = (int)(items.get(i).getWidth() + items.get(i).getX());
+			items.get(i).translate(shift, 0);
+		}
+		
+		
+	}
+	
 	private void randomSpawnBots() {
 		if(timer % 60 == 0) {
 			spawnNewBot((int)(Math.random() * surface.width), 0);
@@ -315,9 +388,6 @@ public class PlatformMode extends Screen
 	}
 	
 	private void botRun() {
-		
-		
-		
 		for(PlayerManager tempBot : bot) {
 			if(tempBot.getController().isFrozen() && tempBot.getController().isOnSurface())
 				tempBot.getController().unFreeze();
@@ -330,6 +400,28 @@ public class PlatformMode extends Screen
 		} 
 	}
 	
+	private void generateNewPlatform() {
+		int x = surface.width;
+		int y = (int)(Math.random()*(surface.height)*0.5 + surface.height*0.2);
+		int height = (int)(Math.random()*(surface.height*0.3) + (surface.height*0.1));
+		int width = (int)(Math.random()*surface.width*0.7 + surface.width*0.3);
+		Rectangle r = new Rectangle(x, y, width, height);
+		obstacles.add(r);
+	}
+	
+	private void setNewMove() {
+		String s = (int)((Math.random() * 3) + 5) + "";
+		
+	}
+	
+	private void spawnNewItems() {
+		if(timer%spawnRequirement == 0) {
+			Rectangle r = new Rectangle(surface.width, 100, 20, 20);
+			items.add(r);
+			spawnRequirement = (int)(Math.random()*3600 + 1800);
+		}
+			
+	}
 	
 
 }

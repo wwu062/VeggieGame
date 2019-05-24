@@ -1,7 +1,7 @@
 Splash,5,none
 Acid,6,poison
 Absorb,7,absorb
-Acid Spray,8,poison
+Acid Spray,50,poison
 Avalanche,9,none
 Spinach Wrap,10,reduce
 Barrier,11,reduce

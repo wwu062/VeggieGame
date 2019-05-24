@@ -33,11 +33,12 @@ public class PlayerPlatform extends MovingImage
 	 * 
 	 * @param x             x coordinate of object
 	 * @param y             y coordinate of object
-	 * @param lettuceAssets image texture of object
+	 * @param playerImages image texture of object
 	 */
-	public PlayerPlatform(Map<String, PImage> lettuceAssets, int x, int y, boolean isBot)
+	public PlayerPlatform(Map<String, PImage> playerImages, int x, int y, boolean isBot)
 	{
-		super(x, y, lettuceAssets.get("bounce").width, lettuceAssets.get("bounce").height, lettuceAssets);
+		
+		super(x, y, playerImages.get("run").width, playerImages.get("run").height, playerImages);
 		
 		velX = 0;
 		velY = 0;
