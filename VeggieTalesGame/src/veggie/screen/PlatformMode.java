@@ -45,6 +45,10 @@ public class PlatformMode extends Screen
 	private double timer;
 	
 	private boolean pause;
+	
+	private ArrayList<Rectangle> items;
+	
+	private int spawnRequirement;
 
 	/**
 	 * Initializes fields
@@ -130,10 +134,12 @@ public class PlatformMode extends Screen
 	{
 		pause = false;
 		timer = 1;
-		bot = new ArrayList<PlayerManager>();
+		spawnRequirement = (int)(Math.random()*120);
 		
+		bot = new ArrayList<PlayerManager>();
+		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
-		//obstacles = surface.createShape(PConstants.GROUP);
+		
 		playerRun = (Gif) surface.lettuceAssets.get("run");
 		playerRun.play();
 		
@@ -199,13 +205,22 @@ public class PlatformMode extends Screen
 		for(Rectangle rect : obstacles) {
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
-
+		
+		surface.pushStyle();
+		surface.fill(255,0,0);
+		for(Rectangle rect : items) {
+			surface.rect(rect.x, rect.y, rect.width, rect.height);
+		}
+		surface.popStyle();
+		
 		mainplayer.draw(surface, "run");
 
 		for(PlayerManager b : bot)
 		{
 			b.getController().draw(surface, "bounce");
 		}
+		
+	
 
 
 		surface.popMatrix();
@@ -300,6 +315,7 @@ public class PlatformMode extends Screen
 		
 		
 		randomSpawnBots();
+		spawnNewItems();
 		
 		timer += 1;
 	}
@@ -325,6 +341,7 @@ public class PlatformMode extends Screen
 	*/
 	
 	private void shift(int shift) {
+		//platform
 		for(int i = 0; i < obstacles.size(); i++) {
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() <= 0) {
 				obstacles.remove(i);
@@ -334,11 +351,26 @@ public class PlatformMode extends Screen
 		}
 		
 		for(int i = 0; i < obstacles.size(); i++) {
-			
 			if(obstacles.get(i).getWidth() + obstacles.get(i).getX() - shift < 0)
 				shift = (int)(obstacles.get(i).getWidth() + obstacles.get(i).getX());
 			obstacles.get(i).translate(shift, 0);
 		}
+		//items
+		for(int i = 0; i < items.size(); i++) {
+			if(items.get(i).getWidth() + items.get(i).getX() <= 0) {
+				items.remove(i);
+				generateNewPlatform();
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < items.size(); i++) {
+			if(items.get(i).getWidth() + items.get(i).getX() - shift < 0)
+				shift = (int)(items.get(i).getWidth() + items.get(i).getX());
+			items.get(i).translate(shift, 0);
+		}
+		
+		
 	}
 	
 	private void randomSpawnBots() {
@@ -362,13 +394,26 @@ public class PlatformMode extends Screen
 	
 	private void generateNewPlatform() {
 		int x = surface.width;
-		int y = (int)(Math.random()*(surface.height)*0.5 + surface.height*0.5);
-		int height = (int)(Math.random() *(surface.height*0.25));
-		int width = (int)(Math.random()*surface.width*0.9 + surface.width*0.1);
+		int y = (int)(Math.random()*(surface.height)*0.5 + surface.height*0.2);
+		int height = (int)(Math.random()*(surface.height*0.3) + (surface.height*0.1));
+		int width = (int)(Math.random()*surface.width*0.7 + surface.width*0.3);
 		Rectangle r = new Rectangle(x, y, width, height);
 		obstacles.add(r);
 	}
 	
+	private void setNewMove() {
+		String s = (int)((Math.random() * 3) + 5) + "";
+		
+	}
+	
+	private void spawnNewItems() {
+		if(timer%spawnRequirement == 0) {
+			Rectangle r = new Rectangle(surface.width, 100, 20, 20);
+			items.add(r);
+			spawnRequirement = (int)(Math.random()*3600 + 1800);
+		}
+			
+	}
 	
 
 }

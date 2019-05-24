@@ -39,7 +39,6 @@ public class PlayerPlatform extends MovingImage
 	{
 		
 		super(x, y, playerImages.get("run").width, playerImages.get("run").height, playerImages);
-		System.out.println(playerImages.get("run").width + " " + playerImages.get("run").height + " " + playerImages.get("attack").height + " " + playerImages.get("attack").width);
 		
 		velX = 0;
 		velY = 0;
