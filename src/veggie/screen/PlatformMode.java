@@ -49,12 +49,13 @@ public class PlatformMode extends Screen
 	private Rectangle bottomPlatform;
 
 	private int spawnRequirement;
-	
+
 	private int battleRequirement = 10;
 
-	/** Constructs a new Screen used for modeling the platforming part of the game.
+	/**
+	 * Constructs a new Screen used for modeling the platforming part of the game.
 	 * 
-	 * @param surface the DrawingSurface used to draw the platform 
+	 * @param surface the DrawingSurface used to draw the platform
 	 */
 	public PlatformMode(DrawingSurface surface)
 	{
@@ -92,7 +93,8 @@ public class PlatformMode extends Screen
 		player = new Player(surface.lettuceAssets, 800 / 2 - 100, 400 / 2 - 100, false, istats, iplayerMovelist);
 	}
 
-	/** Spawns a new bot at the designated coordinates
+	/**
+	 * Spawns a new bot at the designated coordinates
 	 * 
 	 * @param x x-coordinate
 	 * @param y y-coordinate
@@ -118,9 +120,9 @@ public class PlatformMode extends Screen
 			k++;
 		}
 
-		
+
 		Player tempBot;
-		if(((int)(Math.random()*2)) == 1)
+		if(((int) (Math.random() * 2)) == 1)
 			tempBot = new Player(surface.tomatoAssets, x, y, true, istats, iplayerMovelist);
 		else
 			tempBot = new Player(surface.veggieKingAssets, x, y, true, istats, iplayerMovelist);
@@ -142,8 +144,8 @@ public class PlatformMode extends Screen
 		pause = false;
 		timer = 1;
 		spawnTimer = 0;
-		spawnRequirement = (int)(Math.random()*20) + 100;
-		
+		spawnRequirement = (int) (Math.random() * 20) + 100;
+
 		bot = new ArrayList<Player>();
 		items = new ArrayList<Rectangle>();
 		obstacles = new ArrayList<Rectangle>();
@@ -156,8 +158,8 @@ public class PlatformMode extends Screen
 
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
-		
-		bottomPlatform = new Rectangle(-200, (int)(DRAWING_HEIGHT - 68), DRAWING_WIDTH + 200, 500);
+
+		bottomPlatform = new Rectangle(-200, (int) (DRAWING_HEIGHT - 68), DRAWING_WIDTH + 200, 500);
 
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
@@ -198,7 +200,7 @@ public class PlatformMode extends Screen
 	public void draw()
 	{
 		// drawing stuff
-		surface.background(backimg);
+		surface.background(255);
 
 
 		surface.pushMatrix();
@@ -206,16 +208,15 @@ public class PlatformMode extends Screen
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
-		
-		
-		
+
 
 		// surface.shape(obstacles);
 		for(Rectangle rect : obstacles)
 		{
 			surface.rect(rect.x, rect.y, rect.width, rect.height);
 		}
-		//surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width, bottomPlatform.height);
+		// surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width,
+		// bottomPlatform.height);
 
 		surface.pushStyle();
 		surface.fill(255, 0, 0);
@@ -240,28 +241,29 @@ public class PlatformMode extends Screen
 		run();
 		surface.pushStyle();
 		surface.fill(255, 0, 0);
-		surface.text("Battle Upcoming", 0 + 5*((battleRequirement-3)*60-distanceTracker), 50);
+		surface.text("Battle Upcoming", 0 + 5 * ((battleRequirement - 3) * 60 - distanceTracker), 50);
 		surface.popStyle();
 	}
-	
+
 	public void run()
 	{
-		if(distanceTracker == 60*battleRequirement) {
-			spawnNewBot(100,100);
-			surface.addScreen(new BattleMode(surface, player, bot.get(bot.size()-1)));
+		if(distanceTracker == 60 * battleRequirement)
+		{
+			spawnNewBot(100, 100);
+			surface.addScreen(new BattleMode(surface, player, bot.get(bot.size() - 1)));
 			bot = new ArrayList<Player>();
-			//bot.remove(bot.size()-1);
+			// bot.remove(bot.size()-1);
 			distanceTracker = 0;
 			battleRequirement += 5;
 		}
-		
+
 		for(int i = 0; i < bot.size(); i++)
 		{
 			if(player.battle(bot.get(i)))
 			{
 				surface.switchScreen(ScreenSwitcher.GAME_OVER);
 			}
-			
+
 		}
 
 		int accel = (int) timer / 10;
@@ -385,15 +387,17 @@ public class PlatformMode extends Screen
 
 
 	}
-	
-	private void randomSpawnBots() {
-		if(timer % (5*60) == 0) {
+
+	private void randomSpawnBots()
+	{
+		if(timer % (5 * 60) == 0)
+		{
 			/*
-			if(((int)(Math.random()*2)) < 1.5)
-				spawnNewBot((int)(Math.random() * DRAWING_WIDTH), 0);
-			*/
-			//else
-				spawnNewBot(-64, DRAWING_HEIGHT - 100 - 70);
+			 * if(((int)(Math.random()*2)) < 1.5) spawnNewBot((int)(Math.random() *
+			 * DRAWING_WIDTH), 0);
+			 */
+			// else
+			spawnNewBot(-64, DRAWING_HEIGHT - 100 - 70);
 		}
 	}
 
@@ -409,22 +413,25 @@ public class PlatformMode extends Screen
 				tempBot.walk(-1);
 			if(player.getY() < tempBot.getY())
 				tempBot.jump();
-		} 
+		}
 	}
-	
-	private void generateNewPlatform() {
-			Rectangle r = null;
-			boolean contains = true;
-			while(contains) { 
-				int y = DRAWING_HEIGHT/(int)(8*Math.random() + 1) + 100;
-				r = new Rectangle(DRAWING_WIDTH, y, (int)(200*Math.random()) + 50, (int)(DRAWING_HEIGHT/15));
-				for(Rectangle plat : obstacles) {
-					contains = r.intersects(plat) || r.contains(plat);
-				}
+
+	private void generateNewPlatform()
+	{
+		Rectangle r = null;
+		boolean contains = true;
+		while(contains)
+		{
+			int y = DRAWING_HEIGHT / (int) (8 * Math.random() + 1) + 100;
+			r = new Rectangle(DRAWING_WIDTH, y, (int) (200 * Math.random()) + 50, (int) (DRAWING_HEIGHT / 15));
+			for(Rectangle plat : obstacles)
+			{
+				contains = r.intersects(plat) || r.contains(plat);
 			}
-			
-			if(r != null)
-				obstacles.add(r);
+		}
+
+		if(r != null)
+			obstacles.add(r);
 	}
 
 	private void setNewMove()
@@ -458,14 +465,15 @@ public class PlatformMode extends Screen
 			while(contains)
 			{
 				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int) (Math.random() * 4) * 100, 20, 20);
-				for(Rectangle plat : obstacles) {
+				for(Rectangle plat : obstacles)
+				{
 					contains = plat.intersects(r) || plat.contains(r);
 				}
 			}
 
 			if(r != null)
 				items.add(r);
-			spawnRequirement = (int) (Math.random() *20*60);
+			spawnRequirement = (int) (Math.random() * 20 * 60);
 		}
 
 	}

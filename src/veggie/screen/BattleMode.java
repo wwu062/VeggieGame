@@ -10,20 +10,22 @@ import veggie.model.Player;
 
 /**
  * The Battle Screen for the game. In this mode, there are 4 buttons at the
- * bottom of the screen that are the player's attack moves. Once they
+ * bottom of the screen that are the player's attack moves. They can be clicked
+ * and the player will attack. Afterwards the enemy will attack. Whoever defeats
+ * the other first wins.
  * 
  * @author williamwu
  */
 public class BattleMode extends Screen
-{
-	private Player player, enemy;
+{	
+	private DrawingSurface surface;
+	private PGraphics panels, attackScreen, healthPanel;
 
+
+	private Player player, enemy;
 	private int iplayerHealth, ienemyHealth;
 
-	private DrawingSurface surface;
-
 	private Rectangle[] button;
-
 	private Rectangle textRect;
 
 	private Gif hitImage, critImage;
@@ -45,7 +47,6 @@ public class BattleMode extends Screen
 
 	// graphics for the panel, initial state of the players, and final state during
 	// a move
-	private PGraphics panels, attackScreen, healthPanel;
 
 	// keeps check of if it is the players turn or the enemy's
 	private int turnCounter = 0;
@@ -121,7 +122,6 @@ public class BattleMode extends Screen
 
 	/**
 	 * Draws the battle
-	 * 
 	 */
 	public void draw()
 	{
@@ -292,6 +292,9 @@ public class BattleMode extends Screen
 		healthPanel.endDraw();
 	}
 
+	/**
+	 * draws the different clickable panels
+	 */
 	private void drawPanel()
 	{
 
@@ -317,6 +320,9 @@ public class BattleMode extends Screen
 		drawTextScreen();
 	}
 
+	/**
+	 * draws the text that shows effect and damage of abilities to the screen
+	 */
 	private void drawTextScreen()
 	{
 		panels.pushStyle();
@@ -356,6 +362,9 @@ public class BattleMode extends Screen
 		panels.popStyle();
 	}
 
+	/**
+	 * draws the text showing what occurred during an attack
+	 */
 	private void drawTextAttackScreen()
 	{
 		panels.pushStyle();
@@ -409,6 +418,9 @@ public class BattleMode extends Screen
 		panels.popStyle();
 	}
 
+	/**
+	 * checks if a panel was clicked.
+	 */
 	private void checkpanelClick()
 	{
 		if(0 != panelClick) // when mouse is clicked, clears with white screen.
@@ -420,7 +432,13 @@ public class BattleMode extends Screen
 		}
 	}
 
-	// the entity that is being damaged
+	/**
+	 * Changes health depending
+	 * 
+	 * @param num
+	 * @param attacker
+	 * @param opponent
+	 */
 	private void drawMove(int num, Player attacker, Player opponent)
 	{
 		Moves move = attacker.getMove(num);
@@ -582,7 +600,6 @@ public class BattleMode extends Screen
 	}
 
 	/**
-	 * 
 	 * @return -1 if enemy is dead, 1 if player is dead, 0 if neither
 	 */
 	public int isDead()
