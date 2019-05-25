@@ -55,7 +55,7 @@ public class BattleMode extends Screen
 	private int panelClick = 0;
 
 	// private boolean poisoned = false;
-	private int poisonTurnCounter;
+	private int poisonTurns, poisonTurnCounter;
 	private Player poisonedPlayer;
 
 
@@ -103,7 +103,7 @@ public class BattleMode extends Screen
 
 	public void setup()
 	{
-		int poisonTurnCounter = 0;
+		int poisonTurns = 0;
 		Player poisonedPlayer = null;
 
 		hitImage = (Gif) surface.assets.get("hit");
@@ -185,12 +185,12 @@ public class BattleMode extends Screen
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			// if(poisonTurnCounter > 0)
-			// {
-			// changeHealth(poisonedPlayer, 10);
-			// poisonTurnCounter--;
-			// // System.out.println("poisoned" + turnCounter);
-			// }
+			if(poisonTurns > 0)
+			{
+				changeHealth(poisonedPlayer, 10);
+				poisonTurns--;
+				// System.out.println("poisoned" + turnCounter);
+			}
 
 			if(whichPlayer == 0)
 			{
@@ -221,7 +221,7 @@ public class BattleMode extends Screen
 				critImage(crit);
 			}
 
-			if(timer % 10 == 0)
+			if(timer % 30 == 0)
 			{
 				turnDone = false;
 				turnCounter++;
@@ -233,25 +233,24 @@ public class BattleMode extends Screen
 
 		surface.image(panels, 0, 0);
 
-		if(turnCounter % 2 == 0 & timer % 10 == 0)
+		if(turnCounter % 2 == 0 & timer % 30 == 0)
 		{
 			checkpanelClick();
 			whichPlayer = 0;
 		}
 
-		if(turnCounter % 2 != 0 && timer % 10 == 0)
+		if(turnCounter % 2 != 0 && timer % 60 == 0)
 		{
 			int move = (int) (Math.random() * 4);
 			prevEnemyMove = enemy.getMove(move);
 			drawMove(move, enemy, player);
-
 
 			turnDone = true;
 			timer = 1;
 			whichPlayer = 1;
 		}
 
-		if(timer % 7 == 0)
+		if(timer % 30 == 0)
 		{
 			if(isDead() == -1)
 			{
@@ -395,11 +394,18 @@ public class BattleMode extends Screen
 
 		if(!moveEffect.equalsIgnoreCase("none"))
 		{
-			String effect = player + " is " + moveEffect;
+			String effect = "";
+			if(player.equalsIgnoreCase("player"))
+			{
+				effect = "Enemy" + " is " + moveEffect;
+			} else
+			{
+				effect = "Player is " + moveEffect;
+			}
 
 			if(selfAttack)
 			{
-				effect = player + moveEffect;
+				effect = player + " " + moveEffect;
 			}
 			panels.text(effect, textRect.x + 15, textRect.y + 25 + 40, textRect.width, textRect.height);
 		}
@@ -425,7 +431,7 @@ public class BattleMode extends Screen
 
 		if(move.getEffectName().equalsIgnoreCase("poisoned"))
 		{
-			poisonTurnCounter += 3;
+			poisonTurns += 3;
 			poisonedPlayer = opponent;
 		}
 
@@ -433,11 +439,11 @@ public class BattleMode extends Screen
 		{
 			selfAttack = true;
 
-			if(attacker == player && attacker.getHealth() != iplayerHealth)
+			if(attacker == player && attacker.getHealth() + 10 <= iplayerHealth)
 			{
 				changeHealth(attacker, -10);
 			}
-			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
+			if(attacker == enemy && attacker.getHealth() + 10 <= ienemyHealth)
 			{
 				changeHealth(attacker, -10);
 			}
@@ -447,11 +453,11 @@ public class BattleMode extends Screen
 		{
 			selfAttack = true;
 
-			if(attacker == player && attacker.getHealth() != iplayerHealth)
+			if(attacker == player && attacker.getHealth() + 20 <= iplayerHealth)
 			{
 				changeHealth(attacker, -20);
 			}
-			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
+			if(attacker == enemy && attacker.getHealth() <= ienemyHealth)
 			{
 				changeHealth(attacker, -20);
 			}
