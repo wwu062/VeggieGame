@@ -1,5 +1,11 @@
 package veggie.model;
 
+/**
+ * 
+ * @author Alex
+ * 
+ * Models common statistics that can be associated with the Player class.
+ */
 public class Stats
 {
 	private final int totalHP;
@@ -58,6 +64,10 @@ public class Stats
 		this.critrate = critrate;
 	}
 	
+	/**
+	 * 
+	 * @return total health
+	 */
 	public int getTotalHP() {
 		return totalHP;
 	}

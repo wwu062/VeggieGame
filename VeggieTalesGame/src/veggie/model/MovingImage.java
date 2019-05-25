@@ -9,8 +9,8 @@ import processing.core.PImage;
 import veggie.screen.DrawingSurface;
 
 /**
- * @author awang104 MovingImage represents any image that moves an interacts
- *         with the environment while in platform mode
+ * @author awang104 
+ * MovingImage represents any image that moves an interacts with the environment while in platform mode
  */
 public class MovingImage
 {
@@ -24,8 +24,8 @@ public class MovingImage
 	 * @param x             x coordinate of the MovingImage
 	 * @param y             y coordinate of the MovingImage
 	 * @param width         width of the MovingImage
-	 * @param height        height of the MovingImage
-	 * @param lettuceAssets texture used to represent the MovingImage
+	 * @param height height of the MovingImage
+	 * @param imageassets texture used to represent the MovingImage
 	 */
 	public MovingImage(int x, int y, int width, int height, Map<String, PImage> imageassets)
 	{
@@ -57,6 +57,11 @@ public class MovingImage
 		hitbox.y += y;
 	}
 
+	/** Translates the MovingImage by the parameters specified
+	 * 
+	 * @param x the shift in x-coordinate
+	 * @param y the shift in y-coordinate
+	 */
 	public void changeBy(int x, int y)
 	{
 		hitbox.x = x;
@@ -67,6 +72,7 @@ public class MovingImage
 	 * Draws the object
 	 * 
 	 * @param marker Place where object is drawn on.
+	 * @param key key of the image wanted
 	 */
 	public void draw(DrawingSurface marker, String key)
 	{
@@ -82,6 +88,7 @@ public class MovingImage
 	 * Draws the object with PGraphics
 	 * 
 	 * @param graphics where the object is drawn
+	 * @param key key of the image wanted
 	 */
 	public void draw(PGraphics graphics, String key)
 	{	
@@ -95,7 +102,10 @@ public class MovingImage
 	}
 
 	/**
-	 * @param bounds Shape interacting with MovingImage
+	 * 
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @param width width of shape
 	 * @return true if MovingImage touches the shape
 	 */
 	public boolean intersects(double x, double y, double width) {
@@ -115,18 +125,34 @@ public class MovingImage
 		return hitbox;
 	}
 	
+	/**
+	 * 
+	 * @return the x-coordinate value
+	 */
 	public double getX() {
 		return hitbox.getX();
 	}
 	
+	/**
+	 * 
+	 * @return the y-coordinate value
+	 */
 	public double getY() {
 		return hitbox.getY();
 	}
 	
+	/**
+	 * 
+	 * @return the height of the MovingImage
+	 */
 	public double getHeight() {
 		return hitbox.getHeight();
 	}
 	
+	/**
+	 * 
+	 * @return the width of the MovingImage
+	 */
 	public double getWidth() {
 		return hitbox.getWidth();
 	}

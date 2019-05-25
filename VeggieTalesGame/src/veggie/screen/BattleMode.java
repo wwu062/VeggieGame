@@ -7,7 +7,6 @@ import gifAnimation.Gif;
 import processing.core.PGraphics;
 import veggie.model.Moves;
 import veggie.model.Player;
-import veggie.model.Player;
 
 /**
  * The Battle Screen for the game. In this mode, there are 4 buttons at the
@@ -25,7 +24,7 @@ public class BattleMode extends Screen
 
 	private Rectangle[] button;
 
-	private Rectangle textRect, backRect;
+	private Rectangle textRect;
 
 	private Gif hitImage, critImage;
 
@@ -60,7 +59,7 @@ public class BattleMode extends Screen
 
 
 	/**
-	 * initializes the fields
+	 * Constructs a new BattleMode screen
 	 * 
 	 * @param surface DrawingSurface object
 	 * @param player  the Player Entity object
@@ -97,14 +96,14 @@ public class BattleMode extends Screen
 		}
 
 		textRect = new Rectangle(500, 400, 260, 150);
-		backRect = new Rectangle(100, 400, 400, 150);
 
 	}
 
+	/**
+	 * Sets up the BattleMode screen for gameplay
+	 */
 	public void setup()
 	{
-		int poisonTurns = 0;
-		Player poisonedPlayer = null;
 
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
@@ -118,14 +117,11 @@ public class BattleMode extends Screen
 		// surface.createGraphics(800, 300);
 
 		surface.background(255, 255, 255);
-
-
 	}
 
 	/**
 	 * Draws the battle
 	 * 
-	 * @post changes background color
 	 */
 	public void draw()
 	{
@@ -169,9 +165,6 @@ public class BattleMode extends Screen
 		{
 			enemy.draw(attackScreen, "bounce");
 		}
-
-		// System.out.println(enemy.getHealth());
-		long c = System.currentTimeMillis();
 
 
 		if(turnDone)
@@ -270,6 +263,9 @@ public class BattleMode extends Screen
 		// System.out.println(System.currentTimeMillis() - c);
 	}
 
+	/**
+	 * draws the health bars for the players
+	 */
 	public void drawHealthPanel()
 	{
 		float playerHealth = player.getHealth();
@@ -556,12 +552,6 @@ public class BattleMode extends Screen
 		e.setHealth(health - damage);
 	}
 
-	/**
-	 * returns whether or not there is a successful critical hit on the opponent
-	 * 
-	 * @param critChance the critical hit rate of the attacking entity
-	 * @return true if there was a critical, else false.
-	 */
 	private boolean crit(double critChance)
 	{
 		double crit = Math.random();
@@ -591,6 +581,10 @@ public class BattleMode extends Screen
 		return hoverValue;
 	}
 
+	/**
+	 * 
+	 * @return -1 if enemy is dead, 1 if player is dead, 0 if neither
+	 */
 	public int isDead()
 	{
 		if(enemy.getHealth() == 0)

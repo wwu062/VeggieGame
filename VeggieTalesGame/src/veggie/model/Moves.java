@@ -1,23 +1,25 @@
 package veggie.model;
 
-import veggie.screen.DrawingSurface;
-
-public class Moves
-{
-
-	/**
-	 * The name of the Move
-	 */
+/**
+ * 
+ * @author William
+ *
+ * Represents each attack move as a Moves object, with attack values and names.
+ */
+public class Moves {
+	
 	private String name;
 
-	/**
-	 * the attack value of the Move
-	 */
 	private int attackval;
 
 	private String effectName;
 
-
+	/**
+	 * 
+	 * @param name name of the move
+	 * @param attackval attackvalue of the move
+	 * @param effect effect of the move (leeched, heal, poisoned, absorbed, reduced, etc.)
+	 */
 	public Moves(String name, int attackval, String effect)
 	{
 		this.name = name;
@@ -33,6 +35,10 @@ public class Moves
 		return name;
 	}
 
+	/**
+	 * 
+	 * @return the effect name
+	 */
 	public String getEffectName()
 	{
 		return effectName;
@@ -45,15 +51,5 @@ public class Moves
 	public int getAttackval()
 	{
 		return attackval;
-	}
-	
-	public void draw(DrawingSurface marker, float x, float y, int radius) {
-		marker.ellipse(x, y, radius*2, radius*2);
-	}
-	
-	public void randomDraw(DrawingSurface marker, int width, int height) {
-		float x = (float)(Math.random()*width);
-		float y = (float)(Math.random()*height);
-		this.draw(marker, x, y, 20);
 	}
 }

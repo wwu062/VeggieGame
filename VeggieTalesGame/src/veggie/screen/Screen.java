@@ -16,10 +16,19 @@ public abstract class Screen {
 		this.DRAWING_HEIGHT = height;
 	}
 	
+	/**
+	 * Sets up the Screen object by initializing certain fields
+	 */
 	public abstract void setup();
 	
+	/**
+	 * Draws the Screen object
+	 */
 	public abstract void draw();
 	
+	/**
+	 * Detects if mouse is pressed
+	 */
 	public void mousePressed() {
 		
 	}

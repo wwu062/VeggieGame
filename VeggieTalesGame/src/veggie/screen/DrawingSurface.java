@@ -12,7 +12,13 @@ import processing.core.PFont;
 import processing.core.PImage;
 import veggie.model.Moves;
 import veggie.textReader.FileIO;
-
+/**
+ * 
+ * @author Alex and William
+ * 
+ * A surface on which the other screens and graphical elements are drawn on.
+ *
+ */
 public class DrawingSurface extends PApplet implements ScreenSwitcher
 {
 
@@ -98,7 +104,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
 		assets.put("logo", loadImage("images" + FileIO.fileSep + "veggie-tales-logo.png"));
 		assets.put("crit", new Gif(this, "images" + FileIO.fileSep + "crit.gif"));
-		assets.put("background2", loadImage("images" + FileIO.fileSep + "apocolypse-background.png"));
+		assets.put("background2", loadImage("images" + FileIO.fileSep + "apocolypse-background.png"));//"apocolypse-background.png"));
 
 		tomatoAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
@@ -199,7 +205,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	 * records the key that is pressed
 	 * 
 	 * @param code the code of the key that is pressed
-	 * @return
+	 * @return returns the keycode of the keys pressed
 	 */
 	public boolean isPressed(Integer code)
 	{
@@ -238,6 +244,10 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		activeScreen.mouseReleased();
 	}
 
+	/** Adds a Screen to the DrawingSurface and changes it to that Screen
+	 * 
+	 * @param temp the Screen that is to be added.
+	 */
 	public void addScreen(Screen temp)
 	{
 		temp.setup();
@@ -245,11 +255,18 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		activeScreen = temp;
 	}
 
+	/** Switches the Screen to the designated Screen number.
+	 * 
+	 * @param i the screen number
+	 */
 	public void removeScreen(int i)
 	{
 		screens.remove(screens.size() - 1);
 	}
 	
+	/**
+	 * Resets all game screens.
+	 */
 	public void gameOver() {
 		this.setup();
 	}
