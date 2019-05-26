@@ -201,7 +201,7 @@ public class PlatformMode extends Screen
 	public void draw()
 	{
 		// drawing stuff
-		surface.background(255);
+		surface.background(backimg);
 
 
 		surface.pushMatrix();
