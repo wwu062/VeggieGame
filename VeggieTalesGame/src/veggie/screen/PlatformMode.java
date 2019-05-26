@@ -190,6 +190,7 @@ public class PlatformMode extends Screen
 
 
 		backimg = surface.assets.get("background2");
+		backimg.resize(surface.width, surface.height);
 	}
 
 	/**
