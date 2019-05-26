@@ -22,9 +22,7 @@ Move around and interact with NPCs. Initiate battles with enemies to gain experi
 Platform mode: 
 *  WASD - used to move up, left, down, and right, respectively. Space also moves up
 Battle mode:
-* WASD - choose abilities to use against the opponent
-* Enter - use ability
-
+* Click to use ability.
 
 — Feature List—
 

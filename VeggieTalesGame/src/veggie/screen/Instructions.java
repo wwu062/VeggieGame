@@ -50,6 +50,8 @@ public class Instructions extends Screen {
 		surface.textAlign(PConstants.CENTER);
 		surface.textSize(30);
 		surface.text("ARROW KEYS - move around", DRAWING_WIDTH / 2, DRAWING_HEIGHT / 2 - 100);
+		surface.textSize(20);
+		surface.text("Click to use abilities in battle", DRAWING_WIDTH / 2, DRAWING_HEIGHT / 2 );
 		surface.popStyle();
 
 		surface.pushStyle();
