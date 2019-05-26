@@ -19,12 +19,12 @@ public class PlatformMode extends Screen
 	/**
 	 * Screen drawing width
 	 */
-	public static final int DRAWING_WIDTH = 800;
+	public int drawingWidth;;
 
 	/**
 	 * Screen drawing height
 	 */
-	public static final int DRAWING_HEIGHT = 600;
+	public int drawingHeight;
 
 	private Rectangle screenRect;
 
@@ -60,8 +60,8 @@ public class PlatformMode extends Screen
 	public PlatformMode(DrawingSurface surface)
 	{
 		super(800, 600);
+		
 		this.surface = surface;
-		screenRect = new Rectangle(-100, -100, DRAWING_WIDTH + 200, DRAWING_HEIGHT + 200);
 	}
 
 	/**
@@ -140,6 +140,12 @@ public class PlatformMode extends Screen
 	 */
 	public void setup()
 	{
+
+
+		drawingWidth = surface.width;
+		drawingHeight = surface.height;
+		
+		
 		distanceTracker = 0;
 		pause = false;
 		timer = 1;
@@ -159,7 +165,7 @@ public class PlatformMode extends Screen
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
 
-		bottomPlatform = new Rectangle(-200, (int) (DRAWING_HEIGHT - 68), DRAWING_WIDTH + 200, 500);
+		bottomPlatform = new Rectangle(-200, (int) (drawingHeight - 68), drawingWidth + 200, 500);
 
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
@@ -190,6 +196,8 @@ public class PlatformMode extends Screen
 		spawnNewPlayer();
 		// spawnNewBot(1200 / 2 - 100, 600 / 2 - 100);
 
+
+		screenRect = new Rectangle(-100, -100, drawingWidth + 200, drawingHeight + 200);
 
 		backimg = surface.assets.get("background2");
 		backimg.resize(surface.width, surface.height);
@@ -395,10 +403,10 @@ public class PlatformMode extends Screen
 		{
 			/*
 			 * if(((int)(Math.random()*2)) < 1.5) spawnNewBot((int)(Math.random() *
-			 * DRAWING_WIDTH), 0);
+			 * drawingWidth), 0);
 			 */
 			// else
-			spawnNewBot(-64, DRAWING_HEIGHT - 100 - 70);
+			spawnNewBot(-64, drawingHeight - 100 - 70);
 		}
 	}
 
@@ -423,8 +431,8 @@ public class PlatformMode extends Screen
 		boolean contains = true;
 		while(contains)
 		{
-			int y = DRAWING_HEIGHT / (int) (8 * Math.random() + 1) + 100;
-			r = new Rectangle(DRAWING_WIDTH, y, (int) (200 * Math.random()) + 50, (int) (DRAWING_HEIGHT / 15));
+			int y = drawingHeight / (int) (8 * Math.random() + 1) + 100;
+			r = new Rectangle(drawingWidth, y, (int) (200 * Math.random()) + 50, (int) (drawingHeight / 15));
 			for(Rectangle plat : obstacles)
 			{
 				contains = r.intersects(plat) || r.contains(plat);
@@ -465,7 +473,7 @@ public class PlatformMode extends Screen
 			boolean contains = true;
 			while(contains)
 			{
-				r = new Rectangle(DRAWING_WIDTH, DRAWING_HEIGHT - 200 - (int) (Math.random() * 4) * 100, 20, 20);
+				r = new Rectangle(drawingWidth, drawingHeight - 200 - (int) (Math.random() * 4) * 100, 20, 20);
 				for(Rectangle plat : obstacles)
 				{
 					contains = plat.intersects(r) || plat.contains(r);
