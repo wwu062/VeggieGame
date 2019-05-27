@@ -266,6 +266,7 @@ public class BattleMode extends Screen
 			if(isDead() == -1)
 			{
 				player.resetHealth();
+				player.moveTo(surface.width/2, 100);
 				surface.switchScreen(2);
 				surface.removeScreen(ScreenSwitcher.BATTLE);
 			} else if(isDead() == 1)
