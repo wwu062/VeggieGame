@@ -6,7 +6,7 @@ package veggie.model;
  *
  * Represents each attack move as a Moves object, with attack values and names.
  */
-public class Moves {
+public class Move {
 	
 	private String name;
 
@@ -20,7 +20,7 @@ public class Moves {
 	 * @param attackval attackvalue of the move
 	 * @param effect effect of the move (leeched, heal, poisoned, absorbed, reduced, etc.)
 	 */
-	public Moves(String name, int attackval, String effect)
+	public Move(String name, int attackval, String effect)
 	{
 		this.name = name;
 		this.attackval = attackval;

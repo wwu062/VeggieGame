@@ -10,7 +10,7 @@ import gifAnimation.Gif;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
-import veggie.model.Moves;
+import veggie.model.Move;
 import veggie.textReader.FileIO;
 /**
  * 
@@ -42,7 +42,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 
 
 	protected Map<String, PImage> assets;
-	protected Map<Integer, Moves> moves;
+	protected Map<Integer, Move> moves;
 	
 
 
@@ -53,7 +53,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	{
 		lettuceAssets = new HashMap<String, PImage>();
 		assets = new HashMap<String, PImage>();
-		moves = new HashMap<Integer, Moves>();
+		moves = new HashMap<Integer, Move>();
 		tomatoAssets = new HashMap<String, PImage>();
 		veggieKingAssets = new HashMap<String, PImage>();
 
@@ -84,7 +84,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 	{
 		// size(DRAWING_WIDTH, DRAWING_HEIGHT, P2D);
 		size(activeScreen.DRAWING_WIDTH, activeScreen.DRAWING_HEIGHT);
-		pixelDensity(displayDensity());
+		pixelDensity(1);
 	}
 
 	/**
@@ -99,6 +99,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		lettuceAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-run.gif"));
 		lettuceAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-bounce.gif"));
 		lettuceAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "lettuce-sprite-hurt.gif"));
+		lettuceAssets.put("frozen", loadImage("images" + FileIO.fileSep + "lettuce-sprite-frozen.png"));
 
 		assets.put("hit", new Gif(this, "images" + FileIO.fileSep + "hit-effect.gif"));
 		assets.put("background1", loadImage("images" + FileIO.fileSep + "clouds.png"));
@@ -110,12 +111,14 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 		tomatoAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-bounce.gif"));
 		tomatoAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-attack.gif"));
 		tomatoAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "tomato-sprite-hurt.gif"));
+		tomatoAssets.put("frozen", loadImage("images" + FileIO.fileSep + "tomato-sprite-frozen.png"));
 
 
 		veggieKingAssets.put("bounce", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
 		veggieKingAssets.put("run", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-bounce.gif"));
 		veggieKingAssets.put("attack", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-attack.gif"));
 		veggieKingAssets.put("hurt", new Gif(this, "images" + FileIO.fileSep + "veggie-king-sprite-hurt.gif"));
+		veggieKingAssets.put("frozen", loadImage("images" + FileIO.fileSep + "veggie-king-sprite-frozen.png"));
 
 
 		// reading moveList file
@@ -126,7 +129,7 @@ public class DrawingSurface extends PApplet implements ScreenSwitcher
 			int i = 1;
 			for(String s : temp)
 			{
-				Moves m = translator.translateMoveList(s);
+				Move m = translator.translateMoveList(s);
 				moves.put(i, m);
 				i++;
 			}

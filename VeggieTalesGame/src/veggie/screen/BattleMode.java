@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
-import veggie.model.Moves;
+import veggie.model.Move;
 import veggie.model.Player;
 
 /**
@@ -17,46 +17,37 @@ import veggie.model.Player;
  * @author williamwu
  */
 public class BattleMode extends Screen
-{	
+{
 	private DrawingSurface surface;
 	private PGraphics panels, attackScreen, healthPanel;
 
-
-	private Player player, enemy;
-	private int iplayerHealth, ienemyHealth;
-
 	private Rectangle[] button;
-	private Rectangle textRect;
-
-	private Gif hitImage, critImage;
-
-	private int timer = 1;
-
-	private boolean crit = false;
-
-	private boolean selfAttack = false;
-
-	// 0 = player, 1 = enemy
-	private int whichPlayer = 0;
-
-	private Moves prevPlayerMove = null;
-
-	private Moves prevEnemyMove = null;
-
-	private boolean turnDone = false;
-
-	// graphics for the panel, initial state of the players, and final state during
-	// a move
-
-	// keeps check of if it is the players turn or the enemy's
-	private int turnCounter = 0;
-
+	private Rectangle textRect, surroundRect;
 	// sets to 0 before and after each mouse click
 	private int panelClick = 0;
 
-	// private boolean poisoned = false;
-	private int poisonTurns, poisonTurnCounter;
-	private Player poisonedPlayer;
+	private Gif hitImage, critImage;
+
+	private Player player, enemy;
+	private final int playerSize = 250;
+	private final int enemySize = 125;
+	private int iplayerHealth, ienemyHealth;
+	// 0 = player, 1 = enemy
+	private int whichPlayer = 0;
+
+	private boolean crit = false;
+	private boolean selfAttack = false;
+	private Move prevPlayerMove = null;
+	private Move prevEnemyMove = null;
+	private boolean turnDone = false;
+
+	private boolean[] frozen = new boolean[] { false, false };
+	private int frozenCounter = 0;
+
+	private boolean[] reduce = new boolean[] { false, false };
+	private int[] reduceCounter = new int[] { 0, 0 };
+
+	private int timer = 1;
 
 
 	/**
@@ -77,27 +68,26 @@ public class BattleMode extends Screen
 
 
 		// changes location of the player and enemy for battle arena
-		player.changeBy(125, 200);
+		player.changeBy(100, 200);
 		enemy.changeBy(550, 200);
 
 		this.surface = surface;
 
 		button = new Rectangle[4];
 
+		surroundRect = new Rectangle(0, 430, 800, 150);
+		textRect = new Rectangle(surroundRect.x + 510, surroundRect.y + 10, 280, 130);
 		// attacks column 1 initialization
 		for(int i = 0; i < 2; i++)
 		{
-			button[i] = new Rectangle(110, 410 + 70 * i, 185, 60);
+			button[i] = new Rectangle(surroundRect.x + 10, surroundRect.y + 10 + 70 * i, 240, 60);
 		}
 
 		// attacks column 2 initialization
 		for(int i = 0; i < 2; i++)
 		{
-			button[i + 2] = new Rectangle(305, 410 + 70 * i, 185, 60);
+			button[i + 2] = new Rectangle(surroundRect.x + 10 + 240 + 10, surroundRect.y + 10 + 70 * i, 240, 60);
 		}
-
-		textRect = new Rectangle(500, 400, 260, 150);
-
 	}
 
 	/**
@@ -113,7 +103,7 @@ public class BattleMode extends Screen
 		critImage.play();
 
 		panels = surface.createGraphics(800, 600);
-		attackScreen = surface.createGraphics(800, 340);
+		attackScreen = surface.createGraphics(800, surroundRect.y);
 		healthPanel = surface.createGraphics(800, 300);
 		// surface.createGraphics(800, 300);
 
@@ -131,16 +121,6 @@ public class BattleMode extends Screen
 		drawPanel(); // TEXT ONLY CENTERS IF I CALL IT TWICE ?
 		panels.endDraw();
 
-		// textScreen.beginDraw();
-		// drawTextScreen();
-		// textScreen.endDraw();
-		// panels.image(textScreen, 0, 0);
-		// surface.image(panels, 0, 0);
-
-		// System.out.println("This is the ienemy: " + ienemyHealth);
-		// System.out.println("This is the getStat health" +
-		// enemy.getHealth());
-
 		timer++;
 
 		attackScreen.beginDraw();
@@ -150,20 +130,21 @@ public class BattleMode extends Screen
 		attackScreen.image(healthPanel, 0, 0);
 
 
-		if(player.getHealth() <= iplayerHealth / 2)
+		if(frozen[0])
 		{
-			player.draw(attackScreen, "hurt");
-		} else
-		{
-			player.draw(attackScreen, "bounce");
-		}
+			player.draw(attackScreen, "frozen", playerSize);
 
-		if(enemy.getHealth() <= ienemyHealth / 2)
-		{
-			enemy.draw(attackScreen, "hurt");
 		} else
 		{
-			enemy.draw(attackScreen, "bounce");
+			player.draw(attackScreen, "bounce", playerSize);
+		}
+		if(frozen[1])
+		{
+			enemy.draw(attackScreen, "frozen", enemySize);
+
+		} else
+		{
+			enemy.draw(attackScreen, "bounce", enemySize);
 		}
 
 
@@ -178,72 +159,109 @@ public class BattleMode extends Screen
 			attackScreen.image(healthPanel, 0, 0);
 			attackScreen.endDraw();
 
-			if(poisonTurns > 0)
-			{
-				changeHealth(poisonedPlayer, 10);
-				poisonTurns--;
-				// System.out.println("poisoned" + turnCounter);
-			}
 
 			if(whichPlayer == 0)
 			{
-				// System.out.println("hit");
-				if(enemy.getHealth() <= ienemyHealth / 2)
+				if(frozen[1])
 				{
-					enemy.draw(attackScreen, "hurt");
+					enemy.draw(attackScreen, "frozen", enemySize);
+
 				} else
 				{
-					enemy.draw(attackScreen, "bounce");
+					enemy.draw(attackScreen, "hurt", enemySize);
 				}
-				player.draw(attackScreen, "attack");
+				player.draw(attackScreen, "attack", playerSize);
 				hitImage("enemy");
 				critImage(crit);
 			}
 
 			if(whichPlayer == 1)
 			{
-				if(player.getHealth() <= iplayerHealth / 2)
+				if(frozen[0])
 				{
-					player.draw(attackScreen, "hurt");
+					player.draw(attackScreen, "frozen", playerSize);
+
 				} else
 				{
-					player.draw(attackScreen, "bounce");
+					player.draw(attackScreen, "hurt", playerSize);
 				}
-				enemy.draw(attackScreen, "attack");// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
+				enemy.draw(attackScreen, "attack", enemySize);// !@$!@$ CHANGE TO ATTACK LATER!! !@$!@#$(!@$
 				hitImage("player");
 				critImage(crit);
 			}
 
-			if(timer % 30 == 0)
+			if(timer % 80 == 0)
 			{
 				turnDone = false;
-				turnCounter++;
+				if(whichPlayer == 0)
+				{
+					whichPlayer = 1;
+				} else
+				{
+					whichPlayer = 0;
+				}
+
+				if(frozenCounter > 0)
+				{
+					frozen[0] = false;
+					frozen[1] = false;
+					frozenCounter = 0;
+				}
+
 				crit = false;
 				selfAttack = false;
+
 			}
 
 		}
 
 		surface.image(panels, 0, 0);
 
-		if(turnCounter % 2 == 0 & timer % 30 == 0)
+
+		if(whichPlayer == 0 & timer % 80 == 0)
 		{
-			checkpanelClick();
-			whichPlayer = 0;
+			if(reduce[1])
+			{
+				reduceCounter[1]++;
+			}
+
+			if(!frozen[0])
+			{
+
+				checkpanelClick();
+			}
+
+			if(frozen[0] && !frozen[1])
+			{
+				frozenCounter++;
+				whichPlayer = 1;
+			}
 		}
 
-		if(turnCounter % 2 != 0 && timer % 60 == 0)
+		if(whichPlayer == 1 && timer % 130 == 0)
 		{
-			int move = (int) (Math.random() * 4);
-			prevEnemyMove = enemy.getMove(move);
-			drawMove(move, enemy, player);
+			if(reduce[0])
+			{
+				reduceCounter[0]++;
+			}
 
-			turnDone = true;
-			timer = 1;
-			whichPlayer = 1;
+			if(!frozen[1])
+			{
+				int move = (int) (Math.random() * 4);
+				prevEnemyMove = enemy.getMove(move);
+				drawMove(move, enemy, player, 1);
+				turnDone = true;
+				timer = 1;
+			}
+
+			if(frozen[1] && !frozen[0])
+			{
+				frozenCounter++;
+				whichPlayer = 0;
+			}
 		}
 
-		if(timer % 30 == 0)
+		if(timer % 80 == 0)
 		{
 			if(isDead() == -1)
 			{
@@ -297,10 +315,9 @@ public class BattleMode extends Screen
 	 */
 	private void drawPanel()
 	{
-
 		panels.pushStyle();
-		panels.fill(255);
-		panels.rect(100, 400, 400, 150);
+		panels.fill(0);
+		panels.rect(surroundRect.x, surroundRect.y, surroundRect.width, surroundRect.height);
 		panels.popStyle();
 
 		for(int i = 0; i < 4; i++)
@@ -402,15 +419,15 @@ public class BattleMode extends Screen
 			String effect = "";
 			if(player.equalsIgnoreCase("player"))
 			{
-				effect = "Enemy" + " is " + moveEffect;
+				effect = "Enemy" + " is " + moveEffect + "ed";
 			} else
 			{
-				effect = "Player is " + moveEffect;
+				effect = "Player is " + moveEffect + "ed";
 			}
 
 			if(selfAttack)
 			{
-				effect = player + " " + moveEffect;
+				effect = player + " " + moveEffect + "ed";
 			}
 			panels.text(effect, textRect.x + 15, textRect.y + 25 + 40, textRect.width, textRect.height);
 		}
@@ -428,28 +445,13 @@ public class BattleMode extends Screen
 			turnDone = true;
 			timer = 1;
 			prevPlayerMove = player.getMove(panelClick - 1);
-			drawMove(panelClick - 1, player, enemy);
+			drawMove(panelClick - 1, player, enemy, 0);
 		}
 	}
 
-	/**
-	 * Changes health depending
-	 * 
-	 * @param num
-	 * @param attacker
-	 * @param opponent
-	 */
-	private void drawMove(int num, Player attacker, Player opponent)
+	public void ifLeech(Player attacker, Player opponent, Move move)
 	{
-		Moves move = attacker.getMove(num);
-
-		if(move.getEffectName().equalsIgnoreCase("poisoned"))
-		{
-			poisonTurns += 3;
-			poisonedPlayer = opponent;
-		}
-
-		if(move.getEffectName().equalsIgnoreCase("leeched"))
+		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
 			selfAttack = true;
 
@@ -462,8 +464,11 @@ public class BattleMode extends Screen
 				changeHealth(attacker, -10);
 			}
 		}
+	}
 
-		if(move.getEffectName().equalsIgnoreCase("healed"))
+	public void ifHeal(Player attacker, Player opponent, Move move)
+	{
+		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
 			selfAttack = true;
 
@@ -477,34 +482,79 @@ public class BattleMode extends Screen
 			}
 			return;
 		}
+	}
 
-		if(move.getEffectName().equalsIgnoreCase("absorbed"))
+	public void ifReduce(Player attacker, Player opponent, Move move, int whichPlayer)
+	{
+		if(move.getEffectName().equalsIgnoreCase("reduce"))
 		{
 			selfAttack = true;
 
-			if(attacker == player && attacker.getHealth() != iplayerHealth)
+			if(whichPlayer == 0)
 			{
-				changeHealth(attacker, (move.getAttackval() / 5) * -1);
-			}
-			if(attacker == enemy && attacker.getHealth() != ienemyHealth)
+				reduce[0] = true;
+			} else
 			{
-				changeHealth(attacker, (move.getAttackval() / 5) * -1);
+				reduce[1] = true;
 			}
 		}
+	}
+
+	public void ifFrozen(Player attacker, Player opponent, Move move, int whichPlayer)
+	{
+		if(move.getEffectName().equalsIgnoreCase("frozen"))
+		{
+			if(whichPlayer == 0)
+			{
+				frozen[1] = true;
+			} else
+			{
+				frozen[0] = true;
+			}
+		}
+	}
+
+	/**
+	 * Changes health depending
+	 * 
+	 * @param num
+	 * @param attacker
+	 * @param opponent
+	 */
+	private void drawMove(int num, Player attacker, Player opponent, int whichPlayer)
+	{
+		Move move = attacker.getMove(num);
 
 		attackScreen.beginDraw();
+		double reducePercent = 1;
+		if(whichPlayer == 0 && reduce[1] && reduceCounter[1] > 0)
+		{
+			reducePercent = 0.6;
+			reduce[1] = false;
+			reduceCounter[1] = 0;
+		}
+		if(whichPlayer == 1 && reduce[0] && reduceCounter[0] > 0)
+		{
+			reducePercent = 0.6;
+			reduce[0] = false;
+			reduceCounter[0] = 0;
+		}
 
 		boolean crit = crit(attacker.getCritrate());
 		if(crit)
 		{
 			this.crit = true;
-			changeHealth(opponent, attacker.getMove(num).getAttackval() + 10);
+			changeHealth(opponent, (int) ((attacker.getMove(num).getAttackval() + 10) * reducePercent));
 		} else
 		{
-			changeHealth(opponent, attacker.getMove(num).getAttackval());
-
+			changeHealth(opponent, (int) ((attacker.getMove(num).getAttackval()) * reducePercent));
 		}
 		attackScreen.endDraw();
+
+		ifLeech(attacker, opponent, move);
+		ifHeal(attacker, opponent, move);
+		ifFrozen(attacker, opponent, move, whichPlayer);
+		ifReduce(attacker, opponent, move, whichPlayer);
 
 
 		panelClick = 0;

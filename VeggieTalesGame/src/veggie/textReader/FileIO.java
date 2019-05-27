@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import veggie.model.Moves;
+import veggie.model.Move;
 
 public class FileIO {
 
@@ -47,14 +47,14 @@ public class FileIO {
 	 * @param line the line being read from in the text file
 	 * @return an object of the Moves class
 	 */
-	public Moves translateMoveList(String line) {
+	public Move translateMoveList(String line) {
 		String[] tokens = line.split(",");
 
 		String move = tokens[0];
 		int attack = Integer.parseInt(tokens[1]);
 		String effect = tokens[2];
 		
-		Moves m = new Moves(move, attack, effect);
+		Move m = new Move(move, attack, effect);
 		
 		return m;
 	}

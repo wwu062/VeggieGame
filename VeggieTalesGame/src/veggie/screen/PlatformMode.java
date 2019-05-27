@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import gifAnimation.Gif;
 import processing.core.PImage;
-import veggie.model.Moves;
+import veggie.model.Move;
 import veggie.model.Player;
 import veggie.model.Stats;
 
@@ -73,7 +73,7 @@ public class PlatformMode extends Screen
 		// player creation
 		Stats istats = new Stats(100, 0.1);
 
-		Moves[] iplayerMovelist = new Moves[4];
+		Move[] iplayerMovelist = new Move[4];
 
 		int i = 0;
 		int k = 1;
@@ -103,7 +103,7 @@ public class PlatformMode extends Screen
 	{
 		Stats istats = new Stats(100, 0.1);
 
-		Moves[] iplayerMovelist = new Moves[4];
+		Move[] iplayerMovelist = new Move[4];
 
 		int i = 0;
 		int k = 1;
@@ -447,7 +447,7 @@ public class PlatformMode extends Screen
 			if(player.getBounds().intersects(r))
 			{
 				Integer key = (int) (Math.random() * surface.moves.size() + 1);
-				Moves temp = surface.moves.get(key);
+				Move temp = surface.moves.get(key);
 				player.setMoveList(temp, (int) (Math.random() * 4));
 				items.remove(i);
 				i--;

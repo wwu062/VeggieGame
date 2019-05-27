@@ -12,7 +12,7 @@ import processing.core.PImage;
 public class Player extends MovingImage {
 	
 	private Stats statistics;
-	private Moves[] moveList;
+	private Move[] moveList;
 	
 	private double velX;
 	private double velY;
@@ -42,7 +42,7 @@ public class Player extends MovingImage {
 	 * @param statistics a Stats object holding the statistics of the Player
 	 * @param moveList an array of Moves that represent the player's moves.
 	 */
-	public Player(Map<String, PImage> playerImages, int x, int y, boolean isBot, Stats statistics, Moves[] moveList)
+	public Player(Map<String, PImage> playerImages, int x, int y, boolean isBot, Stats statistics, Move[] moveList)
 	{
 		
 		super(x, y, playerImages.get("run").width, playerImages.get("run").height, playerImages);
@@ -71,7 +71,7 @@ public class Player extends MovingImage {
 	 * @param move  the new move
 	 * @param rmove the move that will be replaced
 	 */
-	public void setMoveList(Moves move, int rmove) {
+	public void setMoveList(Move move, int rmove) {
 		moveList[rmove] = move;
 	}
 	
@@ -80,7 +80,7 @@ public class Player extends MovingImage {
 	 * @param i the index of the Move in the list of Moves.
 	 * @return the Moves object of the move desired
 	 */
-	public Moves getMove(int i) {
+	public Move getMove(int i) {
 		return moveList[i];
 	}
 	
