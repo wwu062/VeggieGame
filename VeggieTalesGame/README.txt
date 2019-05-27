@@ -32,9 +32,10 @@ Must have features:
 * Player has health bar and can win or die
 * Two dimensional graphics with basic symbols
 * Turn based attack system
-* Players play against a bot
+* Players play against a bot 
 * Movement system while not in battle
 * Platformer with physics
+
 Want to have features:
 * Item system used for stat boosting
 * Potions, etc.
@@ -47,6 +48,7 @@ Want to have features:
 * Multiscreen
 * Different bots with different difficulties
 * Swap out abilities as player levels up
+
 Stretch features:
 * A difficulty level system
 * Add additional characters to party

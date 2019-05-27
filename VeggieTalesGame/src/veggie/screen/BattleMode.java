@@ -9,10 +9,7 @@ import veggie.model.Move;
 import veggie.model.Player;
 
 /**
- * The Battle Screen for the game. In this mode, there are 4 buttons at the
- * bottom of the screen that are the player's attack moves. They can be clicked
- * and the player will attack. Afterwards the enemy will attack. Whoever defeats
- * the other first wins.
+ * The Battle Screen for the game. 
  * 
  * @author williamwu
  */
@@ -312,7 +309,7 @@ public class BattleMode extends Screen
 	}
 
 	/**
-	 * draws the different clickable panels
+	 * draws the different panel that can be clicked by the player
 	 */
 	private void drawPanel()
 	{
@@ -449,8 +446,14 @@ public class BattleMode extends Screen
 			drawMove(panelClick - 1, player, enemy, 0);
 		}
 	}
-
-	public void ifLeech(Player attacker, Player opponent, Move move)
+	
+	/**
+	 * Checks the attack move has an effect leech and changes health as a result
+	 * @param attacker the attacking character
+	 * @param opponent the defending character
+	 * @param move the move that is being used
+	 */
+	private void ifLeech(Player attacker, Player opponent, Move move)
 	{
 		if(move.getEffectName().equalsIgnoreCase("leech"))
 		{
@@ -467,7 +470,13 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public void ifHeal(Player attacker, Player opponent, Move move)
+	/**
+	 * Checks if the attack move has a heal and changes health as a result
+	 * @param attacker the attacking character
+	 * @param opponent the defending character
+	 * @param move the move that is being used
+	 */
+	private void ifHeal(Player attacker, Player opponent, Move move)
 	{
 		if(move.getEffectName().equalsIgnoreCase("heal"))
 		{
@@ -485,7 +494,14 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public void ifReduce(Player attacker, Player opponent, Move move, int whichPlayer)
+	/**
+	 * Checks if a attack move has a reduce status effect and changes the reduce field to true to reflect this.
+	 * @param attacker the attacking character
+	 * @param opponent the defending character
+	 * @param move the move that is being used
+	 * @param whichPlayer the integer for which 0 is the player and 1 is the enemy
+	 */
+	private void ifReduce(Player attacker, Player opponent, Move move, int whichPlayer)
 	{
 		if(move.getEffectName().equalsIgnoreCase("reduce"))
 		{
@@ -501,7 +517,14 @@ public class BattleMode extends Screen
 		}
 	}
 
-	public void ifFrozen(Player attacker, Player opponent, Move move, int whichPlayer)
+	/**
+	 * Checks if a attack move has a frozen status effect and changes the frozen field to true to reflect this.
+	 * @param attacker the attacking character
+	 * @param opponent the defending character
+	 * @param move the move that is being used
+	 * @param whichPlayer the integer for which 0 is the player and 1 is the enemy
+	 */
+	private void ifFrozen(Player attacker, Player opponent, Move move, int whichPlayer)
 	{
 		if(move.getEffectName().equalsIgnoreCase("frozen"))
 		{
@@ -516,11 +539,12 @@ public class BattleMode extends Screen
 	}
 
 	/**
-	 * Changes health depending
+	 * Changes health based on attack value of a move and checks for different status effects
 	 * 
-	 * @param num
-	 * @param attacker
-	 * @param opponent
+	 * @param num the value of the key to a certain move out of 4 for the attacker
+	 * @param attacker  the attacking character
+	 * @param opponent the defending character
+	 * @param whichPlayer the integer for which 0 is the player and 1 is the enemy
 	 */
 	private void drawMove(int num, Player attacker, Player opponent, int whichPlayer)
 	{
@@ -561,6 +585,10 @@ public class BattleMode extends Screen
 		panelClick = 0;
 	}
 
+	/**
+	 * Draws the critical hit image. 
+	 * @param crit the parameter that indicates if there was a critical hit
+	 */
 	private void critImage(boolean crit)
 	{
 		attackScreen.beginDraw();
@@ -572,9 +600,8 @@ public class BattleMode extends Screen
 	}
 
 	/**
-	 * Checks if the hit image should land on the player or enemy then draws the gif
-	 * 
-	 * @pre Argument only takes "player" or "enemy"
+	 * Checks if the hit image should land on the player or enemy then draws the gif.
+	 * Argument only takes "player" or "enemy".
 	 * @param Entity the "player" or "enemy" that will be damaged
 	 */
 	private void hitImage(String Entity)
@@ -621,6 +648,11 @@ public class BattleMode extends Screen
 		e.setHealth(health - damage);
 	}
 
+	/**
+	 * calculates the critical hit chance
+	 * @param critChance
+	 * @return
+	 */
 	private boolean crit(double critChance)
 	{
 		double crit = Math.random();
@@ -634,6 +666,10 @@ public class BattleMode extends Screen
 		}
 	}
 
+	/**
+	 * checks if a mouse is hovering over the attack panels
+	 * @return
+	 */
 	private int mouseHoverTest()
 	{
 		int hoverValue = -1;
