@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import gifAnimation.Gif;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import veggie.model.Move;
 import veggie.model.Player;
 
@@ -37,13 +38,15 @@ public class BattleMode extends Screen
 	private Move prevPlayerMove = null;
 	private Move prevEnemyMove = null;
 	private boolean turnDone = false;
-
+	private PImage backimg;
+	
 	private boolean[] frozen = new boolean[] { false, false };
 	private int frozenCounter = 0;
 
 	private boolean[] reduce = new boolean[] { false, false };
 	private int[] reduceCounter = new int[] { 0, 0 };
 
+	
 	private int timer = 1;
 
 
@@ -92,6 +95,10 @@ public class BattleMode extends Screen
 	 */
 	public void setup()
 	{
+		
+		backimg = surface.assets.get("background2");
+		backimg.resize(surface.width, surface.height);
+
 
 		hitImage = (Gif) surface.assets.get("hit");
 		hitImage.play();
@@ -103,8 +110,6 @@ public class BattleMode extends Screen
 		attackScreen = surface.createGraphics(800, surroundRect.y);
 		healthPanel = surface.createGraphics(800, 300);
 		// surface.createGraphics(800, 300);
-
-		surface.background(255, 255, 255);
 	}
 
 	/**

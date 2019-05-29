@@ -164,8 +164,8 @@ public class PlatformMode extends Screen
 
 		surface.pushStyle();
 		surface.fill(165, 42, 42);
-
-		bottomPlatform = new Rectangle(-200, (int) (drawingHeight - 68), drawingWidth + 200, 500);
+		
+		bottomPlatform = new Rectangle(-200, (int) (drawingHeight - 45), drawingWidth + 400, 100);
 
 		Rectangle r1 = new Rectangle(200, 400, 400, 50);
 		Rectangle r2 = new Rectangle(0, 250, 100, 50);
@@ -217,7 +217,7 @@ public class PlatformMode extends Screen
 		surface.scale(surface.ratioX, surface.ratioY);
 
 		surface.fill(100);
-
+		
 
 		// surface.shape(obstacles);
 		for(Rectangle rect : obstacles)
@@ -227,6 +227,8 @@ public class PlatformMode extends Screen
 		// surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width,
 		// bottomPlatform.height);
 
+		//surface.rect(bottomPlatform.x, bottomPlatform.y, bottomPlatform.width, bottomPlatform.height);
+		
 		surface.pushStyle();
 		surface.fill(255, 0, 0);
 		for(Rectangle rect : items)
@@ -242,7 +244,7 @@ public class PlatformMode extends Screen
 		}
 
 		player.draw(surface, "run");
-
+		
 
 		surface.popMatrix();
 
